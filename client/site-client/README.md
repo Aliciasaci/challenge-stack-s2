@@ -1,4 +1,4 @@
-# client
+# site-client
 
 ## Project setup
 ```
