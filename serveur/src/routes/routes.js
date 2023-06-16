@@ -1,16 +1,28 @@
-const express = require('express');
-const User = require('../models/models');
+module.exports = app => {
 
-const router = express.Router();
+  const express = require('express');
+  const router = express.Router();
+  app.use('/', router);
 
-router.get('/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erreur du serveur' });
-  }
-});
+  //require les entités
+  const user = require('../controllers/UserController');
+  const auth = require('../controllers/AuthController');
 
-module.exports = router;
+
+  //vérifier l'unicité de l'utilisateur
+  router.get('/users/exists', user.checkExistingUserByEmail);
+  //get all users 
+  router.get('/users', user.getUsers);
+  //add a user
+  router.post('/users', user.addUser);
+  //update a user
+  router.post('/users/:id', user.updateUser);
+  //get user by id
+  router.get('/users/:id', user.getUserById);
+  //delete user
+  router.post('/users/:id', user.deleteUserById);
+
+  //Login
+  router.post('/auth/login', auth.login);
+  router.post('/auth/signin', auth.signin);
+}
