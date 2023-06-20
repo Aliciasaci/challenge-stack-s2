@@ -1,13 +1,15 @@
 <template>
-    <Header />
-    <div>
-        <section class="hero">
-            <div class="hero-body">
-                <p class="title">
-                    Documentation
-                </p>
-            </div>
-        </section>
+    <div class="documentation">
+        <Header />
+        <div>
+            <section class="hero">
+                <div class="hero-body">
+                    <p class="title">
+                        Documentation
+                    </p>
+                </div>
+            </section>
+        </div>
     </div>
 </template>
 <script>
