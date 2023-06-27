@@ -9,14 +9,7 @@ const dotenv = require('dotenv').config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
-app.use(
-  "/users",
-  new genericCRUDRouter(new GenericController(new UserService()))
-);
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use("/users",new genericCRUDRouter(new GenericController(new UserService())));
 
 app.post("/", (req, res) => {
   console.log(req.body);
