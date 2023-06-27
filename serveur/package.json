@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon app.js",
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -18,5 +18,9 @@
     "mongodb": "^5.6.0",
     "mongoose": "^7.2.3",
     "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "mongodb-memory-server": "^8.13.0"
   }
 }
