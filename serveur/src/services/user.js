@@ -13,6 +13,8 @@ module.exports = function () {
         order: Object.entries(order),
       });
     },
+
+
     async create(data) {
       try {
         const user = await User.create(data);
@@ -24,9 +26,13 @@ module.exports = function () {
         throw error;
       }
     },
+
+
     async findOne(id) {
       return await User.findByPk(id);
     },
+
+
     async replaceOne(id, newData) {
       try {
         const deleted = await this.deleteOne(id);
@@ -40,6 +46,8 @@ module.exports = function () {
         throw error;
       }
     },
+
+
     async updateOne(id, newData) {
       try {
         const [nbUpdated, newValues] = await User.update(newData, {
@@ -57,9 +65,11 @@ module.exports = function () {
         throw error;
       }
     },
+
     async deleteOne(id) {
       const nbDeleted = await User.destroy({ where: { id } });
       return nbDeleted === 1;
     },
+
   };
 };
