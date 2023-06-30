@@ -23,6 +23,10 @@ module.exports = function (connection) {
           //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
         },
       },
+      societe : DataTypes.STRING,
+      kbis : DataTypes.STRING, 
+      telephone : DataTypes.INTEGER, 
+      urlsite : DataTypes.STRING
     },
     {
       tableName: "users",

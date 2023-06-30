@@ -80,12 +80,16 @@ module.exports = function (Service, options = {}) {
 
         async signup(req, res) {
             try {
-                const { firstname, lastname, email, password } = req.body;
+                const { firstname, lastname, email, password, societe, kbis, telephone, urlsite } = req.body;
                 const data = {
                     firstname,
                     lastname,
                     email,
                     password: await bcrypt.hash(password, 10),
+                    societe,
+                    kbis,
+                    telephone,
+                    urlsite
                 };
                 const user = await User.create(data);
 
