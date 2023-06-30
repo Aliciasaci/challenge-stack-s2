@@ -1,8 +1,5 @@
-//importing modules
-const express = require("express");
 const db = require("../db");
-//Assigning db.users to User variable
- const user = db.User;
+const user = db.User;
 
  const saveUser = async (req, res, next) => {
  try {
