@@ -1,72 +1,57 @@
 <template>
   <div class="accueil">
     <Header />
+    <HeroSection />
     <div class="first-row">
-      <div class="columns">
-        <div class="column">
-          <div class="card">
-            <div class="card-content">
-              <p class="title">
-                “There are two hard things in computer science: cache invalidation, naming things, and off-by-one errors.”
-              </p>
-              <p class="subtitle">
-                Jeff Atwood
-              </p>
+      <Carousel :value="articles" :numVisible="3" :numScroll="3">
+        <template #item="slotProps">
+          <div class="border rounded-lg m-2 text-center py-5 px-3">
+            <div class="mb-3">
+              <h3 class="mb-1 font-bold">{{ slotProps.data.title }}</h3>
             </div>
-            <footer class="card-footer">
-              <p class="card-footer-item">
-                <span>
-                  View on <a href="https://twitter.com/codinghorror/status/506010907021828096">Twitter</a>
-                </span>
-              </p>
-              <p class="card-footer-item">
-                <span>
-                  Share on <a href="#">Facebook</a>
-                </span>
-              </p>
-            </footer>
+            <div>
+              <h4 class="mb-1">{{ slotProps.data.summary }}</h4>
+              <div class="mt-5">
+                <Button icon="pi pi-check" label="Voir plus" raised />
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="column">
-          <article class="message is-danger">
-            <div class="message-header">
-              <p>Hello World</p>
-              <button class="delete" aria-label="delete"></button>
-            </div>
-            <div class="message-body">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis
-              placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et
-              dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales,
-              arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna,
-              vehicula et sem eget, facilisis sodales sem.
-            </div>
-          </article>
-        </div>
-        <div class="column">
-          <div class="box">
-            <button class="button is-danger is-outlined">Click me</button>
-          </div>
-          <div class="modal">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-              <!-- Any other Bulma elements you want -->
-            </div>
-            <button class="modal-close is-large" aria-label="close"></button>
-          </div>
-        </div>
-      </div>
+        </template>
+      </Carousel>
     </div>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
+import Carousel from "primevue/carousel";
+import Button from "primevue/button";
+import HeroSection from "../components/HeroSection.vue";
+import { ArticleService } from "../service/ArticleService";
+import { ref, onMounted } from "vue";
+
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: {
     Header,
-  }
-}
+    Carousel,
+    Button,
+    HeroSection,
+  },
+  setup() {
+    const articles = ref();
+
+    onMounted(() => {
+      ArticleService.getArticles().then((data) => {
+        articles.value = data;
+      });
+    });
+
+    return {
+      articles,
+    };
+  },
+};
 </script>
 <style lang="scss">
 .navbar {
@@ -79,5 +64,4 @@ export default {
   margin: auto;
   margin-top: 5rem;
 }
-
 </style>
