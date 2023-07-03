@@ -27,7 +27,7 @@ import Header from "../components/Header.vue";
 import Carousel from "primevue/carousel";
 import Button from "primevue/button";
 import HeroSection from "../components/HeroSection.vue";
-import { ArticleService } from "../service/ArticleService";
+import { getArticles } from "../service/ArticleService";
 import { ref, onMounted } from "vue";
 
 export default {
@@ -42,7 +42,7 @@ export default {
     const articles = ref();
 
     onMounted(() => {
-      ArticleService.getArticles().then((data) => {
+      getArticles().then((data) => {
         articles.value = data;
       });
     });

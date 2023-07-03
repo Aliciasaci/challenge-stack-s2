@@ -1,9 +1,9 @@
 <template lang="">
   <div class="grid grid-nogutter surface-section text-800">
     <div
-      class="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center"
+      class="col-12 md:col-6 text-center md:text-left flex align-items-center"
     >
-      <section>
+      <section class="p-6">
         <span class="block text-6xl font-bold mb-1">Create the screens</span>
         <div class="text-6xl text-primary font-bold mb-3">
           visitors deserve to see
@@ -24,18 +24,24 @@
           class="p-button-outlined"
         ></Button>
       </section>
-    </div>
-    <div class="col-12 md:col-6 overflow-hidden">
-      <img
-        src="https://static.vecteezy.com/system/resources/previews/017/033/095/original/abstract-purple-and-pink-bokeh-background-soft-blur-light-effect-wallpaper-dreamy-backdrop-with-copy-space-for-text-party-pastel-lovely-bubble-bokeh-background-vector.jpg"
-        alt="Image"
-        class="md:ml-auto block md:h-full"
-        style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)"
-      />
+      <div class="col-12 md:col-6 overflow-hidden">
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/017/033/095/original/abstract-purple-and-pink-bokeh-background-soft-blur-light-effect-wallpaper-dreamy-backdrop-with-copy-space-for-text-party-pastel-lovely-bubble-bokeh-background-vector.jpg"
+          alt="Image"
+          class="md:ml-auto block md:h-full"
+          style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script>
-export default {};
+import Button from "primevue/button";
+export default {
+  name: "HeroSection",
+  components: {
+    Button,
+  },
+};
 </script>
 <style lang=""></style>
