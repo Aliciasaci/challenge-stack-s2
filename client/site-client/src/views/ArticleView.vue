@@ -16,7 +16,7 @@
               class="my-3 p-button-raised"
               @click="visible = true"
             />
-            <ContactForm v-model="visible" />
+            <ContactForm v-model:visible="visible" />
           </div>
         </div>
       </Fieldset>
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      visible: true,
+      visible: false,
       firstname: null,
       lastname: null,
       email: null,

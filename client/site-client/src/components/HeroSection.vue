@@ -17,12 +17,14 @@
           label="Contactez-nous"
           type="button"
           class="mr-3 p-button-raised"
-        ></Button>
+          @click="visible = true"
+        />
+        <ContactForm v-model:visible="visible" />
         <Button
           label="En savoir plus"
           type="button"
           class="p-button-outlined"
-        ></Button>
+        />
       </section>
       <div class="col-12 md:col-6 overflow-hidden">
         <img
@@ -37,10 +39,17 @@
 </template>
 <script>
 import Button from "primevue/button";
+import ContactForm from "./ContactForm.vue";
 export default {
   name: "HeroSection",
   components: {
     Button,
+    ContactForm,
+  },
+  data() {
+    return {
+      visible: false,
+    };
   },
 };
 </script>
