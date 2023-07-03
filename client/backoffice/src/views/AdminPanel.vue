@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <AdminHeader />
         <h2 class="title is-2 mt-5">Liste des Utilisateurs</h2>
@@ -28,14 +28,13 @@
             </tbody>
         </table>
     </div>
-</template>
+</template> -->
+
 <script>
-import AdminHeader from "../components/AdminHeader.vue";
+const users = ref(null);
+const user = ref({});
 
 export default {
-    components: {
-        AdminHeader
-    },
     data() {
         return {
             users: null,
