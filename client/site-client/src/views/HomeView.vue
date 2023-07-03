@@ -12,7 +12,12 @@
             <div>
               <h4 class="mb-1">{{ slotProps.data.summary }}</h4>
               <div class="mt-5">
-                <Button icon="pi pi-check" label="Voir plus" raised />
+                <Button
+                  icon="pi pi-check"
+                  label="Voir plus"
+                  @click="onClick(slotProps.data.id)"
+                  raised
+                />
               </div>
             </div>
           </div>
@@ -29,6 +34,7 @@ import Button from "primevue/button";
 import HeroSection from "../components/HeroSection.vue";
 import { getArticles } from "../service/ArticleService";
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   name: "HomeView",
@@ -37,6 +43,12 @@ export default {
     Carousel,
     Button,
     HeroSection,
+    useRoute,
+  },
+  methods: {
+    onClick(id) {
+      this.$router.push("/article/" + id);
+    },
   },
   setup() {
     const articles = ref();
