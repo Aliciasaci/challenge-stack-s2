@@ -1,37 +1,39 @@
 <template>
-    <Header />
-    <form class="box login-wrapper">
-        <div v-if="this.response_message" class="notification is-danger is-light">
-            {{ this.response_message }}
-        </div>
-        <h1 class="title">Se connecter</h1>
-        <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-                <input class="input " type="email" placeholder="Text input" v-model="this.email">
+    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+        <div class="flex flex-column align-items-center justify-content-center">
+            <!-- <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" /> -->
+            <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
+                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
+                    <form>
+                        <div v-if="this.response_message" class="notification is-danger is-light">
+                            {{ this.response_message }}
+                        </div>
+                        <div class="text-center mb-5">
+                            <div class="text-900 text-3xl font-medium mb-3">Bienvenue</div>
+                            <span class="text-600 font-medium">Entrer vos identifiants pour se connecter</span>
+                        </div>
+    
+                        <div>
+                            <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
+                            <InputText id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="this.email" />
+    
+                            <label for="password" class="block text-900 font-medium text-xl mb-2">Mot de passe</label>
+                            <InputText id="password" type="text" placeholder="Mot de passe" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="this.password" />
+    
+                            <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                                <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Mot de passe oublié ?</a>
+                            </div>
+                            <Button @click="loginAccount" label="Se connecter" class="w-full p-3 text-xl"></Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <div class="field">
-            <label class="label">Mot de passe</label>
-            <div class="control">
-                <input class="input" type="password" placeholder="*******" v-model="this.password">
-            </div>
-        </div>
-
-        <div class="field is-grouped">
-            <div class="control">
-                <button @click="loginAccount" type="submit" class="button is-link valider-btn">Valider</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </template>
+
 <script>
-import Header from "../components/Header.vue";
 export default {
-    components: {
-        Header,
-    },
     data() {
         return {
             email: null,
@@ -57,19 +59,21 @@ export default {
             if(this.token){
                 this.$router.push('/client-pannel');
             }else{
-                this.response_message = "Mot de passe ou email incorrecte";
+                this.response_message = "Mot de passe ou email incorrect";
             }
         }
     }
 }
 </script>
-<style lang="scss">
-.login-wrapper {
-    width: 30rem;
-    margin: 10% auto;
+
+<style scoped>
+.pi-eye {
+    transform: scale(1.6);
+    margin-right: 1rem;
 }
 
-.valider-btn {
-    background-color: #fb513f !important;
+.pi-eye-slash {
+    transform: scale(1.6);
+    margin-right: 1rem;
 }
 </style>
