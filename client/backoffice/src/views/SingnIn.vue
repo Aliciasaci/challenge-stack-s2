@@ -108,7 +108,7 @@ export default {
 <style lang="scss">
 .login-wrapper {
     width: 30rem;
-    margin: 7% auto;
+    margin: 3% auto;
     text-align: start;
 }
 
