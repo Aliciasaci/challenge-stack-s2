@@ -2,26 +2,26 @@ const Tag = require('../models/tag');
 module.exports = function (connection) {
     const { DataTypes, Model } = require("sequelize");
 
-    class Tunnel extends Model { }
-
-    Tunnel.init(
-        {
-            commentaire: DataTypes.STRING,
-            tagOrder: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
-                allowNull: true,
-            },
+    const Tunnel = connection.define('Tunnel',  {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
         },
-        {
-            tableName: "tunnels",
-            sequelize: connection,
-            //timestamps: false,
-            paranoid: true // soft delete
+        commentaire:{
+          type: DataTypes.STRING,
+          allowNull: true
+        },
+        id_user: {
+            type: DataTypes.INTEGER,
         }
+      },
+      {
+        connection,
+        tableName:"tunnel"
+      }
+  
     );
 
-    Tunnel.belongsToMany(Tag, { through: 'TunnelTag' });
-    Tag.belongsToMany(Tunnel, { through: 'TunnelTag' });
-
-    return Tag;
+    return Tunnel;
 };
