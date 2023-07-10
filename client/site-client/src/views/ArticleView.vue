@@ -14,8 +14,7 @@
               label="Contactez-nous"
               type="button"
               class="my-3 p-button-raised"
-              @click="visible = true"
-            />
+              @click="visible = true" />
             <ContactForm v-model:visible="visible" />
           </div>
         </div>
