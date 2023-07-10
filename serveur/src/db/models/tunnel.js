@@ -23,5 +23,5 @@ module.exports = function (connection) {
   
     );
 
-    return Tunnel;
+    return Tag;
 };
