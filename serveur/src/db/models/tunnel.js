@@ -20,8 +20,5 @@ module.exports = function (connection) {
         }
     );
 
-    Tunnel.belongsToMany(Tag, { through: 'TunnelTag' });
-    Tag.belongsToMany(Tunnel, { through: 'TunnelTag' });
-
     return Tag;
 };
