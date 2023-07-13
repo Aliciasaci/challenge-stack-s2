@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Définition du schéma pour un modèle "Utilisateur"
+// Définition du schéma pour un modèle "events"
 const eventSchema = new mongoose.Schema({
   id: {
     type: Number,
