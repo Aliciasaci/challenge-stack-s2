@@ -5,7 +5,7 @@
 <style lang="scss">
 html {
   background: rgb(251, 187, 63);
-  background: radial-gradient(circle, rgba(251, 187, 63, 0.248972831320028) 0%, rgba(252, 70, 140, 0.2265638677345938) 100%);
+  // background: radial-gradient(circle, rgba(251, 187, 63, 0.248972831320028) 0%, rgba(252, 70, 140, 0.2265638677345938) 100%);
 }
 
 #app {
