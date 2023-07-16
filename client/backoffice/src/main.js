@@ -15,6 +15,11 @@ import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import RadioButton from 'primevue/radiobutton';
+import Menubar from 'primevue/menubar';
+import Card from 'primevue/card';
+import Listbox from 'primevue/listbox';
+import SplitButton from 'primevue/splitbutton';
+import Chart from 'primevue/chart';
 
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";
@@ -42,6 +47,13 @@ app.component("InputNumber", InputNumber);
 app.component("Textarea", Textarea);
 app.component("Dropdown", Dropdown);
 app.component("RadioButton", RadioButton);
+app.component("Menubar", Menubar);
+app.component("Card", Card);
+app.component("Listbox", Listbox);
+app.component("SplitButton", SplitButton);
+app.component("Chart", Chart);
+
+
 
 
 app.config.globalProperties.$api = axios.create({
