@@ -11,16 +11,17 @@ module.exports = function AuthController(UserService) {
       });
 
       if (!user) {
-        return next(new ValidationError({ email: ["Invalid credentials"] }));
+        return next(new ValidationError({ erreur: ["Email ou mot de passe incorrecte."] }));
       }
 
       if (!(await bcrypt.compare(req.body.password, user.password))) {
-        return next(new ValidationError({ email: ["Invalid credentials"]}));
+        return next(new ValidationError({ erreur: ["Email ou mot de passe incorrecte."]}));
       }
 
-      //create token
+      //return token and user
       res.json({
         token: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET),
+        user : user
       });
     },
   };

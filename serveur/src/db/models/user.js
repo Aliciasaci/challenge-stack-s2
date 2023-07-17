@@ -40,7 +40,11 @@ module.exports = function (connection) {
     },
     urlsite: {
       type: DataTypes.STRING
+    },
+    compteIsVerified: {
+      type: DataTypes.STRING
     }
+    
   }, {
     connection,
     tableName: "users",

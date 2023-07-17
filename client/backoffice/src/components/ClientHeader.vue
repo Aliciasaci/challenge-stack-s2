@@ -1,8 +1,9 @@
 
-<template>
+<template v-if="user">
     <div class="card relative z-2">
         <Menubar :model="items">
             <template #start>
+                <div style="color: rgb(179, 34, 208);">Bonjour {{user.firstname }} {{ user.lastname }} ! </div>
             </template>
         </Menubar>
     </div>
@@ -10,6 +11,7 @@
 
 <script setup>
 import { ref } from "vue";
+const user =  JSON.parse(localStorage.getItem('user'));
 
 const items = ref([
     {
@@ -24,9 +26,13 @@ const items = ref([
     {
         label: 'Se déconnecter',
         icon: 'pi pi-fw pi-sign-out'
-    }
+    },
 
 ]);
+
+
+
+
 </script>
 <style>
 .p-menubar {
