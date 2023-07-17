@@ -22,6 +22,7 @@ const items = ref([
     {
         label: 'Profil',
         icon: 'pi pi-fw pi-user',
+        url: '/profil-user'
     },
     {
         label: 'Se déconnecter',
