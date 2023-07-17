@@ -3,6 +3,8 @@ const app = express();
 const userRouter = require("./routes/userRouter");
 const tagRouter = require("./routes/tagRouter.js");
 const AuthRouter = require("./routes/authRouter.js");
+const cors = require("cors");
+
 
 const GenericController = require("./controllers/GenericController");
 const AuthController = require("./controllers/AuthController");
@@ -14,6 +16,9 @@ const dotenv = require('dotenv').config()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+
+app.use(cors());
+app.use(express.json());
 
 app.use("/users", new userRouter(new GenericController(new UserService())));
 app.use("/tags", new tagRouter(new GenericController(new tagService())));
