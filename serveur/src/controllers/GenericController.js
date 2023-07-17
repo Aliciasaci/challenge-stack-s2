@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = function (Service, options = {}) {
     return {
@@ -71,5 +72,15 @@ module.exports = function (Service, options = {}) {
                 res.sendStatus(404);
             } else res.sendStatus(204);
         },
+
+        async generateAppId(req, res) {
+            const userId = req.params.id;
+            const appId = uuidv4();
+            const newData = {appId : appId};
+            if (appId) {
+                res.json(appId);
+                Service.updateOne(userId, newData)
+            } else res.sendStatus(204);
+        }
     };
 };

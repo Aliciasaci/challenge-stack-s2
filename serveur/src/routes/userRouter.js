@@ -9,6 +9,8 @@ module.exports = function (Controller, options = {}) {
   router.put("/:id", Controller.replace);
   router.patch("/:id", Controller.update);
   router.delete("/:id", Controller.delete);
+  router.post("/:id/appid/", Controller.generateAppId);
+
 
   return router;
 };
