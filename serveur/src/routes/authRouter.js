@@ -1,10 +1,8 @@
-module.exports = function (Controller, options = {}) {
-  const { Router } = require("express");
-  const userAuth = require('../middlewares/userAuth')
-  const router = Router();
+const { Router } = require("express");
 
-  router.post('/signup', userAuth.saveUser, Controller.signup)
-  router.post('/login', Controller.login)
-
+module.exports = function AuthRouter(AuthController, UserController) {
+  const router = new Router();
+  router.post("/login", AuthController.login);
+  router.post("/register", UserController.create);
   return router;
 };
