@@ -43,6 +43,9 @@ module.exports = function (connection) {
     },
     compteIsVerified: {
       type: DataTypes.STRING
+    },
+    appId: {
+      type: DataTypes.STRING
     }
     
   }, {

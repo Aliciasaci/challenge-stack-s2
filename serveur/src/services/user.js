@@ -2,6 +2,7 @@ const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
 
+
 module.exports = function () {
   return {
     //retoucher pour order, page etc
@@ -46,6 +47,9 @@ module.exports = function () {
 
 
     async updateOne(id, newData) {
+
+      console.log(id);
+      console.log(newData);
       try {
         const [nbUpdated, newValues] = await User.update(newData, {
           where: { id },
@@ -67,6 +71,8 @@ module.exports = function () {
       const nbDeleted = await User.destroy({ where: { id } });
       return nbDeleted === 1;
     },
+
+
 
   };
 };
