@@ -13,6 +13,8 @@ import TagsModal from '@/components/TagsModal.vue';
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
+const user =  JSON.parse(localStorage.getItem('user'));
+
 
 const generateAppIDModal = () => {
     isAppIDModalVisible.value = true;
@@ -28,8 +30,8 @@ const generateTagModal = () => {
 
 </script>
 
-<template>
-    <Header />
+<template v-if="user">
+    <Header/>
     <span class="p-buttonset">
         <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />

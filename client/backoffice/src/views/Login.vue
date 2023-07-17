@@ -35,63 +35,54 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-export default {
-    setup() {
-        const email = ref(null);
-        const password = ref(null);
-        const response_message = ref(null);
-        const router = useRouter();
+const email = ref(null);
+const password = ref(null);
+const response_message = ref(null);
+const router = useRouter();
 
+async function login() {
 
-        function login() {
-            console.log(email.value, password.value);
+  let hasError = false;
+  try {
+    const response = await fetch('http://localhost:3000/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email.value, password: password.value })
+    });
 
-            let hasError = false;
-            return fetch('http://localhost:3000/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email : email.value, password : password.value })
-            })
-                .then((response) => {
-                    if (response.status === 422) {
-                        hasError = true;
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (hasError) {
-                        response_message.value = data.erreur[0];
-                        return Promise.reject(data);
-                    } else {
-                        const token = data.token;
-                        localStorage.setItem('token', token);
-                        router.push('/client-pannel');
-                        return Promise.resolve(data);
-                    }
-                }).catch(error => {
-                    console.error(error);
-                });
-        }
+    if (response.status === 422) {
+      hasError = true;
+    }
 
-        return {
-            email,
-            password,
-            response_message,
-            login,
-        };
-    },
-};
+    const data = await response.json();
+    if (hasError) {
+      response_message.value = data.erreur[0];
+      return Promise.reject(data);
+    } else {
+      const token = data.token;
+      const user = data.user;
+
+      //stocker le token et le user dans le store.
+      localStorage.setItem('token', token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      router.push('/client-pannel');
+      return Promise.resolve(data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>
 
-  
- 
-  
+
+
 <style scoped>
 .pi-eye {
     transform: scale(1.6);
