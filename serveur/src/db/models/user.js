@@ -1,6 +1,6 @@
 module.exports = function (connection) {
   const { DataTypes, Model } = require("sequelize");
-
+  const bcrypt = require("bcryptjs");
   const User = connection.define("User", {
     id: {
       type: DataTypes.INTEGER,
@@ -29,21 +29,32 @@ module.exports = function (connection) {
       //   //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
       // },
     },
-    societe : {
+    societe: {
       type: DataTypes.STRING
     },
-    kbis : {
+    kbis: {
       type: DataTypes.STRING
-    }, 
-    telephone : {
+    },
+    telephone: {
       type: DataTypes.INTEGER
-    }, 
-    urlsite : {
+    },
+    urlsite: {
       type: DataTypes.STRING
     }
-  },{
+  }, {
     connection,
-    tableName:"users",    
+    tableName: "users",
+  });
+
+  async function hashPassword(user) {
+    console.log("hashPassword");
+    user.password = await bcrypt.hash(user.password, await bcrypt.genSalt());
+  }
+
+  User.addHook("beforeCreate", hashPassword);
+
+  User.addHook("beforeUpdate", async (user, options) => {
+    if (options.fields.includes("password")) await hashPassword(user);
   });
 
   return User;

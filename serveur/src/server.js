@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRouter");
-const authRouter = require("./routes/authRouter");
 const tagRouter = require("./routes/tagRouter.js");
+const AuthRouter = require("./routes/authRouter.js");
 
 const GenericController = require("./controllers/GenericController");
-const authController = require("./controllers/AuthController");
+const AuthController = require("./controllers/AuthController");
 
 const errorsHandler = require("./middlewares/errorsHandler");
 const UserService = require("./services/user.js");
@@ -15,9 +15,16 @@ const dotenv = require('dotenv').config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
-app.use("/",new authRouter(new authController()));
-app.use("/users",new userRouter(new GenericController(new UserService())));
-app.use("/tags",new tagRouter(new GenericController(new tagService())));
+app.use("/users", new userRouter(new GenericController(new UserService())));
+app.use("/tags", new tagRouter(new GenericController(new tagService())));
+
+
+app.use(
+  new AuthRouter(
+    new AuthController(new UserService()),
+    new GenericController(new UserService())
+  )
+);
 
 
 app.use(errorsHandler);

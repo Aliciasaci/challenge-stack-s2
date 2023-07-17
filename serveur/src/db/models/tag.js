@@ -21,20 +21,5 @@ module.exports = function (connection) {
     }
 
   );
-
-  // class Tag extends Model {}
-
-  // Tag.init(
-  //   {
-  //     commentaire: DataTypes.STRING,
-  //   },
-  //   {
-  //     tableName: "tags",
-  //     sequelize: connection,
-  //     //timestamps: false,
-  //     paranoid: true // soft delete
-  //   }
-  // );
-
   return Tag;
 };

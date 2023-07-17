@@ -25,7 +25,7 @@ connection
 //     console.error('Erreur de connexion à MongoDB :', error);
 //   });
 
-// module.exports = connection, mongoose;
+module.exports = connection;
 
 
 

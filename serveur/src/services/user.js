@@ -1,16 +1,13 @@
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
-console.log("***", User, typeof User, "***");
 
 module.exports = function () {
   return {
-    async findAll(criteria, { page = null, itemsPerPage = null, order = {} }) {
+    //retoucher pour order, page etc
+    async findAll(criteria) {
       return await User.findAll({
         where: criteria,
-        limit: itemsPerPage,
-        offset: (page - 1) * itemsPerPage,
-        order: Object.entries(order),
       });
     },
 
