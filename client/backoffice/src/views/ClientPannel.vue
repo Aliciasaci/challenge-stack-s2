@@ -1,23 +1,29 @@
 <script setup>
 import { ref } from 'vue';
-import Header from '../components/ClientHeader.vue';
-import VerticalBar from '../components/VerticalBar.vue';
-import MultiAxis from '../components/MultiAxis.vue';
-import AnalyticsDetail from '../components/AnalyticsDetail.vue';
-import Cards from '../components/Cards.vue';
-import ApiKeyModal from '@/components/ApiKeyModal.vue';
+import Header from '@/components/ClientHeader.vue';
+import VerticalBar from '@/components/VerticalBar.vue';
+import MultiAxis from '@/components/MultiAxis.vue';
+import AnalyticsDetail from '@/components/AnalyticsDetail.vue';
+import Cards from '@/components/Cards.vue';
+import AppIDModal from '@/components/AppIDModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
-
-const isApiKeyModalVisible = ref(false);
-const isPreferebcesModalVisible = ref(false);
+import TagsModal from '@/components/TagsModal.vue';
 
 
-const generateApiKey = () => {
-    isApiKeyModalVisible.value = true;
+const isAppIDModalVisible = ref(false);
+const isPreferencesModalVisible = ref(false);
+const isTagsModalVisible = ref(false);
+
+const generateAppIDModal = () => {
+    isAppIDModalVisible.value = true;
 }
 
-const generatePreferences = () => {
-    isPreferebcesModalVisible.value = true;
+const generatePreferencesModal = () => {
+    isPreferencesModalVisible.value = true;
+}
+
+const generateTagModal = () => {
+    isTagsModalVisible.value = true;
 }
 
 </script>
@@ -25,12 +31,21 @@ const generatePreferences = () => {
 <template>
     <Header />
     <span class="p-buttonset">
-        <Button @click="generatePreferences" label="Préférences" icon="pi pi-check" severity="secondary" outlined />
-        <Button @click="generateApiKey" label="API KEY" icon="pi pi-trash" severity="secondary" outlined />
+        <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
+        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
+        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
     </span>
+
+    <!--Cards-->
     <Cards />
-    <ApiKeyModal id="api-key-modal"  :visible="isApiKeyModalVisible"/>
-    <PreferencesModal id="api-key-modal"  :visible="isPreferebcesModalVisible"/>
+    <!--Cards-->
+
+    <!--Les modals-->
+    <AppIDModal :visible="isAppIDModalVisible" />
+    <PreferencesModal :visible="isPreferencesModalVisible" />
+    <TagsModal  :visible="isTagsModalVisible" />
+    <!--Les modals-->
+
 
     <div class="analytics">
         <div class="detail">
