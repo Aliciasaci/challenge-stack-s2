@@ -5,6 +5,7 @@
     header="Contactez-nous"
     :modal="true"
   >
+  <form @prevent.submit>
     <div class="p-fluid">
       <div class="p-field">
         <label for="firstname">Prénom</label>
@@ -23,20 +24,20 @@
         <Textarea id="message" v-model="message" />
       </div>
     </div>
-    <template #footer>
+    <div>
       <Button
         label="Envoyer"
-        type="button"
+        type="submit"
         class="mr-3 p-button-raised"
-        @click="saveContactForm"
-      />
+        v-tracker:FORMA.click />
       <Button
         label="Annuler"
         type="button"
         class="p-button-outlined"
         @click="this.visible = false"
       />
-    </template>
+    </div>
+  </form>
   </Dialog>
 </template>
 <script>
