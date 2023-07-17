@@ -22,6 +22,10 @@ module.exports = function (connection) {
 
   );
 
+
+
+  
+
   // class Tag extends Model {}
 
   // Tag.init(
