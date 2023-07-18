@@ -1,46 +1,62 @@
 <template>
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
-            <!-- <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" /> -->
+            <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" />
             <div
                 style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
+                <div class="w-full surface-card py-4 px-5 sm:px-8" style="border-radius: 53px">
                     <form @submit.prevent="createAccount">
                         <div v-if="response_message" class="notification is-info is-light">
                             {{ response_message }}
                         </div>
                         <div class="text-center mb-5">
                             <div class="text-900 text-3xl font-medium mb-3">Bienvenue</div>
-                            <span class="text-600 font-medium">Entrer vos identifiants pour s'inscrire</span>
+                            <span class="text-600 font-medium">Entrer vos identifiants pour vous inscrire</span>
                         </div>
                         <div>
-                            <label for="nom" class="block text-900 text font-medium mb-2">Nom</label>
-                            <InputText id="nom" type="text" placeholder="Nom" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="nom" required />
-
-                            <label for="prenom" class="block text-900 text font-medium mb-2">Prenom</label>
-                            <InputText id="prenom" type="text" placeholder="Prenom" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="prenom" required />
-
-                            <label for="email" class="block text-900 text font-medium mb-2">Email</label>
-                            <InputText id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="email" required />
-
-                            <label for="password" class="block text-900 font-medium text mb-2">Mot de passe</label>
-                            <InputText id="password" type="text" placeholder="Mot de passe" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="password" required />
-
-                            <label for="societe" class="block text-900 font-medium text mb-2">Societe</label>
-                            <InputText id="societe" type="text" placeholder="Societe" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="societe" required />
-
-                            <label for="kbis" class="block text-900 font-medium text mb-2">Url Kbis</label>
-                            <InputText id="kbis" type="text" placeholder="lien vers Kbis" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="kbis" required />
-
-                            <label for="telephone" class="block text-900 font-medium text mb-2">Téléphone</label>
-                            <InputText id="telephone" type="Number" placeholder="Telephone" class="w-full md:w-30rem mb-2"
-                                style="padding: 1rem" v-model="telephone" required />
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <label for="nom" class="block text-900 text font-medium mb-2">Nom</label>
+                                    <InputText id="nom" type="text" placeholder="Nom" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="nom" required />
+                                </div>
+                                <div class="field col">
+                                    <label for="prenom" class="block text-900 text font-medium mb-2">Prénom</label>
+                                    <InputText id="prenom" type="text" placeholder="Prenom" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="prenom" required />
+                                </div>                   
+                            </div>
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <label for="email" class="block text-900 text font-medium mb-2">Email</label>
+                                    <InputText id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="email" required />
+                                </div>
+                                <div class="field col">
+                                    <label for="password" class="block text-900 font-medium text mb-2">Mot de passe</label>
+                                    <InputText id="password" type="text" placeholder="Mot de passe" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="password" required />
+                                </div>
+                            </div>
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <label for="societe" class="block text-900 font-medium text mb-2">Société</label>
+                                    <InputText id="societe" type="text" placeholder="Société" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="societe" required />
+                                </div>
+                                <div class="field col">
+                                    <label for="telephone" class="block text-900 font-medium text mb-2">Téléphone</label>
+                                    <InputText id="telephone" type="Number" placeholder="Téléphone" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="telephone" required />
+                                </div>
+                            </div>
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <label for="kbis" class="block text-900 font-medium text mb-2">Url Kbis</label>
+                                    <InputText id="kbis" type="text" placeholder="Lien vers Kbis" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="kbis" required />
+                                </div>
+                            </div>
 
                             <div class="flex align-items-center justify-content-between mb-5 gap-5">
                                 <a class="font-medium no-underline ml-2 text-right cursor-pointer"
@@ -58,9 +74,9 @@
 </template>
   
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { useLayout } from '@/layout/composables/layout';
 
 const nom = ref(null);
 const prenom = ref(null);
@@ -72,7 +88,11 @@ const telephone = ref(null);
 const response_message = ref(null);
 const compteIsVerified = ref(false); 
 const router = useRouter();
+const { contextPath } = useLayout();
 
+const logoUrl = computed(() => {
+  return `${contextPath}layout/images/flutter-ease-logo.png`;
+})
 
 async function accountAlreadyExists(email) {
     try {
