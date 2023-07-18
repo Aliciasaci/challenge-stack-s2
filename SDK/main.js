@@ -21,3 +21,11 @@ export default {
         })
     }
 }
+
+
+
+
+
+
+
+//a chaque action, envoyer la donnée à l'api
