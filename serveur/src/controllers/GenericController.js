@@ -1,3 +1,4 @@
+const { table } = require('console');
 const { v4: uuidv4 } = require('uuid');
 
 module.exports = function (Service, options = {}) {
@@ -73,14 +74,27 @@ module.exports = function (Service, options = {}) {
             } else res.sendStatus(204);
         },
 
+
         async generateAppId(req, res) {
             const userId = req.params.id;
             const appId = uuidv4();
-            const newData = {appId : appId};
+            const newData = { appId: appId };
             if (appId) {
                 res.json(appId);
                 Service.updateOne(userId, newData)
             } else res.sendStatus(204);
+        },
+
+
+        async getUserTags(req, res) {
+            const userId = req.params.id;
+            if (userId) {
+                const userTags = await Service.getUserTags(userId);
+                if (userTags) {
+                    res.json(userTags);
+                }
+                else res.sendStatus(204);
+            }
         }
     };
 };
