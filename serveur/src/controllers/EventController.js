@@ -1,5 +1,6 @@
 module.exports = function (eventService, options = {}) {
   return {
+    
     async createEvent(req, res) {
       try {
         const eventData = req.body;
