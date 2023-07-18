@@ -71,7 +71,9 @@ module.exports = function (Service, options = {}) {
             const deleted = await Service.deleteOne(parseInt(req.params.id, 10));
             if (!deleted) {
                 res.sendStatus(404);
-            } else res.sendStatus(204);
+            } else {
+                res.sendStatus(204);
+            }
         },
 
 
