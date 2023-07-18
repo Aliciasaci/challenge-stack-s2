@@ -7,6 +7,7 @@ module.exports = function (Controller, options = {}) {
     router.post("/", Controller.createEvent);
     router.patch("/:id", Controller.updateEventById);
     router.delete("/:id", Controller.deleteEventById);
+    router.get("/:id/events/", Controller.getEventsByAppId);
 
     return router;
   };

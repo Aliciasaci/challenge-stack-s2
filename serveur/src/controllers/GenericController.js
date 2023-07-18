@@ -100,6 +100,8 @@ module.exports = function (Service) {
                 }
                 else res.sendStatus(204);
             }
-        }
+        },
+
+          
     };
 };
