@@ -1,6 +1,6 @@
 <template>
     <Header></Header>
-    <div class="mention-legale">
+    <div>
         <section class="hero">
             <div class="hero-body">
                 <p class="title">

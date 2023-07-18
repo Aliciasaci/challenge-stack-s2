@@ -1,20 +1,36 @@
 const express = require("express");
 const app = express();
-const genericCRUDRouter = require("./routes/genericCRUDRouter");
+const userRouter = require("./routes/userRouter");
+const tagRouter = require("./routes/tagRouter.js");
+const AuthRouter = require("./routes/authRouter.js");
+const cors = require("cors");
+
+
 const GenericController = require("./controllers/GenericController");
+const AuthController = require("./controllers/AuthController");
+
 const errorsHandler = require("./middlewares/errorsHandler");
 const UserService = require("./services/user.js");
+const tagService = require("./services/Tag.js");
 const dotenv = require('dotenv').config()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
-app.use("/users",new genericCRUDRouter(new GenericController(new UserService())));
+app.use(cors());
+app.use(express.json());
 
-app.post("/", (req, res) => {
-  console.log(req.body);
-  res.send("Got a POST request");
-});
+app.use("/users", new userRouter(new GenericController(new UserService())));
+app.use("/tags", new tagRouter(new GenericController(new tagService())));
+
+
+app.use(
+  new AuthRouter(
+    new AuthController(new UserService()),
+    new GenericController(new UserService())
+  )
+);
+
 
 app.use(errorsHandler);
 

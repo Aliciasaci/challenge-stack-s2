@@ -1,5 +1,5 @@
 <template>
-  <div class="accueil">
+  <div class="home">
     <Header />
     <HeroSection />
     <div class="first-row">
