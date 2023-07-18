@@ -61,6 +61,17 @@ module.exports = function () {
             } catch (error) {
                 throw new Error('Error while deleting the event');
             }
+        },
+
+
+        async getEventsByAppId(appId) {
+            try {
+                const events = await Event.find({  appId: appId });
+                return events;
+            } catch (error) {
+                console.error('Error in service:', error);
+                throw error;
+            }
         }
     }
 }

@@ -1,11 +1,9 @@
 module.exports = function (eventService, options = {}) {
   return {
-    
+
     async createEvent(req, res) {
       try {
         const eventData = req.body;
-        console.log(eventData);
-
         const event = await eventService.createEvent(eventData);
         res.status(201).json(event);
       } catch (error) {
@@ -64,5 +62,17 @@ module.exports = function (eventService, options = {}) {
         res.status(500).json({ error: 'Error while deleting the event' });
       }
     },
+
+
+    async getEventsByAppId(req, res) {
+      const appid = req.params.id;
+      try {
+        const events = await eventService.getEventsByAppId(appid);
+        res.json(events);
+      } catch (error) {
+        console.error('Error in controller:', error);
+        res.status(500).json({ error: 'An error occurred while fetching events.' });
+      }
+    }
   };
 };

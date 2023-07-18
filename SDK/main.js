@@ -22,6 +22,7 @@ export default {
 
         if (this.isAuthorized(options.APPID)) {
             VueInstance.directive('tracker', (el, binding) => {
+                console.log(el);
                 if (binding.modifiers.click) {
                     //tracker tout les boutons du site-client.
                     el.addEventListener("click", () => {

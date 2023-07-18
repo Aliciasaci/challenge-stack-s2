@@ -20,5 +20,5 @@ app.use(PrimeVue);
 //passer le APPID en options.
 
 //APP ID du site kenzo kenzo
-app.use(SDK, {"APPID" : "4c4f2811-157f-4a55-880a-48f6c5935ad0"});
+app.use(SDK, {"APPID" : "4c4f2811-157f-4a55-880a-48fkutkftk6c5935ad0"});
 app.use(ToastService);
