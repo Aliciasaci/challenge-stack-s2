@@ -1,6 +1,7 @@
 export default {
     install(VueInstance, options) {
 
+        console.log(options);
         //check si l'appID se trouve en base de données et si il appartient à un site existant.
         VueInstance.directive('tracker', (el, binding) => {
             if (binding.modifiers.click) {
