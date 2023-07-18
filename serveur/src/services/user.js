@@ -6,11 +6,21 @@ const Tag = require('../db').Tag;
 
 module.exports = function () {
   return {
-    //retoucher pour order, page etc
-    async findAll(criteria) {
-      return await User.findAll({
-        where: criteria,
-      });
+    async findAll(criteria, options) {
+      try {
+        const users = await User.findAll({
+          where: criteria,
+          offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
+          limit: options && options.limit || 20,
+          order: options && options.order ? [options.order.split(":")] : undefined,
+          attributes: options && options.attributes ? [options.attributes] : undefined,
+        });
+
+        return users;
+      } catch (error) {
+        console.error('Error while retrieving users:', error);
+        throw error;
+      }
     },
 
 

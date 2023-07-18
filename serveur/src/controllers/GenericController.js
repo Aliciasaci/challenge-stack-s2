@@ -1,22 +1,25 @@
 const { table } = require('console');
 const { v4: uuidv4 } = require('uuid');
 
-module.exports = function (Service, options = {}) {
+module.exports = function (Service) {
     return {
         async getAll(req, res) {
             const {
                 _page = 1,
                 _itemsPerPage = 30,
-                // _sort[id]=ASC&_sort[name]=DESC
+                _attributes = {},
                 _sort = {},
                 ...criteria
-            } = req.query;
-
-            const items = await Service.findAll(criteria, {
-                itemsPerPage: _itemsPerPage,
+              } = req.query;
+            
+              const options = {
                 page: _page,
-                order: _sort,
-            });
+                itemsPerPage: _itemsPerPage,
+                attributes: _attributes,
+                sort: _sort,
+              };
+
+            const items = await Service.findAll(criteria, options);
             res.json(items);
         },
 
