@@ -1,16 +1,18 @@
 //*POSTGRE SQL
-const { Sequelize, DataTypes } = require('sequelize')
-const connection = new Sequelize(`postgres://postgres:root@localhost:5432/postgres`, { dialect: "postgres" })
+const { Sequelize, DataTypes } = require("sequelize");
+const connection = new Sequelize(
+  `postgres://root:password@localhost:5432/postgres`,
+  { dialect: "postgres" }
+);
 
 connection
   .authenticate()
   .then(() => {
-    console.log("=> Connexion à POSTGRE réussie.");
+    console.log("=> Connexion à POSTGRES réussie.");
   })
   .catch((error) => {
-    console.error("Connexion à  POSTGRE échouée:", error);
+    console.error("Connexion à POSTGRES échouée:", error);
   });
-
 
 //*MongoDB
 // const mongoose = require('mongoose');
@@ -26,6 +28,3 @@ connection
 //   });
 
 module.exports = connection;
-
-
-
