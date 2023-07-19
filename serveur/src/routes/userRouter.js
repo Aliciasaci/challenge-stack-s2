@@ -10,6 +10,7 @@ module.exports = function (Controller, options = {}) {
   router.patch("/:id", Controller.update);
   router.delete("/:id", Controller.delete);
   router.post("/:id/appid/", Controller.generateAppId);
+  router.get("/:id/tags/", Controller.getUserTags);
 
 
   return router;

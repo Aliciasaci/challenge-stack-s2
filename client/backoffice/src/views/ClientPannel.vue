@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Header from '@/components/ClientHeader.vue';
 import VerticalBar from '@/components/VerticalBar.vue';
 import MultiAxis from '@/components/MultiAxis.vue';
@@ -13,8 +13,16 @@ import TagsModal from '@/components/TagsModal.vue';
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
-const user =  JSON.parse(localStorage.getItem('user'));
+const user = JSON.parse(localStorage.getItem('user'));
+const appEvents = ref(false);
 
+
+onMounted(async () => {
+    if (user.appId) {
+        appEvents.value = await getEventsByAppId(user.appId);
+        console.log(appEvents.value)
+    }
+});
 
 const generateAppIDModal = () => {
     isAppIDModalVisible.value = true;
@@ -28,10 +36,22 @@ const generateTagModal = () => {
     isTagsModalVisible.value = true;
 }
 
+async function getEventsByAppId(appId) {
+    try {
+        const response = await fetch(`http://localhost:3000/events/${appId}/events`);
+        if (!response.ok) {
+            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
+        }
+        return  response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 </script>
 
 <template v-if="user">
-    <Header/>
+    <Header />
     <span class="p-buttonset">
         <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
@@ -39,13 +59,13 @@ const generateTagModal = () => {
     </span>
 
     <!--Cards-->
-    <Cards />
+    <Cards/>
     <!--Cards-->
 
     <!--Les modals-->
     <AppIDModal :visible="isAppIDModalVisible" />
     <PreferencesModal :visible="isPreferencesModalVisible" />
-    <TagsModal  :visible="isTagsModalVisible" />
+    <TagsModal :visible="isTagsModalVisible" />
     <!--Les modals-->
 
 

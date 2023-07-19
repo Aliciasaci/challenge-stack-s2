@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
+import { defineProps } from 'vue';
 
 const data = ref([
     { title: 'Nombre de sessions actives', nb: '26', icon: 'pi pi-fw pi-users text-blue-500 text-xl' },
