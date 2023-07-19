@@ -14,9 +14,9 @@ const router = createRouter({
           component: () => import("@/views/Home.vue"),
         },
         {
-          path: "/admin-panel",
-          name: "adminpanel",
-          component: () => import("@/views/AdminPanel.vue"),
+          path: "/user-crud",
+          name: "usercrud",
+          component: () => import("@/views/UserCrud.vue"),
         }
       ],
     },
