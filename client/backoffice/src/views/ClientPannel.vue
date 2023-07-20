@@ -42,7 +42,7 @@ async function getEventsByAppId(appId) {
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
-        return  response.json();
+        return response.json();
     } catch (error) {
         console.error(error);
         throw error;
@@ -59,7 +59,7 @@ async function getEventsByAppId(appId) {
     </span>
 
     <!--Cards-->
-    <Cards/>
+    <Cards />
     <!--Cards-->
 
     <!--Les modals-->
@@ -69,21 +69,22 @@ async function getEventsByAppId(appId) {
     <!--Les modals-->
 
 
-    <div class="analytics">
-        <div class="detail">
-            <AnalyticsDetail></AnalyticsDetail>
-        </div>
+    <div class="analytics" v-if="appEvents">
         <div class="graph">
-            <VerticalBar></VerticalBar>
-            <MultiAxis></MultiAxis>
+            <div id="graph1">
+                <VerticalBar></VerticalBar>
+            </div>
+            <div id="graph2">
+                <MultiAxis></MultiAxis>
+            </div>
+        </div>
+
+        <div class="detail">
+            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
         </div>
     </div>
 </template>
 <style>
-body {
-    /* background-color: #fdf7ef; */
-    background-image: linear-gradient(to top, #fdcbf114 0%, #fdcbf163 1%, #e6dee95c 100%);
-}
 
 .top-btns {
     display: flex;
@@ -99,18 +100,21 @@ body {
 }
 
 .analytics {
-    display: flex;
-    justify-content: space-between;
     width: 80%;
     margin: auto;
 }
 
 .graph {
-    flex-basis: 49%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 4rem;
 }
 
-.detail {
+#graph1,
+#graph2 {
     flex-basis: 49%;
+    height: 100%;
 }
 </style>
   

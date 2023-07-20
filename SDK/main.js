@@ -22,23 +22,44 @@ export default {
 
         if (this.isAuthorized(options.APPID)) {
             VueInstance.directive('tracker', (el, binding) => {
-                console.log(el);
                 if (binding.modifiers.click) {
-                    //tracker tout les boutons du site-client.
+                    //* tracker tout les boutons du site-client.
                     el.addEventListener("click", () => {
-                        switch (binding.arg) {
-                            case 'BUTTONA':
-                                console.log("click", binding.arg, binding.modifiers);
-                                this.createEvent("click", options.APPID, { "tag": binding.arg })
-                                break;
-                            case 'BUTTONB':
-                                console.log("click", binding.arg, binding.modifiers);
-                                this.createEvent("click", options.APPID, { "tag": binding.arg })
-                                break;
-                            case 'FORMA':
-                                console.log("Form A submited", binding.arg, binding.modifiers);
-                        }
+                        const action = Object.keys(binding.modifiers)[0];
+                        let data = {
+                            "modifier": binding.modifiers,
+                            "page": window.location.href,
+                            "tag" : binding.arg,
+                        };
+                        console.log(action, binding.arg, binding.modifiers);
+                        this.createEvent(action, options.APPID, data)
                     });
+                }
+
+                if (binding.modifiers.submit) {
+                    //* tracker les form submit
+                    el.addEventListener("submit", () => {
+                        const action = Object.keys(binding.modifiers)[0];
+                        let data = {
+                            "modifier": binding.modifiers,
+                            "page": window.location.href,
+                            "tag" : binding.page,
+                        };
+                        console.log(action, binding.arg, data);
+                        this.createEvent(action, options.APPID, data)
+                    });
+                }
+
+                if (binding.modifiers.visited) {
+                    //* tracker les visites de pages
+                    const action = Object.keys(binding.modifiers)[0];
+                    let data = {
+                        "modifier": binding.modifiers,
+                        "page": window.location.href,
+                        "tag" : binding.arg,
+                    };
+                    console.log(action, binding.arg, data);
+                    this.createEvent(action, options.APPID, data);
                 }
             })
         } else {

@@ -1,7 +1,7 @@
 
 <template>
     <div class="card">
-        <Chart type="bar" :data="chartData" :options="chartOptions" class=""  />
+        <Chart type="bar" :data="chartData" :options="chartOptions"  class="h-25rem" />
     </div>
 </template>
 
