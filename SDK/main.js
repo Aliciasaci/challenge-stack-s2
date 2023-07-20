@@ -43,7 +43,7 @@ export default {
                         let data = {
                             "modifier": binding.modifiers,
                             "page": window.location.href,
-                            "tag" : binding.page,
+                            "tag" : binding.arg,
                         };
                         console.log(action, binding.arg, data);
                         this.createEvent(action, options.APPID, data)
