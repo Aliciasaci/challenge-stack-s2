@@ -15,7 +15,7 @@
                 <tr v-for="event in events" :key="event._id">
                     <th>{{ event.type }}</th>
                     <td>{{ event.data.tag }}</td>
-                    <td><a>{{ event.data.page }}</a></td>
+                    <td><a>{{ getPageName(event.data.page) }}</a></td>
                     <td>{{ convertDate(event.createdAt) }}</td>
                     <td>{{ convertDate(event.updatedAt) }}</td>
                 </tr>
@@ -47,7 +47,17 @@ function convertDate(dateStr) {
     return dateFrancaise + heureFrancaise;
 }
 
-</script> 
-<style>
+function getPageName(url) {
+    if (url) {
+        const parts = url.split("/");
+        let lastPart = parts[parts.length - 1];
 
-</style>
+        if (lastPart == "") {
+            lastPart = "/";
+        };
+
+        return lastPart;
+    }
+}
+</script> 
+<style></style>
