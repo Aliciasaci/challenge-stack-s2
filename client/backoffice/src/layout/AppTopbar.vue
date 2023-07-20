@@ -18,7 +18,7 @@ onBeforeUnmount(() => {
 });
 
 const logoUrl = computed(() => {
-    return `${contextPath}layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    return `${contextPath}layout/images/flutter-ease-logo.png`;
 });
 
 const onTopBarMenuButton = () => {

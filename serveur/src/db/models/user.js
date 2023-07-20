@@ -9,9 +9,17 @@ module.exports = function (connection) {
     },
     firstname: {
       type: DataTypes.STRING,
+      validate: {
+        len: [8, 32],
+        //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
+      },
     },
     lastname: {
       type: DataTypes.STRING,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "USER_CLIENT",
     },
     email: {
       type: DataTypes.STRING,
@@ -24,10 +32,10 @@ module.exports = function (connection) {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      // validate: {
-      //   //len: [8, 32],
-      //   //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
-      // },
+      validate: {
+        len: [8, 32],
+        //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
+      },
     },
     societe: {
       type: DataTypes.STRING

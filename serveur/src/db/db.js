@@ -1,6 +1,12 @@
 //*POSTGRE SQL
-const { Sequelize, DataTypes } = require('sequelize')
-const connection = new Sequelize(`postgres://postgres:root@localhost:5432/postgres`, { dialect: "postgres" })
+const { Sequelize, DataTypes } = require('sequelize');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const connection = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+});
 
 connection
   .authenticate()
