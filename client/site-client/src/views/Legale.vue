@@ -1,6 +1,8 @@
 <template>
     <Header></Header>
-    <div>
+    <div v-tracker:C7OD4W.visited>
+
+        
         <section class="hero">
             <div class="hero-body">
                 <p class="title">

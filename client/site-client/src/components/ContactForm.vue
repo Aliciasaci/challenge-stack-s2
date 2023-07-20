@@ -5,7 +5,7 @@
     header="Contactez-nous"
     :modal="true"
   >
-  <form @prevent.submit>
+  <form @prevent.submit  v-tracker:4YFCMJ.submit >
     <div class="p-fluid">
       <div class="p-field">
         <label for="firstname">Prénom</label>
@@ -29,10 +29,10 @@
         label="Envoyer"
         type="submit"
         class="mr-3 p-button-raised"
-        v-tracker:FORMA.click />
+       />
       <Button
         label="Annuler"
-        type="button"
+        type="submit"
         class="p-button-outlined"
         @click="this.visible = false"
       />
