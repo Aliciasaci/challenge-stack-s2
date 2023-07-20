@@ -22,8 +22,8 @@ onBeforeMount(() => {
 onMounted(async () => {
     const response = await fetch('http://localhost:3000/users', {
         headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-    }
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
     });
     const data = await response.json();
     users.push(...data);
@@ -117,46 +117,58 @@ const hideDialog = () => {
                             <h5 class="m-0">Gestion d'utilisateurs</h5>
                             <span class="block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Search..." />
+                                <InputText v-model="filters['global'].value" placeholder="Rechercher..." />
                             </span>
                         </div>
                     </template>
 
                     <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-                    <Column field="code" header="Code" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="nom" header="Nom" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Code</span>
-                            {{ slotProps.data.code }}
+                            <span class="p-column-title">Nom</span>
+
                         </template>
                     </Column>
-                    <Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="prenom" header="Prénom" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Name</span>
-                            {{ slotProps.data.name }}
+                            <span class="p-column-title">Prénom</span>
+                            
                         </template>
                     </Column>
-                    <Column header="Image" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="email" header="Email" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Image</span>
-                            <img :src="contextPath + 'demo/images/user/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
+                            <span class="p-column-title">Email</span>
+                            
                         </template>
                     </Column>
-                    <Column field="price" header="Price" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <Column field="societe" header="Société" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Price</span>
-                            {{ formatCurrency(slotProps.data.price) }}
+                            <span class="p-column-title">Société</span>
+                            
                         </template>
                     </Column>
-                    <Column field="category" header="Category" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="urlsite" header="Url Site" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Category</span>
-                            {{ slotProps.data.category }}
+                            <span class="p-column-title">URL site</span>
+                            
                         </template>
                     </Column>
-                    <Column field="inventoryStatus" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="compteIsVerified" header="Statut" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Status</span>
-                            <span :class="'user-badge status-' + (slotProps.data.inventoryStatus ? slotProps.data.inventoryStatus.toLowerCase() : '')">{{ slotProps.data.inventoryStatus }}</span>
+                            <span class="p-column-title">Statut</span>
+                            
+                        </template>
+                    </Column>
+                    <Column field="appId" header="AppID" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">App ID</span>
+                            
+                        </template>
+                    </Column>
+                    <Column field="role" header="Role" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Role</span>
+                            
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
@@ -167,7 +179,7 @@ const hideDialog = () => {
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="userDialog" :style="{ width: '450px' }" header="user Details" :modal="true" class="p-fluid">
+                <!-- <Dialog v-model:visible="userDialog" :style="{ width: '450px' }" header="user Details" :modal="true" class="p-fluid">
                     <img :src="contextPath + 'demo/images/user/' + user.image" :alt="user.image" v-if="user.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
                     <div class="field">
                         <label for="name">Name</label>
@@ -233,9 +245,9 @@ const hideDialog = () => {
                         <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
                         <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveuser" />
                     </template>
-                </Dialog>
+                </Dialog> -->
 
-                <Dialog v-model:visible="deleteUserDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                <!-- <Dialog v-model:visible="deleteUserDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="user"
@@ -247,9 +259,9 @@ const hideDialog = () => {
                         <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteUserDialog = false" />
                         <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteuser" />
                     </template>
-                </Dialog>
+                </Dialog> -->
 
-                <Dialog v-model:visible="deleteUsersDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                <!-- <Dialog v-model:visible="deleteUsersDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="user">Are you sure you want to delete the selected users?</span>
@@ -258,7 +270,7 @@ const hideDialog = () => {
                         <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteUsersDialog = false" />
                         <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedUsers" />
                     </template>
-                </Dialog>
+                </Dialog> -->
             </div>
         </div>
     </div>
