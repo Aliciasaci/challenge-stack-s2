@@ -59,7 +59,7 @@ async function getEventsByAppId(appId) {
     </span>
 
     <!--Cards-->
-    <Cards />
+    <Cards  v-if="appEvents" :events="appEvents"/>
     <!--Cards-->
 
     <!--Les modals-->
