@@ -15,13 +15,19 @@ const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 const appEvents = ref(false);
+import { useStore } from 'vuex';
+const store = useStore();
+let nbVisitsPerMonthArray = [];
+let displayCards = [];
 
 
 onMounted(async () => {
     if (user.appId) {
         appEvents.value = await getEventsByAppId(user.appId);
-        console.log(appEvents.value)
     }
+
+    nbVisitsPerMonthArray = getNbVisitesPerMonth(appEvents.value);
+    togglePreferencesCards();
 });
 
 const generateAppIDModal = () => {
@@ -48,6 +54,71 @@ async function getEventsByAppId(appId) {
         throw error;
     }
 }
+
+//*nombre de visite par mois
+function getNbVisitesPerMonth(appEvents) {
+    const nbVisitsPerMonthObject = {};
+    const nbVisitsPerMonthArray = [];
+
+    function getKey(month, year) {
+        return `${month}-${year}`;
+    }
+
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    for (let month = 1; month <= 12; month++) {
+        const key = getKey(month, currentYear);
+        nbVisitsPerMonthObject[key] = 0;
+    }
+
+    appEvents.forEach((event) => {
+        if (event.type == 'visited') {
+            const eventDate = new Date(event.createdAt);
+            const month = eventDate.getMonth() + 1;
+            const year = eventDate.getFullYear();
+            const key = getKey(month, year);
+
+            nbVisitsPerMonthObject[key]++;
+        }
+    });
+
+    for (const key in nbVisitsPerMonthObject) {
+        nbVisitsPerMonthArray.push(nbVisitsPerMonthObject[key]);
+    }
+
+    return nbVisitsPerMonthArray;
+}
+
+function diplayElement(id, classe, status){
+    if(classe){
+        let classeElement = document.querySelector("."+classe);
+        if (classeElement){
+            classeElement.style.display = status;
+        }
+    }
+    if(id){
+        let idElement = document.querySelector("#"+id);
+        if(idElement){
+            idElement.style.display = status;
+        }
+    }
+}
+
+function togglePreferencesCards(){
+    //recup les préférences de l'utilisateur 
+    const checkedBtnsPreferences = store.state.checkedBtns;
+    for (var index = 0; index < 4; index++){
+        if (checkedBtnsPreferences[index]){
+            displayCards.push("block")
+        }
+        else{
+            displayCards.push("None")
+        }
+    }
+
+}
+
+
 </script>
 
 <template v-if="user">
@@ -59,7 +130,7 @@ async function getEventsByAppId(appId) {
     </span>
 
     <!--Cards-->
-    <Cards  v-if="appEvents" :events="appEvents"/>
+    <Cards v-if="appEvents" :events="appEvents" :displayCards="displayCards" />
     <!--Cards-->
 
     <!--Les modals-->
@@ -72,10 +143,10 @@ async function getEventsByAppId(appId) {
     <div class="analytics" v-if="appEvents">
         <div class="graph">
             <div id="graph1">
-                <VerticalBar></VerticalBar>
+                <VerticalBar v-if="nbVisitsPerMonthArray" :events="nbVisitsPerMonthArray"></VerticalBar>
             </div>
             <div id="graph2">
-                <MultiAxis></MultiAxis>
+                <MultiAxis v-if="nbVisitsPerMonthArray" :events="nbVisitsPerMonthArray"></MultiAxis>
             </div>
         </div>
 
@@ -85,7 +156,6 @@ async function getEventsByAppId(appId) {
     </div>
 </template>
 <style>
-
 .top-btns {
     display: flex;
     align-items: end;

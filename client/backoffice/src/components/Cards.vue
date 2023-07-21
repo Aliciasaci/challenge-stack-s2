@@ -1,6 +1,6 @@
 <template>
     <div class="stat-cards">
-        <div v-for="d in data" :key="d.title" class="box">
+        <div v-for="d,index in data" :key="d.title" class="box test" :id="'carte-'+index">
             <div class="title-wrapper">
                 <span class="card-title">{{ d.title }}</span><span class="icon-style"><i :class="d.icon"></i></span>
             </div>
@@ -35,19 +35,20 @@
 </template>
   
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, nextTick } from "vue";
 import { defineProps } from 'vue';
 
 let nbClickTotal = ref(0);
 let nbSubmitTotal = ref(0);
 let nbVisiteTotal = ref(0);
-let { events } = defineProps(['events']);
+let { events, displayCards } = defineProps(['events', 'displayCards']);
 let visitCountsArray = [];
 let clickCountsArray = [];
 let submitCountsArray = [];
 let data = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref({ title: "", otherData: [] });
+
 
 onMounted(() => {
     let visitCounts = {};
@@ -95,11 +96,21 @@ onMounted(() => {
     submitCountsArray = Object.entries(submitCounts);
 
     data.value = [
-        { id: 1, title: 'Nombre de sessions actives', nb: '26', icon: 'pi pi-fw pi-users text-blue-500 text-xl', },
-        { id: 2,title: 'Nombre de vues par Page', nb: nbVisiteTotal, icon: 'pi pi-fw pi-eye text-blue-500 text-xl', otherData: visitCountsArray },
+        { id: 1, title: 'Nombre de sessions actives', nb: '26', icon: 'pi pi-fw pi-users text-blue-500 text-xl',},
+        { id: 2,title: 'Nombre de vues par Page', nb: nbVisiteTotal, icon: 'pi pi-fw pi-eye text-blue-500 text-xl', otherData: visitCountsArray,},
         { id: 3,title: 'Nombre de cliques', nb: nbClickTotal, icon: 'pi pi-fw pi-pencil text-blue-500 text-xl', otherData: clickCountsArray },
         { id: 4,title: 'Nombre de submit', nb: nbSubmitTotal, icon: 'pi pi-fw pi-pencil text-blue-500 text-xl', otherData: submitCountsArray }
     ];
+
+    for(let index = 0; index < data.value.length; index++){
+        
+        nextTick(() => {
+            const element = document.getElementById("carte-"+index);
+            element.style.display = displayCards[index];
+        })
+
+    }
+
 });
 
 function getPageName(url) {
