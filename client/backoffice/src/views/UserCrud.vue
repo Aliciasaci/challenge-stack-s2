@@ -15,11 +15,8 @@ const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
     initFilters();
-});
-
-onMounted(async () => {
     const response = await fetch('http://localhost:3000/users', {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -27,6 +24,17 @@ onMounted(async () => {
     });
     const data = await response.json();
     users.push(...data);
+    console.log(Array.from(users)[0]);
+});
+
+onMounted(async () => {
+    // const response = await fetch('http://localhost:3000/users', {
+    //     headers: {
+    //         Authorization: 'Bearer ' + localStorage.getItem('token')
+    //     }
+    // });
+    // const data = await response.json();
+    // users.push(...data);
 });
 
 async function deleteUser(user) {
@@ -109,7 +117,7 @@ const hideDialog = () => {
                     :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+                    currentPageReportTemplate="Afficher de {first} à {last} sur {totalRecords} utilisateurs"
                     responsiveLayout="scroll"
                 >
                     <template #header>
@@ -126,49 +134,54 @@ const hideDialog = () => {
                     <Column field="nom" header="Nom" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Nom</span>
-
+                                {{ slotProps.data.firstname }}
                         </template>
                     </Column>
                     <Column field="prenom" header="Prénom" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Prénom</span>
-                            
+                            {{ slotProps.data.lastname }}
                         </template>
                     </Column>
                     <Column field="email" header="Email" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Email</span>
-                            
+                            {{ slotProps.data.email }}
                         </template>
                     </Column>
                     <Column field="societe" header="Société" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Société</span>
-                            
+                            {{ slotProps.data.societe }}
                         </template>
                     </Column>
                     <Column field="urlsite" header="Url Site" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">URL site</span>
-                            
+                            {{ slotProps.data.urlsite }}
                         </template>
                     </Column>
                     <Column field="compteIsVerified" header="Statut" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Statut</span>
-                            
+                            <div v-if="slotProps.data.compteIsVerified">
+                                <Tag severity="success" value="Vérifié"></Tag>
+                            </div>
+                            <div v-else>
+                                <Tag severity="danger" value="Non vérifié"></Tag>
+                            </div>
                         </template>
                     </Column>
                     <Column field="appId" header="AppID" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">App ID</span>
-                            
+                            {{ slotProps.data.appId }}
                         </template>
                     </Column>
                     <Column field="role" header="Role" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Role</span>
-                            
+                            {{ slotProps.data.role }}
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
@@ -179,16 +192,36 @@ const hideDialog = () => {
                     </Column>
                 </DataTable>
 
-                <!-- <Dialog v-model:visible="userDialog" :style="{ width: '450px' }" header="user Details" :modal="true" class="p-fluid">
-                    <img :src="contextPath + 'demo/images/user/' + user.image" :alt="user.image" v-if="user.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
+                <Dialog v-model:visible="userDialog" :style="{ width: '450px' }" header="Ajouter un utilisateur" :modal="true" class="p-fluid">
                     <div class="field">
-                        <label for="name">Name</label>
-                        <InputText id="name" v-model.trim="user.name" required="true" autofocus :class="{ 'p-invalid': submitted && !user.name }" />
-                        <small class="p-invalid" v-if="submitted && !user.name">Name is required.</small>
+                        <label for="lastname">Nom</label>
+                        <InputText id="lastname" v-model.trim="user.lastname" required="true" autofocus :class="{ 'p-invalid': submitted && !user.lastname }" />
+                        <small class="p-invalid" v-if="submitted && !user.lastname">Champ obligatoire.</small>
                     </div>
                     <div class="field">
-                        <label for="description">Description</label>
-                        <Textarea id="description" v-model="user.description" required="true" rows="3" cols="20" />
+                        <label for="firstname">Prénom</label>
+                        <InputText id="firstname" v-model.trim="user.firstname" required="true" autofocus :class="{ 'p-invalid': submitted && !user.firstname }" />
+                        <small class="p-invalid" v-if="submitted && !user.firstname">Champ obligatoire.</small>
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <InputText id="email" v-model.trim="user.email" required="true" autofocus :class="{ 'p-invalid': submitted && !user.email }" />
+                        <small class="p-invalid" v-if="submitted && !user.email">Champ obligatoire.</small>
+                    </div>
+                    <div class="field">
+                        <label for="firstname">Société</label>
+                        <InputText id="firstname" v-model.trim="user.societe" required="true" autofocus :class="{ 'p-invalid': submitted && !user.societe }" />
+                        <small class="p-invalid" v-if="submitted && !user.societe">Champ obligatoire.</small>
+                    </div>
+                    <div class="field">
+                        <label for="urlsite">URL site</label>
+                        <InputText id="urlsite" v-model.trim="user.urlsite" required="true" autofocus :class="{ 'p-invalid': submitted && !user.urlsite }" />
+                        <small class="p-invalid" v-if="submitted && !user.urlsite">Champ obligatoire.</small>
+                    </div>
+                    <div class="field">
+                        <label for="statut">Statut</label>
+                        <InputText id="statut" v-model.trim="user.statut" required="true" autofocus :class="{ 'p-invalid': submitted && !user.statut }" />
+                        <small class="p-invalid" v-if="submitted && !user.statut">Champ obligatoire.</small>
                     </div>
 
                     <div class="field">
@@ -245,7 +278,7 @@ const hideDialog = () => {
                         <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
                         <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveuser" />
                     </template>
-                </Dialog> -->
+                </Dialog>
 
                 <!-- <Dialog v-model:visible="deleteUserDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
                     <div class="flex align-items-center justify-content-center">
@@ -278,4 +311,7 @@ const hideDialog = () => {
 
 
 <style lang="scss">
+table td {
+    vertical-align: middle;
+}
 </style>
