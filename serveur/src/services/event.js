@@ -32,7 +32,11 @@ module.exports = function () {
      */
     async getEventById(eventId) {
       try {
-        return await Event.findOne({ _id: eventId });
+        const event = await Event.findOne({ _id: eventId });
+        if (!event) {
+          throw new Error("Event not found");
+        }
+        return event;
       } catch (error) {
         throw new Error("Error while retrieving the event");
       }
@@ -97,6 +101,7 @@ module.exports = function () {
             event.data.session += data.data.session;
           }
           event.data.timeSpent += data.data.timeSpent;
+          event.updatedAt = Date.now();
           return await event.save();
         } else {
           data.data.session = 1;

@@ -128,20 +128,26 @@ export default {
           const action = Object.keys(binding.modifiers)[0];
           const visitorId = await Fingerprint.loadFingerPrint();
           const startTime = new Date();
-          window.addEventListener("visibilitychange", async () => {
-            if (document.visibilityState === "hidden") {
-              const endTime = new Date();
-              const timeSpent = endTime - startTime;
-              let data = {
-                modifier: binding.modifiers,
-                page: window.location.href,
-                tag: binding.arg,
-                visitor_id: visitorId,
-                timeSpent: timeSpent,
-              };
-              console.log(action, binding.arg, data);
-              this.addTimeSpentOnPage(visitorId, action, options.APPID, data);
-            }
+          const modifier = binding.modifiers;
+          const page = window.location.href;
+          const tag = binding.arg;
+          window.addEventListener("beforeunload", async () => {
+            const endTime = new Date();
+            const timeSpent = endTime - startTime;
+            let data = {
+              modifier: modifier,
+              page: page,
+              tag: tag,
+              visitor_id: visitorId,
+              timeSpent: timeSpent,
+            };
+            console.log(action, binding.arg, data);
+            await this.addTimeSpentOnPage(
+              visitorId,
+              action,
+              options.APPID,
+              data
+            );
           });
         }
       });
