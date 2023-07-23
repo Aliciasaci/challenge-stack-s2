@@ -90,28 +90,53 @@ module.exports = function () {
     },
 
     async addTimeSpentOnPage(data) {
+      const thirtyMinsAgo = new Date(Date.now() - 1800000);
       try {
-        const event = await Event.findOne({
-          "data.visitor_id": { $eq: data.data.visitor_id },
-          "data.page": { $eq: data.data.page },
-        });
-        console.log(event);
-        if (event) {
-          if (event.updatedAt < Date.now() - 1800000) {
-            event.data.session += data.data.session;
-          }
-          event.data.timeSpent += data.data.timeSpent;
-          event.updatedAt = Date.now();
-          return await event.save();
-        } else {
+        if (!data.data.session) {
           data.data.session = 1;
-          const newEvent = new Event({
-            type: data.type,
-            appId: data.appId,
-            data: data.data,
-          });
-          return await newEvent.save();
         }
+        const event = await Event.findOneAndUpdate(
+          {
+            type: "visited",
+            "data.visitor_id": { $eq: data.data.visitor_id },
+            "data.page": { $eq: data.data.page },
+            updatedAt: { $gte: thirtyMinsAgo },
+          },
+          {
+            $inc: { "data.timeSpent": data.data.timeSpent },
+            $set: { updatedAt: Date.now() },
+            $set: { "data.session": data.data.session },
+          },
+          { new: true }
+        );
+        console.log("Found less than 30mins ago", event);
+        if (!event) {
+          const event = await Event.findOne({
+            "data.visitor_id": { $eq: data.data.visitor_id },
+            "data.page": { $eq: data.data.page },
+            updatedAt: { $lt: thirtyMinsAgo },
+          });
+          if (event) {
+            console.log("Found more than 30mins ago", event);
+            data.data.session = data.data.session + 1;
+            const newEvent = new Event({
+              type: data.type,
+              appId: data.appId,
+              data: data.data,
+            });
+            return await newEvent.save();
+          } else {
+            console.log("Not found at all", event);
+            data.data.session = 1;
+            const newEvent = new Event({
+              type: data.type,
+              appId: data.appId,
+              data: data.data,
+            });
+            return await newEvent.save();
+          }
+        }
+        return event;
       } catch (error) {
         console.error("Error in service:", error);
         throw error;

@@ -16,7 +16,7 @@ export default {
     const fpPromise = await FingerPrintjs.load();
     const fp = await fpPromise;
     const result = await fp.get();
-    return result.visitorId;
+    return result;
   },
 
   async getAllVisitorIds() {
@@ -35,25 +35,26 @@ export default {
     }
   },
 
-  async timeSpent(d, s, id, file) {
-    var Tos;
-    var js,
-      fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.onload = function () {
-      var config = {
-        trackBy: "seconds",
-      };
-      if (TimeOnSiteTracker) {
-        Tos = new TimeOnSiteTracker(config);
-      }
+  async addTimeSpentOnPage(visitorId, type, appId, data) {
+    const event = {
+      type: type,
+      appId: appId,
+      data: data,
     };
-    js.src = file;
-    fjs.parentNode.insertBefore(js, fjs);
-    return Tos;
+    try {
+      const response = await fetch(
+        `http://localhost:3000/events/visitor/${visitorId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   },
-
-  // timeSpent(document, 'script', 'TimeOnSiteTracker', '//cdn.jsdelivr.net/gh/saleemkce/timeonsite@1.2.1/timeonsitetracker.min.js');
 };
