@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 
 onMounted(() => {
     chartData.value = setChartData();
@@ -15,32 +15,28 @@ onMounted(() => {
 
 const chartData = ref();
 const chartOptions = ref();
-        
+
+let { events } = defineProps(['events']);
+
 const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
 
     return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'Nombres de vues par mois',
                 fill: false,
                 borderColor: documentStyle.getPropertyValue('--blue-500'),
                 yAxisID: 'y',
                 tension: 0.4,
-                data: [65, 59, 80, 81, 56, 55, 10]
+                data: events,
             },
-            {
-                label: 'Dataset 2',
-                fill: false,
-                borderColor: documentStyle.getPropertyValue('--green-500'),
-                yAxisID: 'y1',
-                tension: 0.4,
-                data: [28, 48, 40, 19, 86, 27, 90]
-            }
         ]
     };
 };
+
+
 const setChartOptions = () => {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');

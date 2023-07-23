@@ -1,7 +1,7 @@
 
 <template>
     <div class="card">
-        <Chart type="bar" :data="chartData" :options="chartOptions"  class="h-25rem" />
+        <Chart type="bar" :data="chartData" :options="chartOptions" class="h-25rem" />
     </div>
 </template>
 
@@ -16,24 +16,22 @@ onMounted(() => {
 const chartData = ref();
 const chartOptions = ref();
 
+let { events } = defineProps(['events']);
+
+
 const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
 
     return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         datasets: [
             {
                 label: 'My First dataset',
                 backgroundColor: documentStyle.getPropertyValue('--blue-500'),
                 borderColor: documentStyle.getPropertyValue('--blue-500'),
-                data: [65, 59, 80, 81, 56, 55, 40]
+                data: events
             },
-            {
-                label: 'My Second dataset',
-                backgroundColor: documentStyle.getPropertyValue('--pink-500'),
-                borderColor: documentStyle.getPropertyValue('--pink-500'),
-                data: [28, 48, 40, 19, 86, 27, 90]
-            }
+
         ]
     };
 };

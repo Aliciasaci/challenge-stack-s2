@@ -1,9 +1,12 @@
 //*POSTGRE SQL
 const { Sequelize, DataTypes } = require("sequelize");
-const connection = new Sequelize(
-  `postgres://root:password@localhost:5432/postgres`,
-  { dialect: "postgres" }
-);
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const connection = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+});
 
 connection
   .authenticate()
@@ -15,16 +18,18 @@ connection
   });
 
 //*MongoDB
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://0.0.0.0:27017/mongodatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('=> Connexion à MongoDB réussie');
-})
+mongoose
+  .connect("mongodb://0.0.0.0:27017/mongodatabase", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("=> Connexion à MongoDB réussie");
+  })
   .catch((error) => {
-    console.error('Erreur de connexion à MongoDB :', error);
+    console.error("Erreur de connexion à MongoDB :", error);
   });
 
 module.exports = connection;

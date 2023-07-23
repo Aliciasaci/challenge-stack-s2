@@ -21,6 +21,8 @@ import Listbox from 'primevue/listbox';
 import SplitButton from 'primevue/splitbutton';
 import Chart from 'primevue/chart';
 import InputSwitch from 'primevue/inputswitch';
+import FileUpload from 'primevue/fileupload';
+
 
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";
@@ -54,10 +56,7 @@ app.component("Listbox", Listbox);
 app.component("SplitButton", SplitButton);
 app.component("Chart", Chart);
 app.component("InputSwitch", InputSwitch);
-
-
-
-
+app.component("FileUpload", FileUpload);
 
 app.config.globalProperties.$api = axios.create({
     baseURL: 'http://localhost:5000/',
