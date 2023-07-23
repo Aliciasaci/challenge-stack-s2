@@ -11,12 +11,14 @@ const deleteUserDialog = ref(false);
 const deleteUsersDialog = ref(false);
 const user = ref({});
 const selectedUsers = ref(null);
+const selectedRole = ref(null);
+const selectedStatus = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 const statuses = [
-    { label: 'Vérifié', value: 'true' },
-    { label: 'Non vérifié', value: 'false' },
+    { label: 'Vérifié', value: true },
+    { label: 'Non vérifié', value: false },
 ];
 const roles = [
     { label: 'USER_ADMIN', value: 'USER_ADMIN' },
@@ -52,6 +54,8 @@ async function deleteUser(userId) {
 }
 
 async function editUser(editUser) {
+    editUser.role = selectedRole.value.value; // update role
+    editUser.compteIsVerified = selectedStatus.value.value; // update status
     const response = await fetch('http://localhost:3000/users/' + editUser.id, {
         method: 'PATCH',
         headers: {
@@ -94,6 +98,8 @@ const exportCSV = () => {
 function confirmEditUser(editUser) {
     userDialog.value = true;
     user.value = editUser;
+    selectedRole.value = roles.filter(el => el.value === editUser.role)[0];
+    selectedStatus.value = statuses.filter(el => el.value === editUser.compteIsVerified)[0];
 }
 
 // one user
@@ -241,13 +247,10 @@ const confirmDeleteSelected = () => {
                     </div>
                     <div class="field">
                         <label for="compteIsVerified" class="mb-3">Compte statut</label>
-                        <Dropdown id="compteIsVerified" v-model="user.compteIsVerified" :options="statuses" optionLabel="label" placeholder="Sélectionner un statut">
+                        <Dropdown id="compteIsVerified" v-model="selectedStatus" :options="statuses" optionLabel="label" placeholder="Sélectionner un statut">
                             <template #value="slotProps">
-                                <div v-if="slotProps.value && slotProps.value.value">
+                                <div v-if="slotProps.value">
                                     <span>{{ slotProps.value.label }}</span>
-                                </div>
-                                <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span>{{ slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
@@ -262,13 +265,10 @@ const confirmDeleteSelected = () => {
                     </div>
                     <div class="field">
                         <label for="role" class="mb-3">Rôle</label>
-                        <Dropdown id="role" v-model="user.role" :options="roles" optionLabel="label" placeholder="Sélectionner un rôle">
+                        <Dropdown id="role" v-model="selectedRole" :options="roles" optionLabel="label" placeholder="Sélectionner un rôle">
                             <template #value="slotProps">
-                                <div v-if="slotProps.value && slotProps.value.value">
+                                <div v-if="slotProps.value">
                                     <span>{{ slotProps.value.label }}</span>
-                                </div>
-                                <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span>{{ slotProps.value }}</span>
                                 </div>
                                 <span v-else>
                                     {{ slotProps.placeholder }}
