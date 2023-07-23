@@ -32,10 +32,10 @@ module.exports = function (connection) {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [8, 32],
-        //is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
-      },
+      // validate: {
+      //   len: [8, 32],
+      //   is: /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/i,
+      // },
     },
     societe: {
       type: DataTypes.STRING
