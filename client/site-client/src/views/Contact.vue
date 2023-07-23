@@ -1,21 +1,17 @@
-<template >
-        <Header />
-        <section class="hero" v-tracker:ZLI4OB.visited>
-            <div class="hero-body">
-                <p class="title">
-                    Contacts
-                </p>
-            </div>
-        </section>
+<template>
+  <Header />
+  <section class="hero" v-tracker:1RYH3L.visited>
+    <div class="hero-body">
+      <p class="title">Contacts</p>
+    </div>
+  </section>
 </template>
 <script>
 import Header from "../components/Header.vue";
 export default {
-    components: {
+  components: {
     Header,
   },
-}
+};
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>
