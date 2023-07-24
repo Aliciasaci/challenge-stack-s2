@@ -22,8 +22,10 @@ import SplitButton from 'primevue/splitbutton';
 import Chart from 'primevue/chart';
 import InputSwitch from 'primevue/inputswitch';
 import FileUpload from 'primevue/fileupload';
-
-
+import Avatar from 'primevue/avatar';
+import AvatarGroup from 'primevue/avatargroup'; 
+import TreeSelect from 'primevue/treeselect';
+import Calendar from 'primevue/calendar';
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 //core
@@ -57,6 +59,13 @@ app.component("SplitButton", SplitButton);
 app.component("Chart", Chart);
 app.component("InputSwitch", InputSwitch);
 app.component("FileUpload", FileUpload);
+app.component("Avatar", Avatar);
+app.component("AvatarGroup", AvatarGroup);
+app.component("TreeSelect", TreeSelect);
+app.component("Calendar", Calendar);
+
+
+
 
 app.config.globalProperties.$api = axios.create({
     baseURL: 'http://localhost:5000/',

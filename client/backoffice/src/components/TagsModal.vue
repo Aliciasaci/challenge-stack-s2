@@ -4,17 +4,18 @@
             <div>
                 <div class="card-modal">
                     <InputText type="text" v-model="generatedTag" placeholder="Cliquer sur générer"
-                        :style="{ width: '31vw' }" />
+                        :style="{ width: '' }" />
                     <Button type="submit" label="Générer" outlined @click="generateRandomTag" />
+                    <InputText type="text" v-model="description" placeholder="Description" :style="{ width: '' }" />
                     <Button type="submit" label="Ajouter" outlined @click="createTag" />
 
                 </div>
                 <div class="tags-list">
                     <ul>
-                        <li class="tag-element" v-for="tag in tags" :key="tag.code">{{ tag.commentaire }}
+                        <li class="tag-element" v-for="tag in tags" :key="tag.code"><span><b>Tag : </b>{{ tag.commentaire }} |
+                            <b>Description</b> : {{
+                                tag.description }}</span>
                             <div class="actions">
-                                <Button icon="pi pi-heart" severity="help" text raised rounded aria-label="Favorite"
-                                    class="mr-2" />
                                 <Button icon="pi pi-times" severity="danger" text raised rounded aria-label="Cancel"
                                     @click="deleteTag(tag.id)" />
                             </div>
@@ -33,6 +34,7 @@ import { onMounted } from 'vue';
 
 const visible = defineProps(['visible']);
 const generatedTag = ref(null);
+const description = ref(null);
 const user = JSON.parse(localStorage.getItem('user'));
 const tags = ref(null);
 
@@ -79,7 +81,7 @@ async function createTag() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ commentaire: generatedTag.value, id_user: user.id })
+                    body: JSON.stringify({ commentaire: generatedTag.value, id_user: user.id, description: description.value })
                 }
             );
             if (!response.ok) {
@@ -112,7 +114,7 @@ async function deleteTag(tagId) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
 
-        if(response.status == 204){
+        if (response.status == 204) {
             alert("Tag supprimé avec success");
             getUsersTags(user.id);
         }
@@ -122,6 +124,7 @@ async function deleteTag(tagId) {
         throw error;
     }
 }
+
 
 </script>
 <style>

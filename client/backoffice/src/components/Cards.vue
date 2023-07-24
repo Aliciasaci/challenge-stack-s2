@@ -41,7 +41,7 @@ import { defineProps } from 'vue';
 let nbClickTotal = ref(0);
 let nbSubmitTotal = ref(0);
 let nbVisiteTotal = ref(0);
-let { events, displayCards } = defineProps(['events', 'displayCards']);
+let { events } = defineProps(['events']);
 let visitCountsArray = [];
 let clickCountsArray = [];
 let submitCountsArray = [];
@@ -102,14 +102,6 @@ onMounted(() => {
         { id: 4,title: 'Nombre de submit', nb: nbSubmitTotal, icon: 'pi pi-fw pi-pencil text-blue-500 text-xl', otherData: submitCountsArray }
     ];
 
-    for(let index = 0; index < data.value.length; index++){
-        
-        nextTick(() => {
-            const element = document.getElementById("carte-"+index);
-            element.style.display = displayCards[index];
-        })
-
-    }
 
 });
 

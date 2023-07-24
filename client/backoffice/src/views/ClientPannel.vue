@@ -8,11 +8,13 @@ import Cards from '@/components/Cards.vue';
 import AppIDModal from '@/components/AppIDModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
+import ParamModal from "../components/ParamModal.vue"
 
 
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
+const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 const appEvents = ref(false);
 import { useStore } from 'vuex';
@@ -41,6 +43,13 @@ const generatePreferencesModal = () => {
 const generateTagModal = () => {
     isTagsModalVisible.value = true;
 }
+
+const generateParamModal = () => {
+    isParamModalVisible.value = true;
+}
+
+
+
 
 async function getEventsByAppId(appId) {
     try {
@@ -89,29 +98,29 @@ function getNbVisitesPerMonth(appEvents) {
     return nbVisitsPerMonthArray;
 }
 
-function diplayElement(id, classe, status){
-    if(classe){
-        let classeElement = document.querySelector("."+classe);
-        if (classeElement){
+function diplayElement(id, classe, status) {
+    if (classe) {
+        let classeElement = document.querySelector("." + classe);
+        if (classeElement) {
             classeElement.style.display = status;
         }
     }
-    if(id){
-        let idElement = document.querySelector("#"+id);
-        if(idElement){
+    if (id) {
+        let idElement = document.querySelector("#" + id);
+        if (idElement) {
             idElement.style.display = status;
         }
     }
 }
 
-function togglePreferencesCards(){
+function togglePreferencesCards() {
     //recup les préférences de l'utilisateur 
     const checkedBtnsPreferences = store.state.checkedBtns;
-    for (var index = 0; index < 4; index++){
-        if (checkedBtnsPreferences[index]){
+    for (var index = 0; index < 4; index++) {
+        if (checkedBtnsPreferences[index]) {
             displayCards.push("block")
         }
-        else{
+        else {
             displayCards.push("None")
         }
     }
@@ -127,16 +136,18 @@ function togglePreferencesCards(){
         <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
+        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
     </span>
 
     <!--Cards-->
-    <Cards v-if="appEvents" :events="appEvents" :displayCards="displayCards" />
+    <Cards v-if="appEvents" :events="appEvents" />
     <!--Cards-->
 
     <!--Les modals-->
     <AppIDModal :visible="isAppIDModalVisible" />
     <PreferencesModal :visible="isPreferencesModalVisible" />
     <TagsModal :visible="isTagsModalVisible" />
+    <ParamModal :visible="isParamModalVisible" />
     <!--Les modals-->
 
 
@@ -153,6 +164,8 @@ function togglePreferencesCards(){
         <div class="detail">
             <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
         </div>
+
+
     </div>
 </template>
 <style>
