@@ -1,7 +1,7 @@
 <template lang="">
   <div>
     <Header />
-    <div class="flex justify-center mt-8">
+    <div class="flex justify-center mt-8" v-tracker:4PS4IB.visited>
       <Fieldset class="w-[80%]" :toggleable="true" :legend="article.title">
         <div class="p-grid">
           <div class="p-col-12 p-md-6">
@@ -14,7 +14,8 @@
               label="Contactez-nous"
               type="button"
               class="my-3 p-button-raised"
-              @click="visible = true" />
+              @click="visible = true"
+            />
             <ContactForm v-model:visible="visible" />
           </div>
         </div>

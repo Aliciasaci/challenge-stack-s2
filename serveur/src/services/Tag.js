@@ -26,6 +26,8 @@ module.exports = function () {
      * @returns 
      */
     async create(data) {
+
+      console.log(data);
       try {
         const tag = await Tag.create(data);
         return tag;
@@ -81,5 +83,7 @@ module.exports = function () {
       const nbDeleted = await Tag.destroy({ where: { id } });
       return nbDeleted === 1;
     },
+
+    
   };
 };

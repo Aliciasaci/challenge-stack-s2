@@ -18,5 +18,7 @@ app.use(store).use(router).mount("#app");
 app.use(PrimeVue);
 
 //passer le APPID en options.
-app.use(SDK, {"APPID" : "123456"});
+
+//APP ID du site kenzo kenzo
+app.use(SDK, { APPID: "8ef37f72-c075-41ca-b838-8b531c685219" });
 app.use(ToastService);

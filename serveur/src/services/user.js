@@ -1,15 +1,26 @@
+const tag = require("../db/models/tag");
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
-
+const Tag = require('../db').Tag;
 
 module.exports = function () {
   return {
-    //retoucher pour order, page etc
-    async findAll(criteria) {
-      return await User.findAll({
-        where: criteria,
-      });
+    async findAll(criteria, options) {
+      try {
+        const users = await User.findAll({
+          where: criteria,
+          offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
+          limit: options && options.limit || 20,
+          order: options && options.order ? [options.order.split(":")] : undefined,
+          attributes: options && options.attributes ? [options.attributes] : undefined,
+        });
+
+        return users;
+      } catch (error) {
+        console.error('Error while retrieving users:', error);
+        throw error;
+      }
     },
 
 
@@ -48,8 +59,6 @@ module.exports = function () {
 
     async updateOne(id, newData) {
 
-      console.log(id);
-      console.log(newData);
       try {
         const [nbUpdated, newValues] = await User.update(newData, {
           where: { id },
@@ -73,6 +82,19 @@ module.exports = function () {
     },
 
 
+    async getUserTags(userId) {
+      try {
+        const tags = await Tag.findAll({
+          where: {
+            id_user: userId
+          }
+        });
 
+        return tags;
+      } catch (error) {
+        console.error('Error while retrieving user tags:', error);
+        throw error;
+      }
+    }
   };
 };
