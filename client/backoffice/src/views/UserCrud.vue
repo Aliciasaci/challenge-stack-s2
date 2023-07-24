@@ -3,7 +3,7 @@ import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount, reactive } from 'vue';
 import { useToast } from 'primevue/usetoast';
 
-// const toast = useToast();
+const toast = useToast();
 
 const users = reactive([]);
 const userDialog = ref(false);
@@ -47,6 +47,8 @@ async function deleteUser(userId) {
         });
         if (response.status === 204) {
             users.splice(users.indexOf(userId), 1);
+            deleteUserDialog.value = false;
+            toast.add({ severity: 'success', summary: 'Succès', detail: 'Utilisateur supprimé', life: 3000 });
         }
     } catch (error) {
         console.error(error);
@@ -58,6 +60,9 @@ async function editUser(editUser) {
     editUser.compteIsVerified = selectedStatus.value.value; // update status
     const response = await fetch('http://localhost:3000/users/' + editUser.id, {
         method: 'PATCH',
+
+
+        
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
             'Content-Type': 'application/json'
@@ -67,6 +72,8 @@ async function editUser(editUser) {
     console.log(JSON.stringify(editUser), response);
     if (response.ok) {
         users.splice(users.findIndex((_u) => _u.id === editUser.id), 1, await response.json());
+        userDialog.value = false;
+        toast.add({ severity: 'success', summary: 'Succès', detail: 'Utilisateur modifié', life: 3000 });
     } else if (response.status === 422) {
         throw await response.json();
     } else {

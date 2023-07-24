@@ -23,6 +23,7 @@ import Chart from 'primevue/chart';
 import FileUpload from 'primevue/fileupload';
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
+import ToastService from 'primevue/toastservice';
 
 
 //theme
@@ -39,6 +40,7 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(PrimeVue);
+app.use(ToastService);
 
 app.component("Button", Button);
 app.component("InputText", InputText);
