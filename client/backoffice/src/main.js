@@ -22,6 +22,10 @@ import SplitButton from 'primevue/splitbutton';
 import Chart from 'primevue/chart';
 import InputSwitch from 'primevue/inputswitch';
 import FileUpload from 'primevue/fileupload';
+import Badge from 'primevue/badge';
+import Tag from 'primevue/tag';
+import ToastService from 'primevue/toastservice';
+
 
 
 //theme
@@ -38,6 +42,7 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(PrimeVue);
+app.use(ToastService);
 
 app.component("Button", Button);
 app.component("InputText", InputText);
@@ -57,6 +62,10 @@ app.component("SplitButton", SplitButton);
 app.component("Chart", Chart);
 app.component("InputSwitch", InputSwitch);
 app.component("FileUpload", FileUpload);
+app.component("Badge", Badge);
+app.component("Tag", Tag);
+
+
 
 app.config.globalProperties.$api = axios.create({
     baseURL: 'http://localhost:5000/',
