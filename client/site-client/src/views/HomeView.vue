@@ -1,5 +1,5 @@
 <template>
-  <div class="home" v-tracker:1YDQ52.visited>
+  <div class="home" v-tracker:9EZQ4I.visited>
     <Header />
     <HeroSection />
     <div class="first-row">

@@ -1,37 +1,35 @@
 //*POSTGRE SQL
-const { Sequelize, DataTypes } = require('sequelize');
-const dotenv = require('dotenv');
+const { Sequelize, DataTypes } = require("sequelize");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 const connection = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
+  dialect: "postgres",
 });
 
 connection
   .authenticate()
   .then(() => {
-    console.log("=> Connexion à POSTGRE réussie.");
+    console.log("=> Connexion à POSTGRES réussie.");
   })
   .catch((error) => {
-    console.error("Connexion à  POSTGRE échouée:", error);
+    console.error("Connexion à POSTGRES échouée:", error);
   });
 
-
 //*MongoDB
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://0.0.0.0:27017/mongodatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('=> Connexion à MongoDB réussie');
-})
+mongoose
+  .connect("mongodb://0.0.0.0:27017/mongodatabase", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("=> Connexion à MongoDB réussie");
+  })
   .catch((error) => {
-    console.error('Erreur de connexion à MongoDB :', error);
+    console.error("Erreur de connexion à MongoDB :", error);
   });
 
 module.exports = connection;
-
-
-
