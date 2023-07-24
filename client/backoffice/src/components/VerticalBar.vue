@@ -27,8 +27,8 @@ const setChartData = () => {
         datasets: [
             {
                 label: 'My First dataset',
-                backgroundColor: documentStyle.getPropertyValue('--blue-500'),
-                borderColor: documentStyle.getPropertyValue('--blue-500'),
+                backgroundColor: "#F72C25DB",
+                borderColor: "#F72C25DB",
                 data: events
             },
 

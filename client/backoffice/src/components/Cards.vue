@@ -6,7 +6,7 @@
             </div>
             <span class="text-900 font-medium text-xl">{{ d.nb }}</span><br />
 
-            <Button label="Voir détails" outlined class="p-button-sm voir-plus" rounded @click="voirDetail(d)" />
+            <Button label="Voir détails" outlined class="p-button-sm voir-plus" rounded @click="voirDetail(d)" style="color: #f63bbe;"/>
         </div>
     </div>
 
@@ -133,7 +133,7 @@ function voirDetail(d) {
 
 .box {
     background: var(--surface-card);
-    border: 1px solid var(--surface-border);
+    border: white;
     padding: 2rem;
     margin: 0rem 1rem 2rem 1rem;
     box-shadow: var(--card-shadow);
@@ -171,7 +171,7 @@ function voirDetail(d) {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 5px;
-    background-color: #d0e1fd;
+    background-color: #fff4fc;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,5 +180,13 @@ function voirDetail(d) {
 .voir-plus {
     position: absolute;
     right: 21px;
+}
+
+.card{
+    border: white;
+}
+
+.text-blue-500 {
+  color: #f63bbe !important;
 }
 </style>

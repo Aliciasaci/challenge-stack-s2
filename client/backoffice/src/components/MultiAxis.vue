@@ -27,7 +27,7 @@ const setChartData = () => {
             {
                 label: 'Nombres de vues par mois',
                 fill: false,
-                borderColor: documentStyle.getPropertyValue('--blue-500'),
+                borderColor: "#216869",
                 yAxisID: 'y',
                 tension: 0.4,
                 data: events,

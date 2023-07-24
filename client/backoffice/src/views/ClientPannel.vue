@@ -199,6 +199,10 @@ function togglePreferencesCards() {
     flex-basis: 49%;
     height: 100%;
 }
+
+.card{
+    border: white;
+}
 </style>
   
 
