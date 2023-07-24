@@ -12,6 +12,10 @@ module.exports = function (connection) {
       type: DataTypes.STRING,
       allowNull: true
     },
+    description : {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     id_user: {
       type: DataTypes.INTEGER,
       allowNull: false,
