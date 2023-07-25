@@ -42,17 +42,11 @@ export default {
       data: data,
     };
     try {
-      const response = await fetch(
+      navigator.sendBeacon(
         `http://localhost:3000/events/visitor/${visitorId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(event),
-        }
+        JSON.stringify(event)
       );
-      console.log(response);
+      console.log("Beacon sent");
     } catch (error) {
       console.error(error);
     }
