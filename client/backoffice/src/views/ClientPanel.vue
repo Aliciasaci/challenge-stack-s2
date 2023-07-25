@@ -8,6 +8,7 @@ import Cards from '@/components/Cards.vue';
 import AppIDModal from '@/components/AppIDModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
+import { mapGetters, mapActions } from '../store/map-state';
 import ParamModal from "../components/ParamModal.vue"
 
 
@@ -21,7 +22,8 @@ const store = useStore();
 let appEvents = ref();
 let nbVisitsPerMonthArray = [];
 let displayCards = [];
-
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const { logoutAsUser } = mapActions('loginAsUser');
 
 onMounted(async () => {
     appEvents = await getEvents();
@@ -71,6 +73,10 @@ async function getEvents() {
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
     </span>
+    <div v-if="isLoggedInAsUser">
+        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
+        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
+    </div>
 
     <!-- Cards-->
     <Cards />

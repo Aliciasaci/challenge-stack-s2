@@ -35,7 +35,6 @@ module.exports = function (connection) {
         },
       },
     },
-
     {
       connection,
       tableName: "tags",

@@ -1,21 +1,12 @@
-import { createStore } from 'vuex';
+import { createStore, createLogger } from 'vuex'
+import checkedBtn from './modules/checkedBtn'
+import loginAsUser from './modules/loginAsUser'
 
 export default createStore({
-  state: {
-    checkedBtns: [],
+  modules: {
+      checkedBtn,
+      loginAsUser
   },
-  mutations: {
-    setCheckedBtn(state, payload) {
-      state.checkedBtns[payload.index] = payload.value;
-    },
-    initializeCheckedBtns(state, numButtons) {
-      state.checkedBtns = new Array(numButtons).fill(false);
-    },
-  },
-  actions: {
-    initializeCheckedBtns({ commit }, numButtons) {
-      commit('initializeCheckedBtns', numButtons);
-    },
-  },
-  modules: {},
-});
+  // strict: debug,
+  // plugins: debug ? [createLogger()] : []
+})

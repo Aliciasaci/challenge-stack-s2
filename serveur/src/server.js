@@ -6,6 +6,7 @@ const eventRouter = require("./routes/eventRouter.js")
 const widgetRouter = require("./routes/widgetRouter.js")
 const AuthRouter = require("./routes/authRouter.js");
 const cors = require("cors");
+const checkAuth = require("./middlewares/checkAuth");
 
 const GenericController = require("./controllers/GenericController");
 const AuthController = require("./controllers/AuthController");
