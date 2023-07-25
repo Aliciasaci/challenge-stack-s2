@@ -12,13 +12,43 @@ module.exports = function (eventService, options = {}) {
 
     async getAllEvents(req, res) {
       // Renamed the function to getAllEvents
+      const options = {
+        dateDebut: req.query.dateDebut ?? null,
+        dateFin: req.query.dateFin ?? null,
+        type: req.query.type ?? null,
+        orderDesc: req.query.orderDesc ?? null,
+        appId: req.query.appId ?? null,
+      }
+
       try {
-        const events = await eventService.getAllEvents();
+        const events = await eventService.getAllEvents(options);
         res.status(200).json(events);
       } catch (error) {
-        res.status(500).json({ error: "Error while retrieving all events" });
+        res.status(500).json({ error: "an error has occured" });
       }
     },
+
+
+    async getCount(req, res) {
+
+      const options = {
+        dateDebut: req.query.dateDebut ?? null,
+        dateFin: req.query.dateFin ?? null,
+        type: req.query.type ?? null,
+        periode : req.query.periode ?? null,
+        orderDesc: req.query.orderDesc ?? null,
+        appId: req.query.appId ?? null,
+      }
+
+
+      try {
+        const events = await eventService.getCount(options);
+        res.status(200).json(events);
+      } catch (error) {
+        res.status(500).json({ error: "Error" });
+      }
+    },
+
 
     async getEventById(req, res) {
       try {
@@ -30,7 +60,8 @@ module.exports = function (eventService, options = {}) {
           res.status(404).json({ error: "Event not found" });
         }
       } catch (error) {
-        res.status(500).json({ error: "Error while retrieving the event" });
+        console.log(error);
+        res.status(500).json({ error: "[Controller] Error while retrieving the event" });
       }
     },
 

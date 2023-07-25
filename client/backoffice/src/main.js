@@ -22,6 +22,11 @@ import SplitButton from 'primevue/splitbutton';
 import Chart from 'primevue/chart';
 import InputSwitch from 'primevue/inputswitch';
 import FileUpload from 'primevue/fileupload';
+import Avatar from 'primevue/avatar';
+import AvatarGroup from 'primevue/avatargroup'; 
+import TreeSelect from 'primevue/treeselect';
+import Calendar from 'primevue/calendar';
+
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
@@ -63,6 +68,13 @@ app.component("SplitButton", SplitButton);
 app.component("Chart", Chart);
 app.component("InputSwitch", InputSwitch);
 app.component("FileUpload", FileUpload);
+
+app.component("Avatar", Avatar);
+app.component("AvatarGroup", AvatarGroup);
+app.component("TreeSelect", TreeSelect);
+app.component("Calendar", Calendar);
+
+
 app.component("Badge", Badge);
 app.component("Tag", Tag);
 app.component("Password", Password);

@@ -19,12 +19,12 @@ onMounted(() => {
 
 <style lang="scss">
 #app {
-  background-color: #FFDBF280;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: rgba(239, 201, 224, 0.26);
 }
 
 nav {

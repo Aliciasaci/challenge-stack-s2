@@ -21,6 +21,10 @@ module.exports = {
       lastname: {
         type: Sequelize.STRING,
       },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: "USER_CLIENT",
+      },
       email: {
         type: Sequelize.STRING,
         validate: {

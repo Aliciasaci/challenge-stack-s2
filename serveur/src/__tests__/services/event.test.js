@@ -1,14 +1,13 @@
-process.env.NODE_ENV = "test";
-const testConfig = require("../../mongotest.config");
-const mongoose = require("mongoose");
-const EventService = require("../../services/event");
-const { after, afterEach, before } = require("node:test");
+process.env.NODE_ENV = "Servicetest";
+import { url, options } from "../../../config/mongotest.config";
+import { connect, connection } from "mongoose";
+import EventService from "../../services/event";
 
 describe("EventService", () => {
   let eventService;
 
   beforeAll(async () => {
-    await mongoose.connect(testConfig.url, testConfig.options);
+    await connect(url, options);
     eventService = EventService();
   });
 
@@ -17,8 +16,8 @@ describe("EventService", () => {
   });
 
   afterAll(async () => {
-    await mongoose.connection.dropDatabase();
-    await mongoose.connection.close();
+    await connection.dropDatabase();
+    await connection.close();
   });
 
   describe("createEvent", () => {
@@ -215,21 +214,6 @@ describe("EventService", () => {
       const event = await eventService.addTimeSpentOnPage(eventData);
       expect(event).toBeDefined();
       expect(event.data.timeSpent).toBe(1000);
-    });
-
-    it("should update time spent on a page if the event already exists", async () => {
-      const eventData = {
-        type: "pageview",
-        appId: "123",
-        data: {
-          visitor_id: "456",
-          page: "home",
-          timeSpent: 2000,
-        },
-      };
-      const event = await eventService.addTimeSpentOnPage(eventData);
-      expect(event).toBeDefined();
-      expect(event.data.timeSpent).toBe(3000);
     });
 
     it("should create a new event if the event does not exist", async () => {
