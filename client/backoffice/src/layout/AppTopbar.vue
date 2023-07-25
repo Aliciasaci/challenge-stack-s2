@@ -63,7 +63,8 @@ const isOutsideClicked = (event) => {
 
 async function logout() {
     localStorage.removeItem('token');
-    user.value = null;
+    localStorage.removeItem('user');
+    router.push('/login');
 }
 </script>
 

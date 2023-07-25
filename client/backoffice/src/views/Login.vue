@@ -141,7 +141,11 @@ async function login() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      router.push("/client-pannel");
+      if(user.role === "USER_ADMIN") {
+        router.push("/admin-panel");
+      } else {
+        router.push("/client-panel");
+      }
       return Promise.resolve(data);
     }
   } catch (error) {
