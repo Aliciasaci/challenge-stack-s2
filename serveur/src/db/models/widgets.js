@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const eventSchema = new mongoose.Schema(
+const widgetSchema = new mongoose.Schema(
   {
     type: {
       type: String,
@@ -19,6 +19,6 @@ const eventSchema = new mongoose.Schema(
 );
 
 
-const event = mongoose.model("event", eventSchema);
+const widget = mongoose.model("widgets", widgetSchema);
 
-module.exports = event;
+module.exports = widget;
