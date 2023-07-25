@@ -8,7 +8,7 @@ import Cards from '@/components/Cards.vue';
 import AppIDModal from '@/components/AppIDModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
-
+import { mapGetters, mapActions } from '../store/map-state';
 
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
@@ -19,7 +19,8 @@ import { useStore } from 'vuex';
 const store = useStore();
 let nbVisitsPerMonthArray = [];
 let displayCards = [];
-
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const { logoutAsUser } = mapActions('loginAsUser');
 
 onMounted(async () => {
     if (user.appId) {
@@ -128,6 +129,10 @@ function togglePreferencesCards(){
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
     </span>
+    <div v-if="isLoggedInAsUser">
+        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
+        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
+    </div>
 
     <!--Cards-->
     <Cards v-if="appEvents" :events="appEvents" :displayCards="displayCards" />

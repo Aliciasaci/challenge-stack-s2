@@ -10,7 +10,7 @@ const router = createRouter({
       children: [
         {
           path: "/admin-panel",
-          name: "home",
+          name: "adminpanel",
           component: () => import("@/views/Home.vue"),
           meta: {
             allowedRoles: ["USER_ADMIN"],

@@ -1,9 +1,8 @@
 <script setup>
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onMounted, onBeforeMount, reactive } from 'vue';
+import { ref, onMounted, onBeforeMount, reactive, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
-
-const toast = useToast();
+import { mapState, mapGetters, mapMutations, mapActions } from '../store/map-state';
 
 const users = reactive([]);
 const userDialog = ref(false);
@@ -24,6 +23,7 @@ const roles = [
     { label: 'USER_ADMIN', value: 'USER_ADMIN' },
     { label: 'USER_CLIENT', value: 'USER_CLIENT' },
 ];
+const toast = useToast();
 
 onBeforeMount(async () => {
     initFilters();
@@ -78,19 +78,6 @@ async function editUser(editUser) {
     }
 }
 
-// const openNew = () => {
-//     user.value = {};
-//     submitted.value = false;
-//     userDialog.value = true;
-// }
-
-const seeAsUser = (user) => {
-    localStorage.setItem('user-client', JSON.stringify(user));
-    window.location.href = '/client-panel';
-    const message = 'Vous êtes connecté en tant que ' + user.value.firstname;
-    console.log(message);
-    toast.add({ severity: 'success', summary: 'Succès', detail: message, life: 3000 });
-}
 const hideDialog = () => {
     submitted.value = false;
     userDialog.value = false;
@@ -124,6 +111,8 @@ const confirmDeleteUser = (deleteUser) => {
 const confirmDeleteSelected = () => {
     deleteUsersDialog.value = true;
 }
+
+const { loginAsUser } = mapActions('loginAsUser');
 </script>
 
 <template>
@@ -229,7 +218,7 @@ const confirmDeleteSelected = () => {
                     </Column>
                     <Column headerStyle="min-width:10rem;">
                         <template #body="slotProps">
-                            <Button icon="pi pi-eye" class="p-button-rounded p-button-info mt-2" @click="seeAsUser(slotProps.data)" />
+                            <Button icon="pi pi-eye" class="p-button-rounded p-button-info mt-2" @click="loginAsUser(slotProps.data)" />
                         </template>
                     </Column>
                 </DataTable>
