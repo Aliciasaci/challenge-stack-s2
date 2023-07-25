@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon ./src/server.js",
     "start": "nodemon ./src/server.js",
-    "test": "jest"
+    "test": "set NODE_ENV=test&& jest"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.32.1",
     "sequelize-auto-migrations": "^1.0.3",
+    "umzug": "^3.2.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
