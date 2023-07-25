@@ -1,5 +1,6 @@
 import Fingerprint from "./fingerprint.js";
-let Tos;
+import detectUrlChange from "detect-url-change";
+
 export default {
   /**
    *
@@ -72,7 +73,7 @@ export default {
           const modifier = binding.modifiers;
           const page = window.location.href;
           const tag = binding.arg;
-          window.addEventListener("beforeunload", async () => {
+          detectUrlChange.addEventListener("change", async () => {
             const endTime = new Date();
             const timeSpent = endTime - startTime;
             let data = {
