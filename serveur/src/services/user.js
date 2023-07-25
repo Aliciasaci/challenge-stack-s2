@@ -10,10 +10,10 @@ module.exports = function () {
       try {
         const users = await User.findAll({
           where: criteria,
-          offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
-          limit: options && options.limit || 20,
-          order: options && options.order ? [options.order.split(":")] : undefined,
-          attributes: options && options.attributes ? [options.attributes] : undefined,
+          // offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
+          // limit: options && options.limit || 20,
+          // order: options && options.order ? [options.order.split(":")] : undefined,
+          // attributes: options && options.attributes ? [options.attributes] : undefined,
         });
 
         return users;

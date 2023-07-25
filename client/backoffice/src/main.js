@@ -25,6 +25,7 @@ import FileUpload from 'primevue/fileupload';
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
+import Password from 'primevue/password';
 
 
 
@@ -64,6 +65,7 @@ app.component("InputSwitch", InputSwitch);
 app.component("FileUpload", FileUpload);
 app.component("Badge", Badge);
 app.component("Tag", Tag);
+app.component("Password", Password);
 
 
 

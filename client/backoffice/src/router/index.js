@@ -14,7 +14,7 @@ const router = createRouter({
           component: () => import("@/views/Home.vue"),
         },
         {
-          path: "/user-crud",
+          path: "/users",
           name: "usercrud",
           component: () => import("@/views/UserCrud.vue"),
         }
@@ -31,9 +31,9 @@ const router = createRouter({
       component: () => import("@/views/Signin.vue"),
     },
     {
-      path: "/client-pannel",
-      name: "clientpannel",
-      component: () => import("@/views/ClientPannel.vue"),
+      path: "/client-panel",
+      name: "clientpanel",
+      component: () => import("@/views/ClientPanel.vue"),
     },
     {
       path: "/profil-user",

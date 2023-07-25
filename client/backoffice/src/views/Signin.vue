@@ -34,8 +34,8 @@
                                 </div>
                                 <div class="field col">
                                     <label for="password" class="block text-900 font-medium text mb-2">Mot de passe</label>
-                                    <InputText id="password" type="text" placeholder="Mot de passe" class="w-full md:w-30rem mb-2"
-                                        style="padding: 1rem" v-model="password" required />
+                                    <InputText type="password" id="password" placeholder="Mot de passe" class="w-full md:w-30rem mb-2"
+                                        style="padding: 1rem" v-model="password" :feedback="false" required />
                                 </div>
                             </div>
                             <div class="formgrid grid">

@@ -5,6 +5,7 @@ const tagRouter = require("./routes/tagRouter.js");
 const eventRouter = require("./routes/eventRouter.js")
 const AuthRouter = require("./routes/authRouter.js");
 const cors = require("cors");
+const checkAuth = require("./middlewares/checkAuth");
 
 
 const GenericController = require("./controllers/GenericController");

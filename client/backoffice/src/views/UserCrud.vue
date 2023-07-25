@@ -60,9 +60,6 @@ async function editUser(editUser) {
     editUser.compteIsVerified = selectedStatus.value.value; // update status
     const response = await fetch('http://localhost:3000/users/' + editUser.id, {
         method: 'PATCH',
-
-
-        
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
             'Content-Type': 'application/json'
@@ -87,6 +84,11 @@ async function editUser(editUser) {
 //     userDialog.value = true;
 // }
 
+const seeAsUser = (user) => {
+    localStorage.setItem('token', user.token);
+    localStorage.setItem('user', JSON.stringify(user));
+    window.location.href = '/client';
+}
 const hideDialog = () => {
     submitted.value = false;
     userDialog.value = false;
@@ -120,7 +122,6 @@ const confirmDeleteUser = (deleteUser) => {
 const confirmDeleteSelected = () => {
     deleteUsersDialog.value = true;
 }
-
 </script>
 
 <template>
@@ -222,6 +223,11 @@ const confirmDeleteSelected = () => {
                         <template #body="slotProps">
                             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="confirmEditUser(slotProps.data)" />
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" @click="confirmDeleteUser(slotProps.data)" />
+                        </template>
+                    </Column>
+                    <Column headerStyle="min-width:10rem;">
+                        <template #body="slotProps">
+                            <Button icon="pi pi-eye" class="p-button-rounded p-button-info mt-2" @click="seeAsUser(slotProps.data)" />
                         </template>
                     </Column>
                 </DataTable>
