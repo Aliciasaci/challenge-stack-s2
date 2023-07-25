@@ -21,13 +21,10 @@ module.exports = function (connection) {
       }
     }
   },
-
-    {
-      connection,
-      tableName: 'tags'
-    }
-
-
+  {
+    connection,
+    tableName: 'tags'
+  }
   );
   return Tag;
 };

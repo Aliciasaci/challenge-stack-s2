@@ -85,9 +85,11 @@ async function editUser(editUser) {
 // }
 
 const seeAsUser = (user) => {
-    localStorage.setItem('token', user.token);
-    localStorage.setItem('user', JSON.stringify(user));
-    window.location.href = '/client';
+    localStorage.setItem('user-client', JSON.stringify(user));
+    window.location.href = '/client-panel';
+    const message = 'Vous êtes connecté en tant que ' + user.value.firstname;
+    console.log(message);
+    toast.add({ severity: 'success', summary: 'Succès', detail: message, life: 3000 });
 }
 const hideDialog = () => {
     submitted.value = false;
