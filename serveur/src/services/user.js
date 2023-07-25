@@ -2,7 +2,7 @@ const tag = require("../db/models/tag");
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
-const Tag = require('../db').Tag;
+const Tag = require("../db").Tag;
 
 module.exports = function () {
   return {
@@ -10,19 +10,22 @@ module.exports = function () {
       try {
         const users = await User.findAll({
           where: criteria,
-          offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
-          limit: options && options.limit || 20,
-          order: options && options.order ? [options.order.split(":")] : undefined,
-          attributes: options && options.attributes ? [options.attributes] : undefined,
+          offset:
+            options && options.page
+              ? (options.page - 1) * (options.limit || 20)
+              : undefined,
+          limit: (options && options.limit) || 20,
+          order:
+            options && options.order ? [options.order.split(":")] : undefined,
+          //attributes: options && options.attributes ? [options.attributes] : undefined,
         });
 
         return users;
       } catch (error) {
-        console.error('Error while retrieving users:', error);
+        console.error("Error while retrieving users:", error);
         throw error;
       }
     },
-
 
     async create(data) {
       try {
@@ -36,11 +39,9 @@ module.exports = function () {
       }
     },
 
-
     async findOne(id) {
       return await User.findByPk(id);
     },
-
 
     async replaceOne(id, newData) {
       try {
@@ -56,9 +57,7 @@ module.exports = function () {
       }
     },
 
-
     async updateOne(id, newData) {
-
       try {
         const [nbUpdated, newValues] = await User.update(newData, {
           where: { id },
@@ -81,20 +80,19 @@ module.exports = function () {
       return nbDeleted === 1;
     },
 
-
     async getUserTags(userId) {
       try {
         const tags = await Tag.findAll({
           where: {
-            id_user: userId
-          }
+            id_user: userId,
+          },
         });
 
         return tags;
       } catch (error) {
-        console.error('Error while retrieving user tags:', error);
+        console.error("Error while retrieving user tags:", error);
         throw error;
       }
-    }
+    },
   };
 };

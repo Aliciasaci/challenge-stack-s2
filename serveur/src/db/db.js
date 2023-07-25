@@ -17,7 +17,7 @@ connection
     console.error("Connexion à POSTGRES échouée:", error);
   });
 
-if (process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== "Servicetest") {
   //*MongoDB
   const mongoose = require("mongoose");
 

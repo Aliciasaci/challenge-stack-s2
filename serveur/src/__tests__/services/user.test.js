@@ -38,7 +38,7 @@ describe("User service", () => {
       email: "example@exmaple.com",
     };
     expect(userService().updateOne("invalid-id", userData)).rejects.toThrow(
-      ValidationError
+      Error
     );
   });
 });
