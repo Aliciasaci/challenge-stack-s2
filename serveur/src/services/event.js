@@ -1,5 +1,6 @@
 const { pipeline } = require('stream');
 const Event = require('../db/models/event');
+const { options } = require('mongoose');
 
 module.exports = function () {
     return {
@@ -16,11 +17,71 @@ module.exports = function () {
             }
         },
 
-        /**
-         * @returns 
-         */
-        async getCount(dateDebut = "2021-01-10", dateFin = "2023-07-31", type = null, periode = "day", orderDesc = false) {
-            console.log("helo");
+
+        async getAllEvents(options) {
+
+            console.log(options);
+            const dateDebut = options.dateDebut;
+            const dateFin = options.dateFin;
+            const type = options.type;
+            const orderDesc = options.orderDesc;
+            const appId = options.appId;
+
+            try {
+
+                let pipeline = []
+                if (type) {
+                    pipeline.push({ $match: { "type": type } })
+                }
+
+                if(appId){
+                    pipeline.push({ $match: { "appId": appId } })
+                }
+
+                if (dateDebut && dateFin) {
+                    console.log(new Date(dateFin))
+                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut), "$lte": new Date(dateFin) } } })
+                }
+                else if (dateDebut) {
+                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut) } } })
+                }
+                else if (dateFin) {
+                    pipeline.push({ $match: { createdAt: { "$lte": new Date(dateFin) } } })
+                }
+
+                if (orderDesc) {
+                    pipeline.push({ $sort: { createdAt: -1 } })
+                }
+                else {
+                    pipeline.push({ $sort: { createdAt: 1 } })
+                }
+
+                console.log(pipeline);
+
+                return Event.aggregate(pipeline).then(resultats => {
+                    console.log(typeof (resultats));
+
+                    return resultats;
+                }).catch(error => {
+                    console.log("here", error);
+                    throw new Error('an error has occured');
+                });
+            } catch (error) {
+                console.log(error);
+            }
+
+        },
+
+        async getCount(options) {
+
+            const dateDebut = options.dateDebut;
+            const dateFin = options.dateFin;
+            const type = options.type;
+            const periode = options.periode;
+            const orderDesc = options.orderDesc;
+
+            console.log(options.periode);
+
             try {
 
                 let pipeline = []
@@ -88,7 +149,7 @@ module.exports = function () {
                     return resultats;
                 }).catch(error => {
                     console.log("here", error);
-                    throw new Error('Error while retrieving all events');
+                    throw new Error('Error');
                 });
             } catch (error) {
                 console.log(error);
@@ -96,57 +157,6 @@ module.exports = function () {
 
         },
 
-        /**
-         * 
-         * @param {*} dateDebut 
-         * @param {*} dateFin 
-         * @param {*} type 
-         * @param {*} periode 
-         * @param {*} orderDesc 
-         * @returns 
-         */
-        async getAllEvents(dateDebut = "2021-01-10", dateFin = "2023-07-31", type = "visited", orderDesc = false) {
-            try {
-
-                let pipeline = []
-
-                if (type) {
-                    pipeline.push({ $match: { "type": type } })
-                }
-
-                if (dateDebut && dateFin) {
-                    console.log(new Date(dateFin))
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut), "$lte": new Date(dateFin) } } })
-                }
-                else if (dateDebut) {
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut) } } })
-                }
-                else if (dateFin) {
-                    pipeline.push({ $match: { createdAt: { "$lte": new Date(dateFin) } } })
-                }
-
-                if (orderDesc) {
-                    pipeline.push({ $sort: { createdAt: -1 } })
-                }
-                else {
-                    pipeline.push({ $sort: { createdAt: 1 } })
-                }
-
-                console.log(pipeline);
-
-                return Event.aggregate(pipeline).then(resultats => {
-                    console.log(typeof (resultats));
-
-                    return resultats;
-                }).catch(error => {
-                    console.log("here", error);
-                    throw new Error('Error while retrieving all events');
-                });
-            } catch (error) {
-                console.log(error);
-            }
-
-        },
 
 
         /**
