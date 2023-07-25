@@ -1,10 +1,10 @@
 
 <template>
-    <div class="card">
+    <div class="card" v-if="events">
         <table class="table full is-fullwidth is-hoverable">
             <thead>
                 <tr>
-                    <th>Pos</th>
+                    <th>Type d'évèment</th>
                     <th>Tag</th>
                     <th>Lien</th>
                     <th>Date création</th>
@@ -53,7 +53,7 @@ function getPageName(url) {
         let lastPart = parts[parts.length - 1];
 
         if (lastPart == "") {
-            lastPart = "/";
+            lastPart = "/accueil";
         };
 
         return lastPart;

@@ -38,6 +38,8 @@ module.exports = function (eventService, options = {}) {
         periode : req.query.periode ?? null,
         orderDesc: req.query.orderDesc ?? null,
         appId: req.query.appId ?? null,
+        tag: req.query.tag ?? null,
+        page: req.query.page ?? null
       }
 
 

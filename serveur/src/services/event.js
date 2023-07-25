@@ -80,6 +80,8 @@ module.exports = function () {
             const periode = options.periode;
             const orderDesc = options.orderDesc;
             const appId = options.appId;
+            const tag = options.tag;
+            const page = options.page;
 
             console.log(options.periode);
 
@@ -93,6 +95,14 @@ module.exports = function () {
 
                 if(appId){
                     pipeline.push({ $match: { "appId": appId } })
+                }
+
+                if(tag){
+                    pipeline.push({ $match: { 'data.tag': tag } })
+                }
+                
+                if(page){
+                    pipeline.push({ $match: { "data.page": page}})
                 }
 
                 if (dateDebut && dateFin) {

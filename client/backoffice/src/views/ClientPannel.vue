@@ -1,15 +1,52 @@
+<template v-if="user">
+    <Header />
+    <span class="p-buttonset">
+        <!-- <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined /> -->
+        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
+        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
+        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+    </span>
+
+    <!-- Cards-->
+    <Cards />
+    <!--Cards -->
+
+    <!--Les modals-->
+    <AppIDModal :visible="isAppIDModalVisible" />
+    <!-- <PreferencesModal :visible="isPreferencesModalVisible" /> -->
+    <TagsModal :visible="isTagsModalVisible" />
+    <ParamModal :visible="isParamModalVisible" />
+    <!--Les modals -->
+
+    <div class="analytics">
+        <div class="graph" v-if="userMultiAxes">
+            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="graph" v-if="userVerticalBars">
+            <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="detail">
+            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
+        </div>
+    </div>
+</template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import Header from '@/components/ClientHeader.vue';
-import VerticalBar from '@/components/VerticalBar.vue';
-import MultiAxis from '@/components/MultiAxis.vue';
 import AnalyticsDetail from '@/components/AnalyticsDetail.vue';
 import Cards from '@/components/Cards.vue';
 import AppIDModal from '@/components/AppIDModal.vue';
-import PreferencesModal from '@/components/PreferencesModal.vue';
+// import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
-import ParamModal from "../components/ParamModal.vue"
-
+import ParamModal from "../components/ParamModal.vue";
+import Graph from '@/components/Graph.vue';
 
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
@@ -18,14 +55,23 @@ const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 import { useStore } from 'vuex';
 const store = useStore();
-let appEvents = ref();
-let nbVisitsPerMonthArray = [];
-let displayCards = [];
-
+let appEvents = ref([]);
+let userMultiAxes = ref([]);
+let userVerticalBars = ref([]);
 
 onMounted(async () => {
-    appEvents = await getEvents();
-    console.log(appEvents);
+    try {
+        if (user) {
+            appEvents.value = await getEvents();
+            userMultiAxes.value = await getUsersMultiAxes();
+            userVerticalBars.value = await getUsersVerticalBars();
+
+            console.log(userMultiAxes.value);
+            console.log(userVerticalBars.value);
+        }
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 const generateAppIDModal = () => {
@@ -44,7 +90,6 @@ const generateParamModal = () => {
     isParamModalVisible.value = true;
 }
 
-
 async function getEvents() {
     try {
         const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true`)
@@ -61,46 +106,35 @@ async function getEvents() {
     }
 }
 
+async function getUsersMultiAxes() {
+    try {
+        const response = await fetch(`http://localhost:3000/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`);
+        if (!response.ok) {
+            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
+        }
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function getUsersVerticalBars() {
+    try {
+        const response = await fetch(`http://localhost:3000/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`);
+        if (!response.ok) {
+            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
+        }
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 </script>
-
-<template v-if="user">
-    <Header />
-    <span class="p-buttonset">
-        <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
-        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-    </span>
-
-    <!-- Cards-->
-    <Cards />
-    <!--Cards -->
-
-    <!--Les modals-->
-    <AppIDModal :visible="isAppIDModalVisible" />
-    <PreferencesModal :visible="isPreferencesModalVisible" />
-    <TagsModal :visible="isTagsModalVisible" />
-    <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals -->
-
-
-    <div class="analytics">
-        <div class="graph">
-            <div id="graph1">
-                <VerticalBar></VerticalBar>
-            </div>
-            <div id="graph2">
-                <MultiAxis></MultiAxis>
-            </div>
-        </div>
-
-        <div class="detail">
-            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-        </div>
-    </div>
-
-</template>
-<style>
+<style lang="scss">
 .top-btns {
     display: flex;
     align-items: end;
@@ -126,10 +160,8 @@ async function getEvents() {
     margin-bottom: 4rem;
 }
 
-#graph1,
-#graph2 {
-    flex-basis: 49%;
-    height: 100%;
+.graph-div {
+    flex-basis: 48%;
 }
 
 .card {
