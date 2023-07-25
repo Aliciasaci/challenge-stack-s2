@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 
 onMounted(() => {
     chartData.value = setChartData();
@@ -16,7 +16,6 @@ onMounted(() => {
 const chartData = ref();
 const chartOptions = ref();
 
-let { events } = defineProps(['events']);
 
 const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -30,7 +29,7 @@ const setChartData = () => {
                 borderColor: "#216869",
                 yAxisID: 'y',
                 tension: 0.4,
-                data: events,
+                data: [],
             },
         ]
     };

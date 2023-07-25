@@ -79,6 +79,7 @@ module.exports = function () {
             const type = options.type;
             const periode = options.periode;
             const orderDesc = options.orderDesc;
+            const appId = options.appId;
 
             console.log(options.periode);
 
@@ -88,6 +89,10 @@ module.exports = function () {
 
                 if (type) {
                     pipeline.push({ $match: { "type": type } })
+                }
+
+                if(appId){
+                    pipeline.push({ $match: { "appId": appId } })
                 }
 
                 if (dateDebut && dateFin) {

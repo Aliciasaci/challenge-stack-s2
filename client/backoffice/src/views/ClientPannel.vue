@@ -16,20 +16,16 @@ const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
-const appEvents = ref(false);
 import { useStore } from 'vuex';
 const store = useStore();
+let appEvents = ref();
 let nbVisitsPerMonthArray = [];
 let displayCards = [];
 
 
 onMounted(async () => {
-    if (user.appId) {
-        appEvents.value = await getEventsByAppId(user.appId);
-    }
-
-    nbVisitsPerMonthArray = getNbVisitesPerMonth(appEvents.value);
-    togglePreferencesCards();
+    appEvents = await getEvents();
+    console.log(appEvents);
 });
 
 const generateAppIDModal = () => {
@@ -49,84 +45,21 @@ const generateParamModal = () => {
 }
 
 
-
-
-async function getEventsByAppId(appId) {
+async function getEvents() {
     try {
-        const response = await fetch(`http://localhost:3000/events/${appId}/events`);
+        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true`)
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
-        return response.json();
+
+        const data = await response.json();
+        return data;
+
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
-
-//*nombre de visite par mois
-function getNbVisitesPerMonth(appEvents) {
-    const nbVisitsPerMonthObject = {};
-    const nbVisitsPerMonthArray = [];
-
-    function getKey(month, year) {
-        return `${month}-${year}`;
-    }
-
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    for (let month = 1; month <= 12; month++) {
-        const key = getKey(month, currentYear);
-        nbVisitsPerMonthObject[key] = 0;
-    }
-
-    appEvents.forEach((event) => {
-        if (event.type == 'visited') {
-            const eventDate = new Date(event.createdAt);
-            const month = eventDate.getMonth() + 1;
-            const year = eventDate.getFullYear();
-            const key = getKey(month, year);
-
-            nbVisitsPerMonthObject[key]++;
-        }
-    });
-
-    for (const key in nbVisitsPerMonthObject) {
-        nbVisitsPerMonthArray.push(nbVisitsPerMonthObject[key]);
-    }
-
-    return nbVisitsPerMonthArray;
-}
-
-function diplayElement(id, classe, status) {
-    if (classe) {
-        let classeElement = document.querySelector("." + classe);
-        if (classeElement) {
-            classeElement.style.display = status;
-        }
-    }
-    if (id) {
-        let idElement = document.querySelector("#" + id);
-        if (idElement) {
-            idElement.style.display = status;
-        }
-    }
-}
-
-function togglePreferencesCards() {
-    //recup les préférences de l'utilisateur 
-    const checkedBtnsPreferences = store.state.checkedBtns;
-    for (var index = 0; index < 4; index++) {
-        if (checkedBtnsPreferences[index]) {
-            displayCards.push("block")
-        }
-        else {
-            displayCards.push("None")
-        }
-    }
-
-}
-
 
 </script>
 
@@ -139,34 +72,33 @@ function togglePreferencesCards() {
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
     </span>
 
-    <!--Cards-->
-    <Cards v-if="appEvents" :events="appEvents" />
-    <!--Cards-->
+    <!-- Cards-->
+    <Cards />
+    <!--Cards -->
 
     <!--Les modals-->
     <AppIDModal :visible="isAppIDModalVisible" />
     <PreferencesModal :visible="isPreferencesModalVisible" />
     <TagsModal :visible="isTagsModalVisible" />
     <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals-->
+    <!--Les modals -->
 
 
-    <div class="analytics" v-if="appEvents">
+    <div class="analytics">
         <div class="graph">
             <div id="graph1">
-                <VerticalBar v-if="nbVisitsPerMonthArray" :events="nbVisitsPerMonthArray"></VerticalBar>
+                <VerticalBar></VerticalBar>
             </div>
             <div id="graph2">
-                <MultiAxis v-if="nbVisitsPerMonthArray" :events="nbVisitsPerMonthArray"></MultiAxis>
+                <MultiAxis></MultiAxis>
             </div>
         </div>
 
         <div class="detail">
             <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
         </div>
-
-
     </div>
+
 </template>
 <style>
 .top-btns {
@@ -200,7 +132,7 @@ function togglePreferencesCards() {
     height: 100%;
 }
 
-.card{
+.card {
     border: white;
 }
 </style>

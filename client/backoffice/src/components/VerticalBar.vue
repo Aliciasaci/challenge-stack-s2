@@ -16,8 +16,6 @@ onMounted(() => {
 const chartData = ref();
 const chartOptions = ref();
 
-let { events } = defineProps(['events']);
-
 
 const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -29,7 +27,7 @@ const setChartData = () => {
                 label: 'My First dataset',
                 backgroundColor: "#F72C25DB",
                 borderColor: "#F72C25DB",
-                data: events
+                data: []
             },
 
         ]

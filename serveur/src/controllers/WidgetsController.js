@@ -11,8 +11,13 @@ module.exports = function (widgetsService, options = {}) {
         },
 
         async getAllWidgets(req, res) { // Corrected function name
+            const options = {
+                type: req.query.type ?? null,
+                orderDesc: req.query.orderDesc ?? null,
+                appId: req.query.appId ?? null,
+            }
             try {
-                const widgets = await widgetsService.getAllWidgets(); // Corrected function name
+                const widgets = await widgetsService.getAllWidgets(options); // Corrected function name
                 res.status(200).json(widgets);
             } catch (error) {
                 res.status(500).json({ error: 'Error while retrieving all widgets' });

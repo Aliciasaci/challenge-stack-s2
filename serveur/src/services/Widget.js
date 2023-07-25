@@ -1,4 +1,5 @@
 const WidgetModel = require('../db/models/widgets');
+const { pipeline } = require('stream');
 
 module.exports = function () {
     return {
@@ -12,9 +13,38 @@ module.exports = function () {
             }
         },
 
-        async getAllWidgets() {
-            try {
-                return await WidgetModel.find();
+        async getAllWidgets(options) {
+
+            const type = options.type;
+            const orderDesc = options.orderDesc;
+            const appId = options.appId;
+
+            try 
+            {
+
+                let pipeline = []
+                if (type) {
+                    pipeline.push({ $match: { "type": type } })
+                }
+
+                if(appId){
+                    pipeline.push({ $match: { "appId": appId } })
+                }
+
+                if (orderDesc) {
+                    pipeline.push({ $sort: { createdAt: -1 } })
+                }else {
+                    pipeline.push({ $sort: { createdAt: 1 } })
+                }
+
+                return WidgetModel.aggregate(pipeline).then(resultats => {
+                    console.log(typeof (resultats));
+
+                    return resultats;
+                }).catch(error => {
+                    console.log("here", error);
+                    throw new Error('an error has occured');
+                });
             } catch (error) {
                 console.error('Error while retrieving all widgets:', error);
                 throw new Error('Error while retrieving all widgets');
