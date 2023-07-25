@@ -42,9 +42,12 @@ export default {
       data: data,
     };
     try {
+      const blob = new Blob([JSON.stringify(event)], {
+        type: "application/json",
+      });
       navigator.sendBeacon(
         `http://localhost:3000/events/visitor/${visitorId}`,
-        JSON.stringify(event)
+        blob
       );
       console.log("Beacon sent");
     } catch (error) {
