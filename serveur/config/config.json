@@ -2,9 +2,10 @@
   "development": {
     "username": "root",
     "password": "password",
-    "database": "postgres",
+    "database": "challengeS2",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "port": 5433
   },
   "test": {
     "username": "root",
