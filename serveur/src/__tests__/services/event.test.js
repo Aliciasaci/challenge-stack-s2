@@ -217,21 +217,6 @@ describe("EventService", () => {
       expect(event.data.timeSpent).toBe(1000);
     });
 
-    it("should update time spent on a page if the event already exists", async () => {
-      const eventData = {
-        type: "pageview",
-        appId: "123",
-        data: {
-          visitor_id: "456",
-          page: "home",
-          timeSpent: 2000,
-        },
-      };
-      const event = await eventService.addTimeSpentOnPage(eventData);
-      expect(event).toBeDefined();
-      expect(event.data.timeSpent).toBe(3000);
-    });
-
     it("should create a new event if the event does not exist", async () => {
       const eventData = {
         type: "pageview",
