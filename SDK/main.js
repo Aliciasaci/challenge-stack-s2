@@ -73,22 +73,28 @@ export default {
           const modifier = binding.modifiers;
           const page = window.location.href;
           const tag = binding.arg;
-          detectUrlChange.addEventListener("change", async () => {
-            const endTime = new Date();
-            const timeSpent = endTime - startTime;
-            let data = {
-              modifier: modifier,
-              page: page,
-              tag: tag,
-              visitor_id: visitorId,
-              timeSpent: timeSpent,
-              timezone: timezone,
-            };
-            await Fingerprint.addTimeSpentOnPage(
+          detectUrlChange.on("change", async () => {
+            this.eventMaker(
+              startTime,
+              page,
+              tag,
               visitorId,
               action,
-              options.APPID,
-              data
+              timezone,
+              modifier,
+              options
+            );
+          });
+          window.addEventListener("unload", async () => {
+            this.eventMaker(
+              startTime,
+              page,
+              tag,
+              visitorId,
+              action,
+              timezone,
+              modifier,
+              options
             );
           });
         }
@@ -139,5 +145,33 @@ export default {
         console.error(error);
       }
     }
+  },
+
+  async eventMaker(
+    startTime,
+    page,
+    tag,
+    visitorId,
+    action,
+    timezone,
+    modifier,
+    options
+  ) {
+    const endTime = new Date();
+    const timeSpent = endTime - startTime;
+    let data = {
+      modifier: modifier,
+      page: page,
+      tag: tag,
+      visitor_id: visitorId,
+      timeSpent: timeSpent,
+      timezone: timezone,
+    };
+    await Fingerprint.addTimeSpentOnPage(
+      visitorId,
+      action,
+      options.APPID,
+      data
+    );
   },
 };
