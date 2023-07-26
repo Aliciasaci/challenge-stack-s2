@@ -74,12 +74,6 @@ export default {
           const page = window.location.href;
           const tag = binding.arg;
           detectUrlChange.on("change", async () => {
-<<<<<<< Updated upstream
-            this.eventMaker(
-              startTime,
-              page,
-              tag,
-=======
             const endTime = new Date();
             const timeSpent = endTime - startTime;
             let data = {
@@ -91,7 +85,6 @@ export default {
               timezone: timezone,
             };
             await Fingerprint.addTimeSpentOnPage(
->>>>>>> Stashed changes
               visitorId,
               action,
               timezone,
