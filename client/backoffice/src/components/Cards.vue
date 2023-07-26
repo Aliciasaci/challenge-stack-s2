@@ -33,7 +33,7 @@ onMounted(async () => {
 
 async function getUsersKpis() {
     try {
-        const response = await fetch(`http://localhost:3000/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }

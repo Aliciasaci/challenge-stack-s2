@@ -48,7 +48,7 @@ function getPageName(url) {
 
 async function getEvents() {
     try {
-        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -62,7 +62,7 @@ async function getEvents() {
 
 async function getEventsCount() {
     try {
-        const response = await fetch(`http://localhost:3000/events/count/?appId=${user.appId}&orderDesc=true&periode=year`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/count/?appId=${user.appId}&orderDesc=true&periode=year`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }

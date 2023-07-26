@@ -10,7 +10,7 @@ const generatedAppId = ref(user.appId);
 
 async function getUserState(userId) {
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -39,7 +39,7 @@ async function generateAppID() {
     //2.Génerer le token
     let hasError = false;
     try {
-        const response = await fetch('http://localhost:3000/users/' + user.id + '/appid/', {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users/' + user.id + '/appid/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

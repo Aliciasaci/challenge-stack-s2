@@ -46,7 +46,7 @@ onMounted(() => {
 
 async function getUsersTags(userId) {
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}/tags`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}/tags`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -75,7 +75,7 @@ async function createTag() {
         alert("Merci de générer un tag avant de cliquer sur Ajouter");
     } else {
         try {
-            const response = await fetch(`http://localhost:3000/tags/`,
+            const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/`,
                 {
                     method: "POST",
                     headers: {
@@ -103,7 +103,7 @@ async function createTag() {
 
 async function deleteTag(tagId) {
     try {
-        const response = await fetch(`http://localhost:3000/tags/${tagId}`,
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/${tagId}`,
             {
                 method: 'DELETE',
                 headers: {

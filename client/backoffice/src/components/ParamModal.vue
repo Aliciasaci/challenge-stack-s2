@@ -113,8 +113,8 @@ const dataTypes = ref([
 
 
 const Pages = ref([
-    { name: 'Accueil', raw: "http://localhost:8080/?#/"},
-    { name: "Contact", raw : 'http://localhost:8080/?#/contact'},
+    { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL+"/"},
+    { name: "Contact", raw : import.meta.env.VITE_SERVER_URL+'/contact'},
     { name: 'Mention légale', },
 ]);
 
@@ -188,7 +188,7 @@ async function setSelectedTauxType() {
 async function getUsersTags(userId) {
 
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}/tags`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}/tags`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -242,7 +242,7 @@ async function createWidget() {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/widgets/", {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+"/widgets/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -278,9 +278,8 @@ async function getEventsAccordingToChoice() {
         console.log(page);
     }
 
-    console.log(`http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
     try {
-        const response = await fetch(`http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
