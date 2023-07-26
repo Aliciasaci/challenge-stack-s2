@@ -25,6 +25,7 @@ onMounted(() => {
   text-align: center;
   color: #2c3e50;
   background-color: rgba(239, 201, 224, 0.26);
+  padding-bottom: 5rem;
 }
 
 nav {

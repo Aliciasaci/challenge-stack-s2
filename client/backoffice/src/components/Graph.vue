@@ -7,41 +7,40 @@
 
 <script setup>
 import { ref, onMounted, defineProps } from "vue";
-import {de} from 'date-fns/locale';
+import { de } from 'date-fns/locale';
 import 'chartjs-adapter-date-fns';
+const chartData = ref();
+const chartOptions = ref();
+let typeGraph = '';
+const { graph } = defineProps(['graph']);
 
 onMounted(() => {
     chartData.value = setChartData();
     chartOptions.value = setChartOptions();
 });
 
-const chartData = ref();
-const chartOptions = ref();
-let typeGraph = '';
-
-const { graph } = defineProps(['graph']);
 
 const setChartData = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    let data =  graph.data.arrayData.map(function(row) {
+    let data = graph.data.arrayData.map(function (row) {
         row["x"] = row["periode"];
-        delete(row["periode"]);
+        delete (row["periode"]);
         row["y"] = row["count"];
-        delete(row["count"]);
+        delete (row["count"]);
         return row;
     });
+
+
     return {
-        // labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         datasets: [
             {
-                label: 'Label',
+                label: graph.data.label,
                 fill: false,
                 borderColor: "#216869",
                 backgroundColor: "#F72C25DB",
                 yAxisID: 'y',
                 tension: 0.4,
-                data:data
-              
+                data: data
+
             },
         ]
     };
@@ -55,17 +54,16 @@ const setChartOptions = () => {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     let grapheTypeDict = {}
-    
-    if (graph.type == "multiaxis")
-    {
+
+    if (graph.type == "multiaxis") {
         typeGraph = 'line';
         grapheTypeDict = {
             x: {
-                type:'time',
-                time:{
-                    unit:graph.data.periode
+                type: 'time',
+                time: {
+                    unit: graph.data.periode
                 }
-               
+
             },
             y: {
                 type: 'linear',
@@ -82,16 +80,15 @@ const setChartOptions = () => {
     }
 
 
-    else if(graph.type == "verticalbar")
-    {
+    else if (graph.type == "verticalbar") {
         typeGraph = 'bar';
         grapheTypeDict = {
             x: {
-                type:'time',
-                time:{
-                    unit:graph.data.periode
+                type: 'time',
+                time: {
+                    unit: graph.data.periode
                 }
-               
+
             },
             y: {
                 ticks: {
@@ -104,7 +101,6 @@ const setChartOptions = () => {
             }
         }
     }
-    console.log(grapheTypeDict)
     return {
         stacked: false,
         maintainAspectRatio: false,
@@ -117,8 +113,8 @@ const setChartOptions = () => {
             }
         },
         scales: grapheTypeDict,
-        
-        
+
+
     };
 }
 </script>

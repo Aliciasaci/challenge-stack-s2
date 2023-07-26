@@ -7,6 +7,7 @@ const widgetRouter = require("./routes/widgetRouter.js")
 const AuthRouter = require("./routes/authRouter.js");
 const cors = require("cors");
 const checkAuth = require("./middlewares/checkAuth");
+require('dotenv').config();
 
 const GenericController = require("./controllers/GenericController");
 const AuthController = require("./controllers/AuthController");

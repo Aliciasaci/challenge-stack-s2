@@ -28,7 +28,6 @@ const user = JSON.parse(localStorage.getItem('user'));
 
 onMounted(async () => {
     kpis.value = await getUsersKpis();
-    console.log(kpis.value);
 });
 
 async function getUsersKpis() {

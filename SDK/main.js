@@ -63,7 +63,7 @@ export default {
         }
 
         if (binding.modifiers.visited) {
-          //* tracker les visites de pages
+                    //* tracker les visites de pages
           const action = Object.keys(binding.modifiers)[0];
           const visitorId = (await Fingerprint.loadFingerPrint()).visitorId;
           const timezone = (await Fingerprint.loadFingerPrint()).components
@@ -74,10 +74,24 @@ export default {
           const page = window.location.href;
           const tag = binding.arg;
           detectUrlChange.on("change", async () => {
+<<<<<<< Updated upstream
             this.eventMaker(
               startTime,
               page,
               tag,
+=======
+            const endTime = new Date();
+            const timeSpent = endTime - startTime;
+            let data = {
+              modifier: modifier,
+              page: page,
+              tag: tag,
+              visitor_id: visitorId,
+              timeSpent: timeSpent,
+              timezone: timezone,
+            };
+            await Fingerprint.addTimeSpentOnPage(
+>>>>>>> Stashed changes
               visitorId,
               action,
               timezone,

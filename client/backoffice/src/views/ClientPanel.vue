@@ -1,7 +1,6 @@
 <template v-if="user">
     <Header />
     <span class="p-buttonset">
-        <!-- <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined /> -->
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
@@ -10,29 +9,33 @@
     </span>
 
     <!-- Cards-->
+    <h1>KPIS</h1>
     <Cards />
     <!--Cards -->
 
     <!--Les modals-->
     <AppIDModal :visible="isAppIDModalVisible" />
-    <!-- <PreferencesModal :visible="isPreferencesModalVisible" /> -->
     <TagsModal :visible="isTagsModalVisible" />
     <ParamModal :visible="isParamModalVisible" />
     <!--Les modals -->
 
     <div class="analytics">
-        <div class="graph" v-if="userMultiAxes">
-            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
-                <Graph :graph="graph"></Graph>
-            </div>
-        </div>
-
+        <h1>Graphes</h1>
+        <h3>Barre Vericales</h3>
         <div class="graph" v-if="userVerticalBars">
             <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
                 <Graph :graph="graph"></Graph>
             </div>
         </div>
 
+        <h3>Mutli axes</h3>
+        <div class="graph" v-if="userMultiAxes">
+            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <h1>Dernière activité</h1>
         <div class="detail">
             <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
         </div>
@@ -53,7 +56,6 @@ import { mapGetters, mapActions } from '../store/map-state';
 
 
 const isAppIDModalVisible = ref(false);
-const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
@@ -68,12 +70,8 @@ const { logoutAsUser } = mapActions('loginAsUser');
 onMounted(async () => {
     try {
         if (user) {
-            appEvents.value = await getEvents();
             userMultiAxes.value = await getUsersMultiAxes();
             userVerticalBars.value = await getUsersVerticalBars();
-
-            console.log(userMultiAxes.value);
-            console.log(userVerticalBars.value);
         }
     } catch (error) {
         console.error(error);
@@ -84,32 +82,12 @@ const generateAppIDModal = () => {
     isAppIDModalVisible.value = true;
 }
 
-const generatePreferencesModal = () => {
-    isPreferencesModalVisible.value = true;
-}
-
 const generateTagModal = () => {
     isTagsModalVisible.value = true;
 }
 
 const generateParamModal = () => {
     isParamModalVisible.value = true;
-}
-
-async function getEvents() {
-    try {
-        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=10&page_number=1`)
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-
-        const data = await response.json();
-        return data;
-
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
 }
 
 async function getUsersMultiAxes() {
@@ -140,47 +118,6 @@ async function getUsersVerticalBars() {
     }
 }
 </script>
-<template v-if="user">
-    <Header />
-    <span class="p-buttonset">
-        <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
-        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-    </span>
-    <div v-if="isLoggedInAsUser">
-        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
-        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
-    </div>
-
-    <!-- Cards-->
-    <Cards />
-    <!--Cards -->
-
-    <!--Les modals-->
-    <AppIDModal :visible="isAppIDModalVisible" />
-    <PreferencesModal :visible="isPreferencesModalVisible" />
-    <TagsModal :visible="isTagsModalVisible" />
-    <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals -->
-
-
-    <div class="analytics">
-        <div class="graph">
-            <div id="graph1">
-                <VerticalBar></VerticalBar>
-            </div>
-            <div id="graph2">
-                <MultiAxis></MultiAxis>
-            </div>
-        </div>
-
-        <div class="detail">
-            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-        </div>
-    </div>
-
-</template>
 <style>
 .top-btns {
     display: flex;
@@ -204,11 +141,13 @@ async function getUsersVerticalBars() {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
 .graph-div {
-    flex-basis: 48%;
+    flex-basis: 49%;
+    margin-bottom: 2rem;
 }
 
 .card {

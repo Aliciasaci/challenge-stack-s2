@@ -134,7 +134,7 @@ const typeComparaison = ref([
 
 onMounted(() => {
     getUsersTags(user.id)
-    
+
 });
 
 async function setSelectedTypePerChoice() {
@@ -208,25 +208,17 @@ async function createWidget() {
 
     let data = await getEventsAccordingToChoice();
     data.forEach(element => {
+
         countTotal += element.count;
     });
 
 
     if (selectedRepresentation.value.code == "multiaxis" || selectedRepresentation.value.code == "verticalbar") {
-        if (selectedPeriod.value == "day") {
-            WidgetLabels = getAllDatesBetween(dateDebut, dateFin);
-
-        } else if (selectedPeriod.value == "month") {
-            WidgetLabels = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-        } else if (selectedPeriod.value == "year") {
-            WidgetLabels = ['2020', '2021', '2023', '2024', '2025', '2026', '2O27', '2028', '2029', '2030'];
-        }
-
         widget = {
             type: selectedRepresentation.value.code, 
             appId: user.appId,
             data: {
-                labels: WidgetLabels,
+                labels: [],
                 label: "nombre de " + selectedType.value.name,
                 date_interval: transformDate(date1.value) + " - " + transformDate(date2.value),
                 arrayData: data,
@@ -246,7 +238,6 @@ async function createWidget() {
                 page: selectedPage.value ?? ''
             }
         }
-        console.log(widget);
     }
 
     try {

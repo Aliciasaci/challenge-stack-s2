@@ -1,8 +1,7 @@
 //*POSTGRE SQL
 const { Sequelize, DataTypes } = require("sequelize");
-const dotenv = require("dotenv");
+require('dotenv').config();
 
-dotenv.config();
 
 const connection = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
