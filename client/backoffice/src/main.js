@@ -30,6 +30,7 @@ import Calendar from 'primevue/calendar';
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
+import Password from 'primevue/password';
 
 
 
@@ -76,6 +77,7 @@ app.component("Calendar", Calendar);
 
 app.component("Badge", Badge);
 app.component("Tag", Tag);
+app.component("Password", Password);
 
 
 

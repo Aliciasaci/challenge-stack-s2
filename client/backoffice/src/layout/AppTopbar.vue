@@ -3,6 +3,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 
+const user = ref(null);
+
 const { layoutConfig, onMenuToggle, contextPath } = useLayout();
 
 const outsideClickListener = ref(null);
@@ -58,6 +60,12 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+
+async function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
+}
 </script>
 
 <template>
@@ -75,10 +83,17 @@ const isOutsideClicked = (event) => {
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
-        <div class="layout-topbar-menu" :class="topbarMenuClasses">
+        <!-- <div class="layout-topbar-menu" :class="topbarMenuClasses">
             <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-user"></i>
-                <span>Profile</span>
+                <span>Profil</span>
+            </button>
+        </div> -->
+
+        <div class="layout-topbar-menu" :class="topbarMenuClasses">
+            <button @click="logout()" class="p-link layout-topbar-button">
+                <i class="pi pi-sign-out"></i>
+                <span>Se déconnecter</span>
             </button>
         </div>
     </div>

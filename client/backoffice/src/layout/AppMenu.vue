@@ -10,7 +10,7 @@ const model = ref([
     },
     {
         label: "Utilisateurs",
-        items: [{ label: "Gestion de webmasters", icon: 'pi pi-fw pi-users', to: '/' }]
+        items: [{ label: "Gestion de webmasters", icon: 'pi pi-fw pi-users', to: '/users' }]
     },
 ]);
 </script>
