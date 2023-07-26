@@ -9,7 +9,7 @@ import "../src/assets/index.css";
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
-import SDK from "../../../SDK/main.js";
+import SDK from "../SDK/main.js";
 const app = createApp(App);
 
 app.component("Header", Header);
