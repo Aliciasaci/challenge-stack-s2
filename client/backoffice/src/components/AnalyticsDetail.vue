@@ -12,6 +12,8 @@ onMounted(async () => {
     try {
         appEvents.value = await getEvents();
         nbPages.value = await getNbPages();
+        //check for event changes
+        checkEventChange();
     } catch (error) {
         console.error(error);
     }
@@ -48,7 +50,7 @@ function getPageName(url) {
 
 async function getEvents() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -62,7 +64,7 @@ async function getEvents() {
 
 async function getEventsCount() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/count/?appId=${user.appId}&orderDesc=true&periode=year`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?appId=${user.appId}&orderDesc=true&periode=year`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -77,7 +79,7 @@ async function getEventsCount() {
 async function getNbPages() {
     //nb page possible pour la pagination
     const nbPagesObject = await getEventsCount();
-    if (nbPagesObject[0]) {
+    if (nbPagesObject[0]["count"]) {
         nbTotalEvents.value = nbPagesObject[0]["count"];
         nbPages.value = Math.ceil((nbTotalEvents.value) / pageSize.value);
         return nbPages.value;
@@ -95,9 +97,29 @@ async function changePage(event) {
 
 }
 
+function checkEventChange() {
+    const eventSource = new EventSource(import.meta.env.VITE_SERVER_URL + '/watch/events');
+
+    eventSource.onopen = function () {
+        console.log('Connexion établie.');
+    };
+
+    eventSource.onerror = function (event) {
+        console.error('Erreur de connexion :', event);
+        eventSource.close();
+    };
+
+    eventSource.onmessage = async function (event) {
+        if (event) {
+            appEvents.value = await getEvents();
+            nbPages.value = await getNbPages();
+        }
+    };
+}
+
 </script>
 <template>
-    <div class="card mb-5" v-if="appEvents.value">
+    <div class="card mb-5">
         <table class="table full is-fullwidth is-hoverable is-bordered">
             <thead>
                 <tr>

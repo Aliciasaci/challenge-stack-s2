@@ -1,23 +1,23 @@
 <template >
-        <div class="stat-cards" v-if="kpis.value">
-            <h1>KPIS</h1>
-            <div class="box" v-for="kpi in kpis" :key="kpi._id">
-                <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
-                <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
-                <span class="icon-style"><i class="pi pi-database text-blue-500"></i></span>
-                <span v-if="kpi.data.tag != ''" class="font-medium">Tag : {{ kpi.data.tag.commentaire }}</span>
-                <span v-if="kpi.data.page != ''" class="font-medium">Page : {{ kpi.data.page.name }}
-                </span><br />
-                <span v-if="kpi.data.date_interval != 'null - null'" class="font-medium date">{{ kpi.data.date_interval
-                }}</span><br />
-                <span class="text-900 font-medium text-xl">{{ kpi.data.count }}</span>
-            </div>
+    <div class="stat-cards" v-if="kpis.value">
+        <h1>KPIS</h1>
+        <div class="box" v-for="kpi in kpis" :key="kpi._id">
+            <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
+            <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
+            <span class="icon-style"><i class="pi pi-database text-blue-500"></i></span>
+            <span v-if="kpi.data.tag != ''" class="font-medium">Tag : {{ kpi.data.tag.commentaire }}</span>
+            <span v-if="kpi.data.page != ''" class="font-medium">Page : {{ kpi.data.page.name }}
+            </span><br />
+            <span v-if="kpi.data.date_interval != 'null - null'" class="font-medium date">{{ kpi.data.date_interval
+            }}</span><br />
+            <span class="text-900 font-medium text-xl">{{ kpi.data.count }}</span>
         </div>
+    </div>
 
-        <div>
-            <Dialog v-model:visible="isModalVisible" modal header="Détails" :style="{ width: '30vw' }">
-            </Dialog>
-        </div>
+    <div>
+        <Dialog v-model:visible="isModalVisible" modal header="Détails" :style="{ width: '30vw' }">
+        </Dialog>
+    </div>
 </template>
 
 <script setup>
@@ -33,7 +33,7 @@ onMounted(async () => {
 
 async function getUsersKpis() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -44,6 +44,8 @@ async function getUsersKpis() {
         throw error;
     }
 }
+
+
 </script>
 
 <style lang="scss">

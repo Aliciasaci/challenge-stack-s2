@@ -1,7 +1,7 @@
 
 <template >
     <div class="flex justify-content-center">
-        <Dialog  v-model:visible="visible.visible" modal header="Créer un widget" :style="{ width: '45vw' }">
+        <Dialog v-model:visible="visible.visible" modal header="Créer un widget" :style="{ width: '45vw' }">
             <h5>Type de donnée *</h5>
             <div class="card flex justify-content-center choice">
                 <Dropdown v-model="selectedType" :options="dataTypes" optionLabel="name" placeholder="Type de données"
@@ -24,7 +24,8 @@
 
             <div class="card flex justify-content-center choice per_page dont-show">
                 <h5>La page (tracker par nom de page)</h5>
-                <Dropdown v-model="selectedPage" :options="Pages" optionLabel="name" placeholder="Page" class="w-full md:w-14rem" required />
+                <Dropdown v-model="selectedPage" :options="Pages" optionLabel="name" placeholder="Page"
+                    class="w-full md:w-14rem" required />
             </div>
             <div class="card flex justify-content-center choice per_tag dont-show">
                 <h5>Tag</h5>
@@ -113,8 +114,8 @@ const dataTypes = ref([
 
 
 const Pages = ref([
-    { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL+"/"},
-    { name: "Contact", raw : import.meta.env.VITE_SERVER_URL+'/contact'},
+    { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL + "/" },
+    { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + '/contact' },
     { name: 'Mention légale', },
 ]);
 
@@ -134,8 +135,7 @@ const typeComparaison = ref([
 ]);
 
 onMounted(() => {
-    getUsersTags(user.id)
-
+    getUsersTags(user.id);
 });
 
 async function setSelectedTypePerChoice() {
@@ -188,7 +188,7 @@ async function setSelectedTauxType() {
 async function getUsersTags(userId) {
 
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}/tags`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -216,14 +216,14 @@ async function createWidget() {
 
     if (selectedRepresentation.value.code == "multiaxis" || selectedRepresentation.value.code == "verticalbar") {
         widget = {
-            type: selectedRepresentation.value.code, 
+            type: selectedRepresentation.value.code,
             appId: user.appId,
             data: {
                 labels: [],
                 label: "nombre de " + selectedType.value.name,
                 date_interval: transformDate(date1.value) + " - " + transformDate(date2.value),
                 arrayData: data,
-                periode : selectedPeriod.value,
+                periode: selectedPeriod.value,
             }
         }
     } else if (selectedRepresentation.value.code == "kpi") {
@@ -242,7 +242,7 @@ async function createWidget() {
     }
 
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+"/widgets/", {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + "/widgets/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -269,24 +269,23 @@ async function getEventsAccordingToChoice() {
     const periode = selectedPeriod.value ?? 'day';
     let tag = '';
     let page = '';
-    if(selectedTag.value){
-        tag =  selectedTag.value.commentaire ?? '';
+    if (selectedTag.value) {
+        tag = selectedTag.value.commentaire ?? '';
     }
-    if (selectedPage.value)
-    {
-        page =  encodeURIComponent(selectedPage.value.raw) ?? '';
+    if (selectedPage.value) {
+        page = encodeURIComponent(selectedPage.value.raw) ?? '';
         console.log(page);
     }
 
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
         const data = await response.json();
-        if(data.length > 0){
+        if (data.length > 0) {
             return data;
-        }else{
+        } else {
             alert('no data found for this specific request')
         }
     } catch (error) {
@@ -333,5 +332,4 @@ function transformDate(date) {
 .show {
     display: block !important;
 }
-
 </style>
