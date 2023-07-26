@@ -26,6 +26,9 @@ module.exports = function () {
             const type = options.type;
             const orderDesc = options.orderDesc;
             const appId = options.appId;
+            // Pagination parameters
+            const pageSize = parseInt(options.page_size); // Number of documents per page
+            const pageNumber = parseInt(options.page_number); // Current page number, you can change this dynamically
 
             try {
 
@@ -34,7 +37,7 @@ module.exports = function () {
                     pipeline.push({ $match: { "type": type } })
                 }
 
-                if(appId){
+                if (appId) {
                     pipeline.push({ $match: { "appId": appId } })
                 }
 
@@ -55,6 +58,10 @@ module.exports = function () {
                 else {
                     pipeline.push({ $sort: { createdAt: 1 } })
                 }
+
+                // Add pagination stages
+                pipeline.push({ $skip: (pageNumber - 1) * pageSize });
+                pipeline.push({ $limit: pageSize });
 
                 console.log(pipeline);
 
@@ -93,16 +100,16 @@ module.exports = function () {
                     pipeline.push({ $match: { "type": type } })
                 }
 
-                if(appId){
+                if (appId) {
                     pipeline.push({ $match: { "appId": appId } })
                 }
 
-                if(tag){
+                if (tag) {
                     pipeline.push({ $match: { 'data.tag': tag } })
                 }
-                
-                if(page){
-                    pipeline.push({ $match: { "data.page": page}})
+
+                if (page) {
+                    pipeline.push({ $match: { "data.page": page } })
                 }
 
                 if (dateDebut && dateFin) {

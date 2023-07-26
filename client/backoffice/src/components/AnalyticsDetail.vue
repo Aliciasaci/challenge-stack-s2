@@ -1,6 +1,6 @@
 
 <template>
-    <div class="card" v-if="events">
+    <div class="card mb-5" v-if="events">
         <table class="table full is-fullwidth is-hoverable">
             <thead>
                 <tr>
@@ -20,6 +20,7 @@
                     <td>{{ convertDate(event.updatedAt) }}</td>
                 </tr>
             </tbody>
+            <tfoot>Previous - Next</tfoot>
         </table>
     </div>
 </template>
@@ -60,4 +61,6 @@ function getPageName(url) {
     }
 }
 </script> 
-<style></style>
+<style>
+
+</style>

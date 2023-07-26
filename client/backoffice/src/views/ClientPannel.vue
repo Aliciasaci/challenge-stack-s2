@@ -5,6 +5,8 @@
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+        <Button @click="" label="Mon site" icon="pi pi-plus" severity="secondary" outlined />
+
     </span>
 
     <!-- Cards-->
@@ -92,7 +94,7 @@ const generateParamModal = () => {
 
 async function getEvents() {
     try {
-        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true`)
+        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=10&page_number=1`)
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
