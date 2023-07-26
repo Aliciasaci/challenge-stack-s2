@@ -18,7 +18,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-html, body {
+html,
+body {
   background-color: rgba(239, 201, 224, 0.26);
   height: 100%;
 

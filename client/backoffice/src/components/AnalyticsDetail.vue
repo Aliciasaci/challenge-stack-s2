@@ -48,7 +48,6 @@ function getPageName(url) {
 
 async function getEvents() {
     try {
-        console.log(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
@@ -78,9 +77,11 @@ async function getEventsCount() {
 async function getNbPages() {
     //nb page possible pour la pagination
     const nbPagesObject = await getEventsCount();
-    nbTotalEvents.value = nbPagesObject[0]["count"];
-    nbPages.value = Math.ceil((nbTotalEvents.value) / pageSize.value);
-    return nbPages.value;
+    if (nbPagesObject[0]) {
+        nbTotalEvents.value = nbPagesObject[0]["count"];
+        nbPages.value = Math.ceil((nbTotalEvents.value) / pageSize.value);
+        return nbPages.value;
+    }
 }
 
 async function changePage(event) {
@@ -96,7 +97,7 @@ async function changePage(event) {
 
 </script>
 <template>
-    <div class="card mb-5">
+    <div class="card mb-5" v-if="appEvents.value">
         <table class="table full is-fullwidth is-hoverable is-bordered">
             <thead>
                 <tr>

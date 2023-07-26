@@ -24,7 +24,7 @@
                                     <label for="prenom" class="block text-900 text font-medium mb-2">Prénom</label>
                                     <InputText id="prenom" type="text" placeholder="Prenom" class="w-full md:w-30rem mb-2"
                                         style="padding: 1rem" v-model="prenom" required />
-                                </div>                   
+                                </div>
                             </div>
                             <div class="formgrid grid">
                                 <div class="field col">
@@ -34,8 +34,9 @@
                                 </div>
                                 <div class="field col">
                                     <label for="password" class="block text-900 font-medium text mb-2">Mot de passe</label>
-                                    <InputText type="password" id="password" placeholder="Mot de passe" class="w-full md:w-30rem mb-2"
-                                        style="padding: 1rem" v-model="password" :feedback="false" required />
+                                    <InputText type="password" id="password" placeholder="Mot de passe"
+                                        class="w-full md:w-30rem mb-2" style="padding: 1rem" v-model="password"
+                                        :feedback="false" required />
                                 </div>
                             </div>
                             <div class="formgrid grid">
@@ -46,15 +47,15 @@
                                 </div>
                                 <div class="field col">
                                     <label for="telephone" class="block text-900 font-medium text mb-2">Téléphone</label>
-                                    <InputText id="telephone" type="Number" placeholder="Téléphone" class="w-full md:w-30rem mb-2"
-                                        style="padding: 1rem" v-model="telephone" required />
+                                    <InputText id="telephone" type="Number" placeholder="Téléphone"
+                                        class="w-full md:w-30rem mb-2" style="padding: 1rem" v-model="telephone" required />
                                 </div>
                             </div>
                             <div class="formgrid grid">
                                 <div class="field col">
                                     <label for="kbis" class="block text-900 font-medium text mb-2">Url Kbis</label>
-                                    <InputText id="kbis" type="text" placeholder="Lien vers Kbis" class="w-full md:w-30rem mb-2"
-                                        style="padding: 1rem" v-model="kbis" required />
+                                    <InputText id="kbis" type="text" placeholder="Lien vers Kbis"
+                                        class="w-full md:w-30rem mb-2" style="padding: 1rem" v-model="kbis" required />
                                 </div>
                             </div>
 
@@ -86,12 +87,12 @@ const societe = ref(null);
 const kbis = ref(null);
 const telephone = ref(null);
 const response_message = ref(null);
-const compteIsVerified = ref(false); 
+const compteIsVerified = ref(false);
 const router = useRouter();
 const { contextPath } = useLayout();
 
 const logoUrl = computed(() => {
-  return `${contextPath}layout/images/flutter-ease-logo.png`;
+    return `${contextPath}layout/images/flutter-ease-logo.png`;
 })
 
 async function accountAlreadyExists(email) {
@@ -108,7 +109,7 @@ async function createAccount() {
     if (nom.value && prenom.value && email.value && password.value) {
         if (!(await accountAlreadyExists(email.value))) {
             try {
-                const response = await fetch('http://localhost:3000/register', {
+                const response = await fetch(import.meta.env.VITE_SERVER_URL + "/register/", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

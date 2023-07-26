@@ -7,7 +7,6 @@
 
 <script setup>
 import { ref, onMounted, defineProps } from "vue";
-import { de } from 'date-fns/locale';
 import 'chartjs-adapter-date-fns';
 const chartData = ref();
 const chartOptions = ref();
