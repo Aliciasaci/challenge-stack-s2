@@ -17,7 +17,7 @@ const items = ref([
     {
         label: 'Accueil',
         icon: 'pi pi-fw pi-home',
-        url: '/client-pannel'
+        url: '/client-panel'
     },
     {
         label: 'Profil',
@@ -26,7 +26,8 @@ const items = ref([
     },
     {
         label: 'Se déconnecter',
-        icon: 'pi pi-fw pi-sign-out'
+        icon: 'pi pi-fw pi-sign-out',
+        url: '/logout',
     },
 
 ]);

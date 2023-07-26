@@ -8,8 +8,6 @@ const urlSite = ref(null);
 const user = JSON.parse(localStorage.getItem('user'));
 const generatedAppId = ref(user.appId);
 
-
-//!sortir cette fonction pour en faire une foinction générale
 async function getUserState(userId) {
     try {
         const response = await fetch(`http://localhost:3000/users/${userId}`);
@@ -71,8 +69,7 @@ async function generateAppID() {
 <template>
     <div class="flex justify-content-center">
         <Dialog v-model:visible="visible.visible" modal header="Générer APP ID" :style="{ width: '600px' }">
-            <p>
-            <div class="card-modal mb-5">
+            <div class="card-modal mb-5" v-if="!user.appId">
                 <span>Saisir Url site</span>
                 <InputText type="text" v-model="urlSite" placeholder="https://example.fr"
                     :style="{ width: '380px' }" />
@@ -83,7 +80,6 @@ async function generateAppID() {
                 <InputText type="text" placeholder="" :style="{ width: '380px' }" disabled v-model="generatedAppId" />
                 <Button label="Copier" outlined />
             </div>
-            </p>
         </Dialog>
     </div>
 </template>

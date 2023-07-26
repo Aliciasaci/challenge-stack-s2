@@ -18,6 +18,12 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+html, body {
+  background-color: rgba(239, 201, 224, 0.26);
+  height: 100%;
+
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

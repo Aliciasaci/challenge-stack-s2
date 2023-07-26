@@ -12,9 +12,9 @@
                 </div>
                 <div class="tags-list">
                     <ul>
-                        <li class="tag-element" v-for="tag in tags" :key="tag.code"><span><b>Tag : </b>{{ tag.commentaire }} |
-                            <b>Description</b> : {{
-                                tag.description }}</span>
+                        <li class="tag-element" v-for="tag in tags" :key="tag.code">
+                            <span class="comm">Tag : {{ tag.commentaire }}</span> |
+                            <span class="desc">Description: {{ tag.description }}</span>
                             <div class="actions">
                                 <Button icon="pi pi-times" severity="danger" text raised rounded aria-label="Cancel"
                                     @click="deleteTag(tag.id)" />
@@ -147,5 +147,9 @@ async function deleteTag(tagId) {
     align-items: center;
     padding: 5px;
     border-radius: 6px;
+}
+
+.comm, .desc{
+    width: 10rem;
 }
 </style>

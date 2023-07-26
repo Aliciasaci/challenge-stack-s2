@@ -4,8 +4,6 @@
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-        <Button @click="" label="Mon site" icon="pi pi-plus" severity="secondary" outlined />
-
     </span>
 
     <!-- Cards-->
