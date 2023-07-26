@@ -18,7 +18,7 @@ module.exports = function (eventService, options = {}) {
         type: req.query.type ?? null,
         orderDesc: req.query.orderDesc ?? null,
         appId: req.query.appId ?? null,
-        page_size: req.query.page_size ?? 10,  //ce page fait référence à une page pagination
+        page_size: req.query.page_size ?? 10,  
         page_number: req.query.page_number ?? 1,
       }
 

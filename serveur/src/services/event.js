@@ -24,8 +24,8 @@ module.exports = function () {
             const type = options.type;
             const orderDesc = options.orderDesc;
             const appId = options.appId;
-            const page_size = 10;
-            const page_number = 1;
+            const page_size = parseInt(options.page_size);
+            const page_number = parseInt(options.page_number);
 
             try {
                 let pipeline = [];

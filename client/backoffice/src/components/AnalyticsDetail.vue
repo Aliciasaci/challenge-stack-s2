@@ -3,16 +3,15 @@ import { ref, onMounted } from 'vue';
 
 let appEvents = ref([]);
 const user = JSON.parse(localStorage.getItem('user'));
-const currentPage = ref(1);
-const pageSize = 10; // Number of events per page
-let nbPages = 1; // Initialize the variable
-
+const pageSize = ref(10); // Number of events per page
+const pageNumber = ref(1);
+let nbPages = ref(0); // Initialize the variable
+let nbTotalEvents = ref(0);
+const currentPage = ref(0);
 onMounted(async () => {
     try {
-        appEvents.value = await getEvents(currentPage.value);
-        // nbPages = Math.ceil(countEvents[0].count / pageSize); // Assign the value to nbPages
-
-        console.log(appEvents.value);
+        appEvents.value = await getEvents();
+        nbPages.value = await getNbPages();
     } catch (error) {
         console.error(error);
     }
@@ -40,17 +39,17 @@ function getPageName(url) {
         let lastPart = parts[parts.length - 1];
 
         if (lastPart === "") {
-            lastPart = "/accueil";
+            lastPart = "/Accueil";
         }
 
         return lastPart;
     }
 }
 
-async function getEvents(pageNumber) {
+async function getEvents() {
     try {
-        console.log(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize}&page_number=${pageNumber}`);
-        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize}&page_number=${pageNumber}`);
+        console.log(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
+        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -76,10 +75,29 @@ async function getEventsCount() {
     }
 }
 
+async function getNbPages() {
+    //nb page possible pour la pagination
+    const nbPagesObject = await getEventsCount();
+    nbTotalEvents.value = nbPagesObject[0]["count"];
+    nbPages.value = Math.ceil((nbTotalEvents.value) / pageSize.value);
+    return nbPages.value;
+}
+
+async function changePage(event) {
+    const selectedPageNumber = event;
+    currentPage.value = selectedPageNumber.originalTarget.getAttribute("aria-label");
+
+    if (Number.isInteger(parseInt(currentPage.value))) {
+        pageNumber.value = currentPage.value;
+        appEvents.value = await getEvents();
+    }
+
+}
+
 </script>
 <template>
     <div class="card mb-5">
-        <table class="table full is-fullwidth is-hoverable">
+        <table class="table full is-fullwidth is-hoverable is-bordered">
             <thead>
                 <tr>
                     <th>Type d'évènement</th>
@@ -99,8 +117,8 @@ async function getEventsCount() {
                 </tr>
             </tbody>
         </table>
-        <div>
-            <span>{{ currentPage }}</span>
+        <div class="">
+            <Paginator @click="changePage" :rows="nbPages" :totalRecords="nbTotalEvents"></Paginator>
         </div>
     </div>
 </template>

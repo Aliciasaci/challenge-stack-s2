@@ -1,7 +1,7 @@
 
-<template>
+<template >
     <div class="flex justify-content-center">
-        <Dialog v-model:visible="visible.visible" modal header="Header" :style="{ width: '45vw' }">
+        <Dialog  v-model:visible="visible.visible" modal header="Créer un widget" :style="{ width: '45vw' }">
             <h5>Type de donnée *</h5>
             <div class="card flex justify-content-center choice">
                 <Dropdown v-model="selectedType" :options="dataTypes" optionLabel="name" placeholder="Type de données"
@@ -86,6 +86,7 @@
             </div>
 
             <Button label="Générer" @click="createWidget()" />
+            <Button label="Fermer" @click="closeModal()" />
         </Dialog>
     </div>
 </template>
@@ -251,6 +252,7 @@ async function createWidget() {
         if (!response.ok) {
             throw new Error(`Server error (${response.status} ${response.statusText})`);
         }
+        alert("Widget crée avec success");
         const responseData = await response.json();
         return responseData;
     } catch (error) {
@@ -309,18 +311,6 @@ function transformDate(date) {
     return null;
 }
 
-function getAllDatesBetween(startDate, endDate) {
-    const dateList = [];
-    let currentDate = new Date(startDate);
-
-    // Loop through the dates and add them to the dateList
-    while (currentDate <= endDate) {
-        dateList.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-    return dateList;
-}
-
 </script>
 <style lang="scss">
 .wrapper {
@@ -344,6 +334,5 @@ function getAllDatesBetween(startDate, endDate) {
 .show {
     display: block !important;
 }
-
 
 </style>

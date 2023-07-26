@@ -26,7 +26,7 @@ import Avatar from 'primevue/avatar';
 import AvatarGroup from 'primevue/avatargroup'; 
 import TreeSelect from 'primevue/treeselect';
 import Calendar from 'primevue/calendar';
-
+import Paginator from 'primevue/paginator';
 import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
@@ -78,11 +78,11 @@ app.component("Calendar", Calendar);
 app.component("Badge", Badge);
 app.component("Tag", Tag);
 app.component("Password", Password);
+app.component("Paginator", Paginator);
 
 
 
 app.config.globalProperties.$api = axios.create({
-    baseURL: 'http://localhost:5000/',
     params: {}
 });
 

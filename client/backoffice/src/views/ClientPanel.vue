@@ -9,7 +9,6 @@
     </span>
 
     <!-- Cards-->
-    <h1>KPIS</h1>
     <Cards />
     <!--Cards -->
 
@@ -19,24 +18,24 @@
     <ParamModal :visible="isParamModalVisible" />
     <!--Les modals -->
 
-    <div class="analytics">
+    <div class="analytics" v-if="userVerticalBars || userMultiAxes">
         <h1>Graphes</h1>
-        <h3>Barre Vericales</h3>
         <div class="graph" v-if="userVerticalBars">
+            <h3 style="flex-basis: 100%;">Barre Vericales</h3>
             <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
                 <Graph :graph="graph"></Graph>
             </div>
         </div>
 
-        <h3>Mutli axes</h3>
         <div class="graph" v-if="userMultiAxes">
+            <h3 style="flex-basis: 100%;">Mutli axes</h3>
             <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
                 <Graph :graph="graph"></Graph>
             </div>
         </div>
 
-        <h1>Dernière activité</h1>
         <div class="detail">
+            <h1>Dernière activité</h1>
             <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
         </div>
     </div>
