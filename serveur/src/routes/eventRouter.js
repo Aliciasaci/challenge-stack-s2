@@ -14,7 +14,6 @@ module.exports = function (Controller, options = {}) {
   router.delete("/:id", Controller.deleteEventById);
   router.get("/:id/events/", Controller.getEventsByAppId);
   router.get("/visitor/:id", Controller.getEventsByVisitorId);
-  // route to update event timeSpent by visitorId and by page
   router.patch("/visitor/:id", Controller.addTimeSpentOnPage);
 
 

@@ -6,6 +6,7 @@ const eventRouter = require("./routes/eventRouter.js")
 const widgetRouter = require("./routes/widgetRouter.js")
 const AuthRouter = require("./routes/authRouter.js");
 const cors = require("cors");
+const checkAuth = require("./middlewares/checkAuth");
 
 const GenericController = require("./controllers/GenericController");
 const AuthController = require("./controllers/AuthController");
@@ -39,6 +40,10 @@ app.use(
 
 app.use(errorsHandler);
 
-app.listen(3000, () => {
-  console.log("Example app listening on port 3000!");
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(3000, () => {
+    console.log("App listening on port 3000!");
+  });
+}
+
+module.exports = app;

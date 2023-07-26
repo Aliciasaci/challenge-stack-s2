@@ -1,9 +1,8 @@
 <script setup>
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onMounted, onBeforeMount, reactive } from 'vue';
+import { ref, onMounted, onBeforeMount, reactive, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
-
-const toast = useToast();
+import { mapState, mapGetters, mapMutations, mapActions } from '../store/map-state';
 
 const users = reactive([]);
 const userDialog = ref(false);
@@ -24,6 +23,7 @@ const roles = [
     { label: 'USER_ADMIN', value: 'USER_ADMIN' },
     { label: 'USER_CLIENT', value: 'USER_CLIENT' },
 ];
+const toast = useToast();
 
 onBeforeMount(async () => {
     initFilters();
@@ -60,9 +60,6 @@ async function editUser(editUser) {
     editUser.compteIsVerified = selectedStatus.value.value; // update status
     const response = await fetch('http://localhost:3000/users/' + editUser.id, {
         method: 'PATCH',
-
-
-        
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
             'Content-Type': 'application/json'
@@ -80,12 +77,6 @@ async function editUser(editUser) {
         throw new Error('Error while fetching');
     }
 }
-
-// const openNew = () => {
-//     user.value = {};
-//     submitted.value = false;
-//     userDialog.value = true;
-// }
 
 const hideDialog = () => {
     submitted.value = false;
@@ -121,6 +112,7 @@ const confirmDeleteSelected = () => {
     deleteUsersDialog.value = true;
 }
 
+const { loginAsUser } = mapActions('loginAsUser');
 </script>
 
 <template>
@@ -222,6 +214,11 @@ const confirmDeleteSelected = () => {
                         <template #body="slotProps">
                             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="confirmEditUser(slotProps.data)" />
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" @click="confirmDeleteUser(slotProps.data)" />
+                        </template>
+                    </Column>
+                    <Column headerStyle="min-width:10rem;">
+                        <template #body="slotProps">
+                            <Button icon="pi pi-eye" class="p-button-rounded p-button-info mt-2" @click="loginAsUser(slotProps.data)" />
                         </template>
                     </Column>
                 </DataTable>

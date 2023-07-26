@@ -134,6 +134,7 @@ const typeComparaison = ref([
 
 onMounted(() => {
     getUsersTags(user.id)
+    
 });
 
 async function setSelectedTypePerChoice() {

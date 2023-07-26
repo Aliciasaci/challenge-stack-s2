@@ -13,13 +13,13 @@ module.exports = function AuthController(UserService) {
 
       if (!user) {
         return next(
-          new ValidationError({ erreur: ["Email ou mot de passe incorrecte."] })
+          new ValidationError({ erreur: ["Email ou mot de passe incorrect."] })
         );
       }
 
       if (!(await bcrypt.compare(req.body.password, user.password))) {
         return next(
-          new ValidationError({ erreur: ["Email ou mot de passe incorrecte."] })
+          new ValidationError({ erreur: ["Email ou mot de passe incorrect."] })
         );
       }
       //return token and user

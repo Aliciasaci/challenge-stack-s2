@@ -49,6 +49,8 @@ import AppIDModal from '@/components/AppIDModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
 import ParamModal from "../components/ParamModal.vue";
 import Graph from '@/components/Graph.vue';
+import { mapGetters, mapActions } from '../store/map-state';
+
 
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
@@ -57,9 +59,11 @@ const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 import { useStore } from 'vuex';
 const store = useStore();
-let appEvents = ref([]);
 let userMultiAxes = ref([]);
 let userVerticalBars = ref([]);
+let appEvents = ref();
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const { logoutAsUser } = mapActions('loginAsUser');
 
 onMounted(async () => {
     try {
@@ -136,7 +140,48 @@ async function getUsersVerticalBars() {
     }
 }
 </script>
-<style lang="scss">
+<template v-if="user">
+    <Header />
+    <span class="p-buttonset">
+        <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
+        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
+        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
+        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+    </span>
+    <div v-if="isLoggedInAsUser">
+        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
+        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
+    </div>
+
+    <!-- Cards-->
+    <Cards />
+    <!--Cards -->
+
+    <!--Les modals-->
+    <AppIDModal :visible="isAppIDModalVisible" />
+    <PreferencesModal :visible="isPreferencesModalVisible" />
+    <TagsModal :visible="isTagsModalVisible" />
+    <ParamModal :visible="isParamModalVisible" />
+    <!--Les modals -->
+
+
+    <div class="analytics">
+        <div class="graph">
+            <div id="graph1">
+                <VerticalBar></VerticalBar>
+            </div>
+            <div id="graph2">
+                <MultiAxis></MultiAxis>
+            </div>
+        </div>
+
+        <div class="detail">
+            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
+        </div>
+    </div>
+
+</template>
+<style>
 .top-btns {
     display: flex;
     align-items: end;
