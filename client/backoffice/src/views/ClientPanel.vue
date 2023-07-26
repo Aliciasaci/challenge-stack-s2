@@ -89,7 +89,7 @@ const generateParamModal = () => {
 
 async function getUsersMultiAxes() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -103,7 +103,7 @@ async function getUsersMultiAxes() {
 
 async function getUsersVerticalBars() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -114,6 +114,7 @@ async function getUsersVerticalBars() {
         throw error;
     }
 }
+
 </script>
 <style>
 .top-btns {

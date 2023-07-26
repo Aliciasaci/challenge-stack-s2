@@ -16,6 +16,5 @@ module.exports = function (Controller, options = {}) {
   router.get("/visitor/:id", Controller.getEventsByVisitorId);
   router.patch("/visitor/:id", Controller.addTimeSpentOnPage);
 
-
   return router;
 };

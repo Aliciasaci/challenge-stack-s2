@@ -27,4 +27,5 @@ tunnel.belongsToMany(tag, { through: "tunnel_tag" });
 //relations tag et user
 user.hasMany(tag, { foreignKey: "id_user" });
 
+
 module.exports = db;
