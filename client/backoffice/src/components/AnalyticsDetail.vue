@@ -10,8 +10,9 @@ let nbPages = 1; // Initialize the variable
 onMounted(async () => {
     try {
         appEvents.value = await getEvents(currentPage.value);
-        const countEvents = await getEventsCount();
         // nbPages = Math.ceil(countEvents[0].count / pageSize); // Assign the value to nbPages
+
+        console.log(appEvents.value);
     } catch (error) {
         console.error(error);
     }
@@ -48,6 +49,7 @@ function getPageName(url) {
 
 async function getEvents(pageNumber) {
     try {
+        console.log(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize}&page_number=${pageNumber}`);
         const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize}&page_number=${pageNumber}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
