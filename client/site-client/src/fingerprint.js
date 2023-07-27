@@ -42,14 +42,16 @@ export default {
       data: data,
     };
     try {
-      const blob = new Blob([JSON.stringify(event)], {
-        type: "application/json",
-      });
-      navigator.sendBeacon(
+      const response = await fetch(
         `http://localhost:3000/events/visitor/${visitorId}`,
-        blob
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        }
       );
-      console.log("Beacon sent");
     } catch (error) {
       console.error(error);
     }
