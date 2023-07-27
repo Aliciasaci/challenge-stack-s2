@@ -16,21 +16,21 @@ connection
     console.error("Connexion à POSTGRES échouée:", error);
   });
 
-if (process.env.NODE_ENV !== "Servicetest") {
-  //*MongoDB
-  const mongoose = require("mongoose");
+// if (process.env.NODE_ENV !== "Servicetest") {
+//   //*MongoDB
+//   const mongoose = require("mongoose");
 
-  mongoose
-    .connect("mongodb://0.0.0.0:27017/mongodatabase", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(() => {
-      console.log("=> Connexion à MongoDB réussie");
-    })
-    .catch((error) => {
-      console.error("Erreur de connexion à MongoDB :", error);
-    });
-}
+//   mongoose
+//     .connect("mongodb://0.0.0.0:27017/mongodatabase", {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     })
+//     .then(() => {
+//       console.log("=> Connexion à MongoDB réussie");
+//     })
+//     .catch((error) => {
+//       console.error("Erreur de connexion à MongoDB :", error);
+//     });
+// }
 
 module.exports = connection;

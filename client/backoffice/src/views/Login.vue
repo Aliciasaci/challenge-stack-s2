@@ -1,5 +1,6 @@
 <template>
   <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+  <Toast />
     <div class="flex flex-column align-items-center justify-content-center">
       <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" />
       <div style="
@@ -34,9 +35,16 @@
                 <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Mot
                   de passe oublié ?</a>
               </div>
-              <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">
-                  <router-link to="/signin">Pas de compte ? Inscrivez vous.</router-link>
+              <div
+                class="flex align-items-center justify-content-between mb-5 gap-5"
+              >
+                <a
+                  class="font-medium no-underline ml-2 text-right cursor-pointer"
+                  style="color: var(--primary-color)"
+                >
+                  <router-link to="/register"
+                    >Pas de compte ? Inscrivez vous.</router-link
+                  >
                 </a>
               </div>
               <Button type="submit" label="Se connecter" class="w-full p-3 text-xl" />
@@ -51,12 +59,14 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useLayout } from "@/layout/composables/layout";
+import { useToast } from 'primevue/usetoast';
 
 const email = ref(null);
 const password = ref(null);
 const response_message = ref(null);
 const router = useRouter();
 const { contextPath } = useLayout();
+const toast = useToast();
 
 const logoUrl = computed(() => {
   return `${contextPath}layout/images/flutter-ease-logo.png`;
@@ -89,11 +99,14 @@ async function login() {
       //stocker le token et le user dans le store.
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
-      if (user.role === "USER_ADMIN") {
-        router.push("/admin-panel");
+      if(user.compteIsVerified === false) {
+        toast.add({ severity: 'success', summary: 'Attention', detail: 'Attendez que votre compte soit validé pour pouvoir vous connecter.', life: 4000 });
       } else {
-        router.push("/client-panel");
+        if(user.role === "USER_ADMIN") {
+          router.push("/admin-panel");
+        } else {
+          router.push("/client-panel");
+        }
       }
       return Promise.resolve(data);
     }
