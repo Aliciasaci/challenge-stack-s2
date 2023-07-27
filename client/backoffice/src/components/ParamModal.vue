@@ -18,19 +18,22 @@
         />
       </div>
 
-      <h5>Type de représentation</h5>
-      <div class="card flex justify-content-center choice">
-        <Dropdown
-          @change="setSelectedPeriodType"
-          v-model="selectedRepresentation"
-          :options="typeGraphes"
-          optionLabel="name"
-          placeholder="Type de graphe"
-          class="w-full md:w-14rem"
-          required
-        />
+      <div
+        v-show="selectedType !== undefined && selectedType.code !== 'heatmap'"
+      >
+        <h5>Type de représentation</h5>
+        <div class="card flex justify-content-center choice">
+          <Dropdown
+            @change="setSelectedPeriodType"
+            v-model="selectedRepresentation"
+            :options="typeGraphes"
+            optionLabel="name"
+            placeholder="Type de graphe"
+            class="w-full md:w-14rem"
+            required
+          />
+        </div>
       </div>
-
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
       >
@@ -53,7 +56,6 @@
           <label for="ingredient4" class="ml-2">Par Page</label>
         </div>
       </div>
-
       <div class="card flex justify-content-center choice per_page dont-show">
         <h5>La page (tracker par nom de page)</h5>
         <Dropdown
@@ -78,31 +80,6 @@
             placeholder="Tag"
             class="w-full md:w-14rem"
             required
-          />
-          <div v-for="click in clicks" :key="click">
-            <Dropdown
-              v-model="selectedTags[click]"
-              :options="tags"
-              optionLabel="commentaire"
-              placeholder="Tag"
-              class="w-full md:w-14rem"
-              required
-            />
-          </div>
-          <Button
-            icon="pi pi-plus"
-            id="plusButton"
-            class="ml-2"
-            aria-label="Ajouter"
-            rounded
-            text
-            raised
-            v-if="
-              showAddButton &&
-              selectedRepresentation !== undefined &&
-              selectedRepresentation.code === 'heatmap'
-            "
-            @click="generateSelect()"
           />
         </div>
       </div>
@@ -175,7 +152,6 @@
 </template>
 
 <script setup>
-import { lo } from "plotly.js-dist";
 import Dropdown from "primevue/dropdown";
 import { ref, defineProps, onMounted } from "vue";
 const visible = defineProps(["visible"]);
@@ -185,8 +161,8 @@ const date1 = ref();
 const date2 = ref();
 const tags = ref([]);
 const clicks = ref(0);
+const showElement = ref(true);
 const selectedTag = ref();
-const selectedTags = ref([]);
 const showAddButton = ref(true);
 const selectedTypePerChoice = ref();
 const selectedRepresentation = ref();
@@ -197,11 +173,12 @@ const dataTypes = ref([
   { name: "Click", code: "click" },
   { name: "Soumission de formulaire", code: "submit" },
   { name: "Visite", code: "visited" },
+  { name: "Heatmap", code: "heatmap" },
 ]);
 
 const Pages = ref([
-  { name: "Accueil", raw: import.meta.env.VITE_SERVER_URL + "/" },
-  { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + "/contact" },
+  { name: "Accueil", raw: import.meta.env.VITE_LOCAL_URL + "/" },
+  { name: "Contact", raw: import.meta.env.VITE_LOCAL_URL + "/contact" },
   { name: "Mention légale" },
 ]);
 
@@ -209,7 +186,6 @@ const typeGraphes = ref([
   { name: "KPI", code: "kpi" },
   { name: "Graphe MultiAxis", code: "multiaxis" },
   { name: "Graphe VerticalBar", code: "verticalbar" },
-  { name: "HeatMap", code: "heatmap" },
 ]);
 
 const typeComparaison = ref([
@@ -287,64 +263,52 @@ async function createWidget() {
   let countTotal = null;
   const dateDebut = transformDate(date1.value) ?? null;
   const dateFin = transformDate(date2.value) ?? null;
+  const select = selectedType.value.code;
+  console.log(select);
+  if (select !== "heatmap") {
+    console.log(select);
+    let data = await getEventsAccordingToChoice();
+    data.forEach((element) => {
+      countTotal += element.count;
+    });
 
-  let data = await getEventsAccordingToChoice();
-  data.forEach((element) => {
-    countTotal += element.count;
-  });
-
-  if (
-    selectedRepresentation.value.code == "multiaxis" ||
-    selectedRepresentation.value.code == "verticalbar"
-  ) {
-    widget = {
-      type: selectedRepresentation.value.code,
-      appId: user.appId,
-      data: {
-        labels: [],
-        label: "Nombre de " + selectedType.value.name,
-        date_interval:
-          transformDate(date1.value) + " - " + transformDate(date2.value),
-        arrayData: data,
-        periode: selectedPeriod.value,
-      },
-    };
-  } else if (selectedRepresentation.value.code == "kpi") {
-    widget = {
-      type: "kpi",
-      appId: user.appId,
-      data: {
-        label: "Nombre de " + selectedType.value.name,
-        date_interval:
-          transformDate(date1.value) + " - " + transformDate(date2.value),
-        count: countTotal,
-        tag: selectedTag.value ?? "",
-        page: selectedPage.value ?? "",
-      },
-    };
-  } else if (selectedRepresentation.value.code === "heatmap") {
-    // append to data the result of the other tags
-    for (let i = 0; i < selectedTags.value.length; i++) {
-      const tagSelect = selectedTags.value[i];
-      const dataTag = await getEventsAccordingToChoiceSeveralTags(tagSelect);
-      dataTag.forEach((element) => {
-        data.push(element);
-      });
+    if (
+      selectedRepresentation.value.code == "multiaxis" ||
+      selectedRepresentation.value.code == "verticalbar"
+    ) {
+      widget = {
+        type: selectedRepresentation.value.code,
+        appId: user.appId,
+        data: {
+          labels: [],
+          label: "Nombre de " + selectedType.value.name,
+          date_interval:
+            transformDate(date1.value) + " - " + transformDate(date2.value),
+          arrayData: data,
+          periode: selectedPeriod.value,
+        },
+      };
+    } else if (selectedRepresentation.value.code == "kpi") {
+      widget = {
+        type: "kpi",
+        appId: user.appId,
+        data: {
+          label: "Nombre de " + selectedType.value.name,
+          date_interval:
+            transformDate(date1.value) + " - " + transformDate(date2.value),
+          count: countTotal,
+          tag: selectedTag.value ?? "",
+          page: selectedPage.value ?? "",
+        },
+      };
     }
-
+  } else {
+    let data = await getPageClicksAccordingToChoice();
+    console.log(data);
     widget = {
       type: "heatmap",
       appId: user.appId,
-      data: {
-        label: "Nombre de " + selectedType.value.name,
-        date_interval:
-          transformDate(date1.value) + " - " + transformDate(date2.value),
-        arrayData: data,
-        page: selectedPage.value ?? "",
-        tag: selectedTag.value ?? "",
-        extraTags: selectedTags.value ?? "",
-        periode: selectedPeriod.value,
-      },
+      data: data[0],
     };
   }
 
@@ -367,6 +331,39 @@ async function createWidget() {
     alert("Widget crée avec success");
     const responseData = await response.json();
     return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function getPageClicksAccordingToChoice() {
+  const dateDebut = transformDate(date1.value) ?? "";
+  const dateFin = transformDate(date2.value) ?? "";
+  const periode = selectedPeriod.value ?? "day";
+  let page = "";
+  if (selectedPage.value) {
+    page = encodeURIComponent(selectedPage.value.raw) ?? "";
+    console.log(selectedPage.value);
+    console.log(page);
+  }
+
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/pageClicks/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&periode=${periode}&page=${page}`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
+    }
+    const data = await response.json();
+    if (data.length > 0) {
+      return data;
+    } else {
+      alert("no data found for this specific request");
+    }
   } catch (error) {
     console.error(error);
     throw error;
@@ -403,46 +400,6 @@ async function getEventsAccordingToChoice() {
     } else {
       alert("no data found for this specific request");
     }
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-async function getEventsAccordingToChoiceSeveralTags(tagSelect) {
-  const dateDebut = transformDate(date1.value) ?? "";
-  const dateFin = transformDate(date2.value) ?? "";
-  const periode = selectedPeriod.value ?? "day";
-  let result = {};
-  let page = "";
-  if (selectedPage.value) {
-    page = encodeURIComponent(selectedPage.value.raw) ?? "";
-  }
-
-  try {
-    const response = await fetch(
-      import.meta.env.VITE_SERVER_URL +
-        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tagSelect}&page=${page}`
-    );
-    if (!response.ok) {
-      throw new Error(
-        `erreur serveur (${response.status} ${response.statusText})`
-      );
-    }
-    const data = await response.json();
-    if (data.length > 0) {
-      result = {
-        tag: tagSelect,
-        arrayData: data,
-      };
-    } else {
-      result = {
-        tag: tagSelect,
-        arrayData: null,
-      };
-    }
-    console.log(result);
-    return result;
   } catch (error) {
     console.error(error);
     throw error;

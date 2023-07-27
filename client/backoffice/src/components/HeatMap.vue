@@ -2,8 +2,8 @@
   <div></div>
 </template>
 <script setup>
-import plotly from "plotly.js-dist";
 import { ref, onMounted } from "vue";
+import { puppeteer } from "puppeteer";
 
 const { heatmap } = defineProps(["heatmap"]);
 
