@@ -87,7 +87,6 @@
             </div>
 
             <Button label="Générer" @click="createWidget()" />
-            <Button label="Fermer" @click="closeModal()" />
         </Dialog>
     </div>
 </template>
@@ -252,7 +251,7 @@ async function createWidget() {
         if (!response.ok) {
             throw new Error(`Server error (${response.status} ${response.statusText})`);
         }
-        alert("Widget crée avec success");
+        location.reload();
         const responseData = await response.json();
         return responseData;
     } catch (error) {
