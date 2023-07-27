@@ -86,9 +86,8 @@ export default {
             await Fingerprint.addTimeSpentOnPage(
               visitorId,
               action,
-              timezone,
-              modifier,
-              options
+              options.APPID,
+              data,
             );
           });
           window.addEventListener("unload", async () => {
