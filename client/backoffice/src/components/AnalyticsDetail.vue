@@ -13,7 +13,7 @@ onMounted(async () => {
         appEvents.value = await getEvents();
         nbPages.value = await getNbPages();
         //check for event changes
-        // checkEventChange();
+        checkEventChange();
     } catch (error) {
         console.error(error);
     }
@@ -49,6 +49,8 @@ function getPageName(url) {
 }
 
 async function getEvents() {
+
+    console.log(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
     try {
         const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         if (!response.ok) {
@@ -97,25 +99,25 @@ async function changePage(event) {
 
 }
 
-// function checkEventChange() {
-//     const eventSource = new EventSource(import.meta.env.VITE_SERVER_URL + '/watch/events');
+function checkEventChange() {
+    const eventSource = new EventSource(import.meta.env.VITE_SERVER_URL + '/watch/events');
 
-//     eventSource.onopen = function () {
-//         console.log('Connexion établie.');
-//     };
+    eventSource.onopen = function () {
+        console.log('Connexion établie.');
+    };
 
-//     eventSource.onerror = function (event) {
-//         console.error('Erreur de connexion :', event);
-//         eventSource.close();
-//     };
+    eventSource.onerror = function (event) {
+        console.error('Erreur de connexion :', event);
+        eventSource.close();
+    };
 
-//     eventSource.onmessage = async function (event) {
-//         if (event) {
-//             appEvents.value = await getEvents();
-//             nbPages.value = await getNbPages();
-//         }
-//     };
-// }
+    eventSource.onmessage = async function (event) {
+        if (event) {
+            appEvents.value = await getEvents();
+            nbPages.value = await getNbPages();
+        }
+    };
+}
 
 </script>
 <template>
