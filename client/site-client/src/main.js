@@ -19,6 +19,5 @@ app.use(PrimeVue);
 
 //passer le APPID en options.
 
-//compte alicia
 app.use(SDK, { APPID: "3fb28de7-25c1-4eca-a526-9bef25ecdd19" });
 app.use(ToastService);
