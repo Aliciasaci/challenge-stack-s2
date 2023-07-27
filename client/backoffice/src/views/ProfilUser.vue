@@ -1,7 +1,7 @@
 <script setup>
 import Header from '@/components/ClientHeader.vue';
 import { mapGetters } from '../store/map-state';
-import { on } from 'formidable/src/PersistentFile';
+// import { on } from 'formidable/src/PersistentFile';
 import { onMounted, onBeforeMount, ref } from 'vue';
 
 const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
