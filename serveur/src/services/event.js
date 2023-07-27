@@ -66,7 +66,7 @@ module.exports = function () {
                 return Event.aggregate(pipeline)
                     .then((resultats) => {
                         console.log(typeof resultats);
-
+                        console.log(resultats);
                         return resultats;
                     })
                     .catch((error) => {

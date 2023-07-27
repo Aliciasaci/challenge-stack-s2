@@ -1,6 +1,5 @@
 <template >
-    <div class="stat-cards" v-if="kpis.value">
-        <h1>KPIS</h1>
+    <div class="stat-cards" >
         <div class="box" v-for="kpi in kpis" :key="kpi._id">
             <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
             <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />

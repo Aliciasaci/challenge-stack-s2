@@ -1,177 +1,93 @@
-<template>
-  <div class="flex justify-content-center">
-    <Dialog
-      v-model:visible="visible.visible"
-      modal
-      header="Créer un widget"
-      :style="{ width: '45vw' }"
-    >
-      <h5>Type de donnée *</h5>
-      <div class="card flex justify-content-center choice">
-        <Dropdown
-          v-model="selectedType"
-          :options="dataTypes"
-          optionLabel="name"
-          placeholder="Type de données"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
+<template >
+    <div class="flex justify-content-center">
+        <Dialog v-model:visible="visible.visible" modal header="Créer un widget" :style="{ width: '45vw' }">
+            <h5>Type de donnée *</h5>
+            <div class="card flex justify-content-center choice">
+                <Dropdown v-model="selectedType" :options="dataTypes" optionLabel="name" placeholder="Type de données"
+                    class="w-full md:w-14rem" required />
+            </div>
 
-      <h5>Type de représentation</h5>
-      <div class="card flex justify-content-center choice">
-        <Dropdown
-          @change="setSelectedPeriodType"
-          v-model="selectedRepresentation"
-          :options="typeGraphes"
-          optionLabel="name"
-          placeholder="Type de graphe"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
+            <div class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice">
+                <div class="flex align-items-center">
+                    <RadioButton @change=setSelectedTypePerChoice v-model="selectedTypePerChoice" name="per_tag"
+                        value="per_tag" />
+                    <label for="ingredient3" class="ml-2">Par Tag</label>
+                </div>
+                <div class="flex align-items-center">
+                    <RadioButton @change=setSelectedTypePerChoice v-model="selectedTypePerChoice" name="per_page"
+                        value="per_page" />
+                    <label for="ingredient4" class="ml-2">Par Page</label>
+                </div>
+            </div>
 
-      <div
-        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
-      >
-        <div class="flex align-items-center">
-          <RadioButton
-            @change="setSelectedTypePerChoice"
-            v-model="selectedTypePerChoice"
-            name="per_tag"
-            value="per_tag"
-          />
-          <label for="ingredient3" class="ml-2">Par Tag</label>
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton
-            @change="setSelectedTypePerChoice"
-            v-model="selectedTypePerChoice"
-            name="per_page"
-            value="per_page"
-          />
-          <label for="ingredient4" class="ml-2">Par Page</label>
-        </div>
-      </div>
 
-      <div class="card flex justify-content-center choice per_page dont-show">
-        <h5>La page (tracker par nom de page)</h5>
-        <Dropdown
-          v-model="selectedPage"
-          :options="Pages"
-          optionLabel="name"
-          placeholder="Page"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
-      <div
-        id="tags"
-        class="card flex justify-content-center choice per_tag dont-show"
-      >
-        <h5>Tag</h5>
-        <div class="flex flex-wrap">
-          <Dropdown
-            v-model="selectedTag"
-            :options="tags"
-            optionLabel="commentaire"
-            placeholder="Tag"
-            class="w-full md:w-14rem"
-            required
-          />
-          <div v-for="click in clicks" :key="click">
-            <Dropdown
-              v-model="selectedTags[click]"
-              :options="tags"
-              optionLabel="commentaire"
-              placeholder="Tag"
-              class="w-full md:w-14rem"
-              required
-            />
-          </div>
-          <Button
-            icon="pi pi-plus"
-            id="plusButton"
-            class="ml-2"
-            aria-label="Ajouter"
-            rounded
-            text
-            raised
-            v-if="
-              showAddButton &&
-              selectedRepresentation !== undefined &&
-              selectedRepresentation.code === 'heatmap'
-            "
-            @click="generateSelect()"
-          />
-        </div>
-      </div>
-      <h5>Date</h5>
-      <div class="wrapper">
-        <div class="card flex justify-content-center choice">
-          <Calendar v-model="date1" showIcon />
-        </div>
-        <div class="card flex justify-content-center choice">
-          <Calendar v-model="date2" showIcon />
-        </div>
-      </div>
+            <div class="card flex justify-content-center choice per_page dont-show">
+                <h5>La page (tracker par nom de page)</h5>
+                <Dropdown v-model="selectedPage" :options="Pages" optionLabel="name" placeholder="Page"
+                    class="w-full md:w-14rem" required />
+            </div>
+            <div class="card flex justify-content-center choice per_tag dont-show">
+                <h5>Tag</h5>
+                <Dropdown v-model="selectedTag" :options="tags" optionLabel="commentaire" placeholder="Tag"
+                    class="w-full md:w-14rem" required />
+            </div>
+            <h5>Date</h5>
+            <div class="wrapper">
+                <div class="card flex justify-content-center choice">
+                    <Calendar v-model="date1" showIcon />
+                </div>
+                <div class="card flex justify-content-center choice">
+                    <Calendar v-model="date2" showIcon />
+                </div>
+            </div>
 
-      <h5>Taux ou valeur *</h5>
-      <div
-        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
-      >
-        <div class="flex align-items-center">
-          <RadioButton
-            @change="setSelectedTauxType"
-            v-model="choix"
-            name="taux"
-            value="taux"
-          />
-          <label for="ingredient3" class="ml-2">Taux</label>
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton
-            @change="setSelectedTauxType"
-            v-model="choix"
-            name="valeur_absolue"
-            value="valeur_absolue"
-          />
-          <label for="ingredient4" class="ml-2">Valeur absolue</label>
-        </div>
-      </div>
+            <h5>Taux ou valeur *</h5>
+            <div class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice">
+                <div class="flex align-items-center">
+                    <RadioButton @change=setSelectedTauxType v-model="choix" name="taux" value="taux" />
+                    <label for="ingredient3" class="ml-2">Taux</label>
+                </div>
+                <div class="flex align-items-center">
+                    <RadioButton @change=setSelectedTauxType v-model="choix" name="valeur_absolue" value="valeur_absolue" />
+                    <label for="ingredient4" class="ml-2">Valeur absolue</label>
+                </div>
+            </div>
 
-      <div class="card flex justify-content-center choice per-taux dont-show">
-        <h5>Comparer à</h5>
-        <Dropdown
-          v-model="typeComparaison"
-          optionLabel="name"
-          placeholder="Comparer à"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
-      <div
-        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
-      >
-        <h5>Représentation par jour / mois / année</h5>
-        <div class="flex align-items-center">
-          <RadioButton v-model="selectedPeriod" name="Jour" value="day" />
-          <label for="ingredient3" class="ml-2">Jour</label>
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton v-model="selectedPeriod" name="Mois" value="month" />
-          <label for="ingredient4" class="ml-2">Mois</label>
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton v-model="selectedPeriod" name="Année" value="year" />
-          <label for="ingredient4" class="ml-2">Année</label>
-        </div>
-      </div>
 
-      <Button label="Générer" @click="createWidget()" />
-      <Button label="Fermer" @click="closeModal()" />
-    </Dialog>
-  </div>
+
+            <div class="card flex justify-content-center choice per-taux dont-show">
+                <h5>Comparer à </h5>
+                <Dropdown v-model="typeComparaison" optionLabel="name" placeholder="Comparer à" class="w-full md:w-14rem"
+                    required />
+            </div>
+
+            <h5>Type de représentation</h5>
+            <div class="card flex justify-content-center choice ">
+                <Dropdown @change=setSelectedPeriodType v-model="selectedRepresentation" :options="typeGraphes"
+                    optionLabel="name" placeholder="Type de graphe" class="w-full md:w-14rem" required />
+            </div>
+
+
+            <div
+                class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show">
+                <h5>Représentation par jour / mois / année</h5>
+                <div class="flex align-items-center">
+                    <RadioButton v-model="selectedPeriod" name="Jour" value="day" />
+                    <label for="ingredient3" class="ml-2">Jour</label>
+                </div>
+                <div class="flex align-items-center">
+                    <RadioButton v-model="selectedPeriod" name="Mois" value="month" />
+                    <label for="ingredient4" class="ml-2">Mois</label>
+                </div>
+                <div class="flex align-items-center">
+                    <RadioButton v-model="selectedPeriod" name="Année" value="year" />
+                    <label for="ingredient4" class="ml-2">Année</label>
+                </div>
+            </div>
+
+            <Button label="Générer" @click="createWidget()" />
+        </Dialog>
+    </div>
 </template>
 
 <script setup>
@@ -331,38 +247,23 @@ async function createWidget() {
         data.push(element);
       });
     }
-
-    widget = {
-      type: "heatmap",
-      appId: user.appId,
-      data: {
-        label: "Nombre de " + selectedType.value.name,
-        date_interval:
-          transformDate(date1.value) + " - " + transformDate(date2.value),
-        arrayData: data,
-        page: selectedPage.value ?? "",
-        tag: selectedTag.value ?? "",
-        extraTags: selectedTags.value ?? "",
-        periode: selectedPeriod.value,
-      },
-    };
-  }
-
-  try {
-    const response = await fetch(
-      import.meta.env.VITE_SERVER_URL + "/widgets/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(widget),
-      }
-    );
-    if (!response.ok) {
-      throw new Error(
-        `Server error (${response.status} ${response.statusText})`
-      );
+    try {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + "/widgets/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(widget),
+        });
+        if (!response.ok) {
+            throw new Error(`Server error (${response.status} ${response.statusText})`);
+        }
+        location.reload();
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
     alert("Widget crée avec success");
     const responseData = await response.json();
