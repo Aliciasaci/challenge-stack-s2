@@ -4,14 +4,8 @@
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-        <router-link to="/tunnel">
-            <Button label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
-        </router-link>
+        <Button @click="$router.push('/tunnel')" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
     </span>
-    <div v-if="isLoggedInAsUser">
-        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
-        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
-    </div>
 
     <!-- Cards-->
     <h1>KPIS</h1>

@@ -30,12 +30,9 @@ import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
 import Password from 'primevue/password';
-<<<<<<< HEAD
 import FileUpload from 'primevue/fileupload';
-=======
 import PickList from 'primevue/picklist';
 
->>>>>>> 8758682f9c757c999131425f1ee22ae5b530263d
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 //core

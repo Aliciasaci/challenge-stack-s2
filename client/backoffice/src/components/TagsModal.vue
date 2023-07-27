@@ -32,17 +32,24 @@
 import { ref } from "vue";
 import { defineProps } from 'vue';
 import { onMounted } from 'vue';
+import { mapGetters } from '../store/map-state';
 
 const visible = defineProps(['visible']);
 const generatedTag = ref(null);
 const description = ref(null);
-const user = JSON.parse(localStorage.getItem('user'));
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const user = ref({});
+if (isLoggedInAsUser.value) {
+    user.value = currentUser.value;
+} else {
+    user.value = JSON.parse(localStorage.getItem('user'));
+}
 const tags = ref(null);
 let display = true;
 
 
 onMounted(() => {
-    getUsersTags(user.id);
+    getUsersTags(user.value.id);
 });
 
 
@@ -73,6 +80,7 @@ function generateRandomTag() {
 
 
 async function createTag() {
+    console.log(user.id);
     if (!generatedTag.value) {
         alert("Merci de générer un tag avant de cliquer sur Ajouter");
     } else {
