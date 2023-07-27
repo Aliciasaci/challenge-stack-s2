@@ -151,10 +151,16 @@ function confirmEditTunnel(editTunnel) {
                 </template>
             </PickList>
             <br/>
-            <InputText type="text" v-model="commentaire" />
-            <Button label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" @click="createTunnel()" />
-
-            <br>
+            <div class="row">
+                <div class="col-12">
+                    <InputText type="text" v-model="commentaire" />
+                </div>
+                <div class="col-12">
+                    <Button label="Ajouter le tunnel" icon="pi pi-plus" class="p-button-success" @click="createTunnel()" />
+                </div>
+            </div>
+            
+            <br/>
 
             <DataTable
                 ref="dt"

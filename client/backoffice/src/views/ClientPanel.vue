@@ -23,7 +23,6 @@ let nbVisitsPerMonthArray = [];
 let displayCards = [];
 const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
 const { logoutAsUser } = mapActions('loginAsUser');
-const tunnelDialog = ref(false);
 
 onMounted(async () => {
     appEvents = await getEvents();
@@ -45,11 +44,6 @@ const generateTagModal = () => {
 const generateParamModal = () => {
     isParamModalVisible.value = true;
 }
-
-const generateTunnelModal = () => {
-    tunnelDialog.value = true;
-}
-
 
 async function getEvents() {
     try {
@@ -93,7 +87,10 @@ async function getTags() {
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-        <Button @click="generateTunnelModal" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
+        <router-link to="/tunnel">
+            <Button label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
+        </router-link>
+        
     </span>
     <div v-if="isLoggedInAsUser">
         <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
