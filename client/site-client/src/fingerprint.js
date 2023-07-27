@@ -42,14 +42,18 @@ export default {
       data: data,
     };
     try {
-      const blob = new Blob([JSON.stringify(event)], {
-        type: "application/json",
-      });
-      navigator.sendBeacon(
+      const response = await fetch(
         `http://vps-34811de6.vps.ovh.net:3000/events/visitor/${visitorId}`,
-        blob
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        }
       );
       console.log("Beacon sent");
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
