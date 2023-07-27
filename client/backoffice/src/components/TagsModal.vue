@@ -87,9 +87,8 @@ function generateRandomTag() {
     generatedTag.value = randomTag;
 }
 
-const accessToken = localStorage.getItem('token');
 async function createTag() {
-    console.log(user.id);
+const accessToken = localStorage.getItem('token');
     if (!generatedTag.value) {
         alert("Merci de générer un tag avant de cliquer sur Ajouter");
     } else {

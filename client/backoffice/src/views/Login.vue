@@ -99,9 +99,9 @@ async function login() {
           router.push("/admin-panel");
           if (user.role === "USER_ADMIN") {
             router.push("/users");
-          } else {
-            router.push("/client-panel");
           }
+        } else {
+          router.push("/client-panel");
         }
         return Promise.resolve(data);
       }

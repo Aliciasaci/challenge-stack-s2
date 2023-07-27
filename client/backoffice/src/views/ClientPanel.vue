@@ -63,10 +63,13 @@ const store = useStore();
 let userMultiAxes = ref([]);
 let userVerticalBars = ref([]);
 let appEvents = ref();
-const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
-const { logoutAsUser } = mapActions('loginAsUser');
+// const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+// const { logoutAsUser } = mapActions('loginAsUser');
 
 onMounted(async () => {
+
+    const accessToken = localStorage.getItem('token');
+    console.log(accessToken);
     try {
         if (user) {
             userMultiAxes.value = await getUsersMultiAxes();

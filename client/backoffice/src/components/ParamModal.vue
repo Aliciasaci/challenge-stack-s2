@@ -290,7 +290,6 @@ async function getEventsAccordingToChoice() {
 
     try {
         const accessToken = localStorage.getItem('token');
-
         const requestOptions = {
             method: 'GET',
             headers: {
