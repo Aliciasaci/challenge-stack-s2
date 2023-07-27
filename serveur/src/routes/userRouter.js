@@ -4,14 +4,14 @@ module.exports = function (Controller, options = {}) {
   const checkAuth = require("../middlewares/checkAuth");
 
   router.get("/", Controller.getAll);
-  router.post("/", checkAuth, Controller.create);
+  router.post("/", Controller.create);
 
-  router.get("/:id", checkAuth, Controller.getOne);
-  router.put("/:id", checkAuth, Controller.replace);
-  router.patch("/:id", checkAuth, Controller.update);
-  router.delete("/:id", checkAuth, Controller.delete);
+  router.get("/:id", Controller.getOne);
+  router.put("/:id", Controller.replace);
+  router.patch("/:id", Controller.update);
+  router.delete("/:id", Controller.delete);
   router.post("/:id/appid/", Controller.generateAppId);
-  router.get("/:id/tags/", checkAuth, Controller.getUserTags);
+  router.get("/:id/tags/", Controller.getUserTags);
 
 
   return router;
