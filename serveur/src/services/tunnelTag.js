@@ -30,17 +30,18 @@ module.exports = function () {
     async create(data) {
         const idTag = data.id_tag;
         const idTunnel = data.id_tunnel;
-        const order = data.order;
+        const ordre = data.ordre;
         return Tag.findByPk(idTag).then((tag) => {
             if (!tag) {
                 throw new Error("Tag not found");
             }
-            return Tunnel.findByPk(idTunnel).then((tunnel) => {
+            return Tunnel.findByPk(idTunnel).then(async (tunnel) => {
                 if (!tunnel) {
                     throw new Error("Tunnel not found");
                 }
-                tunnel.addTag(tag, { through: { order: order } });
-                return tunnel;
+                // await tunnel.addTag(tag, { through: TunnelTag });
+                const tunnelTag = await TunnelTag.create({ id_tag: idTag, id_tunnel: idTunnel, ordre: ordre });
+                return tunnelTag;
             });
         });
     },

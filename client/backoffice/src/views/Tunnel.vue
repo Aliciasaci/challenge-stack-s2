@@ -153,7 +153,7 @@ function confirmEditTunnel(editTunnel) {
                 <template #targetheader> Tags sélectionnés </template>
                 <template #item="slotProps">
                     <div>
-                        <span>{{ slotProps.item.description }}</span>
+                        <span>{{ slotProps.item.commentaire }}</span>
                     </div>
                 </template>
             </PickList>
