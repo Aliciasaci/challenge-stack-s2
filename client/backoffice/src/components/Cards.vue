@@ -1,5 +1,5 @@
 <template >
-    <div class="stat-cards" >
+    <div class="stat-cards">
         <div class="box" v-for="kpi in kpis" :key="kpi._id">
             <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
             <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
@@ -32,7 +32,16 @@ onMounted(async () => {
 
 async function getUsersKpis() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
+        const accessToken = localStorage.getItem('token');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }

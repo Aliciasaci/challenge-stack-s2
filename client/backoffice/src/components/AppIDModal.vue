@@ -10,7 +10,18 @@ const generatedAppId = ref(user.appId);
 
 async function getUserState(userId) {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}`);
+
+        const accessToken = localStorage.getItem('token');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/users/${userId}`,
+        requestOptions
+        );
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -26,25 +37,28 @@ async function getUserState(userId) {
 
 
 function isURLValid(url) {
-  const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]+)?(\/[^\s]*)?$/;
-  return urlPattern.test(url);
+    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]+)?(\/[^\s]*)?$/;
+    return urlPattern.test(url);
 }
 
 
 async function generateAppID() {
     //1. Vérifier que l'url copié est valide
-    if(!isURLValid(urlSite.value)){
+    if (!isURLValid(urlSite.value)) {
         alert("Url de site non valide");
         return;
     }
 
     //2.Génerer le token
+
+    const accessToken = localStorage.getItem('token');
     let hasError = false;
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users/' + user.id + '/appid/', {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + '/users/' + user.id + '/appid/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify()
         });
@@ -73,8 +87,7 @@ async function generateAppID() {
         <Dialog v-model:visible="visible.visible" modal header="Générer APP ID" :style="{ width: '600px' }">
             <div class="card-modal mb-5" v-if="!user.appId">
                 <span>Saisir Url site</span>
-                <InputText type="text" v-model="urlSite" placeholder="https://example.fr"
-                    :style="{ width: '380px' }" />
+                <InputText type="text" v-model="urlSite" placeholder="https://example.fr" :style="{ width: '380px' }" />
                 <Button type="submit" label="Générer" outlined @click="generateAppID" />
             </div>
             <div class="card-modal">

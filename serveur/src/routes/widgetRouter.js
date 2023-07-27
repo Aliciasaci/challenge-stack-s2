@@ -1,16 +1,17 @@
 module.exports = function (Controller, options = {}) {
     const { Router } = require("express");
     const router = Router();
+    const checkAuth = require("../middlewares/checkAuth");
+
   
-  
-    router.get("/", Controller.getAllWidgets);
-    router.get("/:id", Controller.getWidgetById);
+    router.get("/", checkAuth, Controller.getAllWidgets);
+    router.get("/:id", checkAuth, Controller.getWidgetById);
   
     
-    router.post("/", Controller.createWidget);
-    router.patch("/:id", Controller.updateWidgetById);
-    router.delete("/:id", Controller.deleteWidgetById);
-    router.get("/:id/widgets/", Controller.getWidgetsByAppId);  
+    router.post("/", checkAuth, Controller.createWidget);
+    router.patch("/:id", checkAuth, Controller.updateWidgetById);
+    router.delete("/:id", checkAuth, Controller.deleteWidgetById);
+    router.get("/:id/widgets/", checkAuth, Controller.getWidgetsByAppId);  
   
     return router;
   };

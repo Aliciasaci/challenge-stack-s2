@@ -49,10 +49,18 @@ function getPageName(url) {
 }
 
 async function getEvents() {
-
+    const accessToken = localStorage.getItem('token');
     console.log(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`,
+            requestOptions
+        );
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -65,8 +73,20 @@ async function getEvents() {
 }
 
 async function getEventsCount() {
+
+    const accessToken = localStorage.getItem('token');
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    };
+
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?appId=${user.appId}&orderDesc=true&periode=year`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?appId=${user.appId}&orderDesc=true&periode=year`,
+            requestOptions
+        );
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }

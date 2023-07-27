@@ -12,13 +12,21 @@ const toast = useToast();
 const user = JSON.parse(localStorage.getItem('user'));
 const tags = ref([[], []]);
 const commentaire = ref(null);
-const tunnels  = reactive([]);
+const tunnels = reactive([]);
 const selectedTunnels = ref(null);
 const tunnel = ref({});
 
 async function getUsersTags(userId) {
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}/tags`);
+        const accessToken = localStorage.getItem('token');
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(`http://localhost:3000/users/${userId}/tags`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -33,11 +41,13 @@ async function createTunnel() {
     console.log("selected tags", tags.value[1]);
     console.log("cmt", commentaire.value);
     try {
+        const accessToken = localStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/tunnels/`,
             {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
                 },
                 body: JSON.stringify({ commentaire: commentaire.value, id_user: user.id })
             }
@@ -45,6 +55,7 @@ async function createTunnel() {
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         } else {
+            const accessToken = localStorage.getItem('token');
             const data = await response.json();
             if (data) {
                 console.log(`Tunnel ${commentaire.value} crée avec success`, data);
@@ -55,12 +66,13 @@ async function createTunnel() {
                         {
                             method: "POST",
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${accessToken}`
                             },
-                            body: JSON.stringify({ id_tunnel: data.id, id_tag: item.id, ordre: idx})
+                            body: JSON.stringify({ id_tunnel: data.id, id_tag: item.id, ordre: idx })
                         }
                     );
-                    
+
                     const data2 = await response2.json();
                     console.log(`Tunnel tag ${idx} crée avec success`, data2);
                 });
@@ -74,7 +86,15 @@ async function createTunnel() {
 
 async function getTunnels() {
     try {
-        const response = await fetch(`http://localhost:3000/tunnels/`);
+        const accessToken = localStorage.getItem('token');
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(`http://localhost:3000/tunnels/`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -106,7 +126,7 @@ async function editTunnel(editTunnel) {
     } else {
         throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
     }
-    
+
 }
 
 onBeforeMount(async () => {
@@ -139,7 +159,7 @@ function confirmEditTunnel(editTunnel) {
 <template>
     <Header />
     <Toast />
-    <div class="card">    
+    <div class="card">
         <div class="my-2">
             <PickList v-model="tags" listStyle="height:342px">
                 <template #sourceheader> Tags valables </template>
@@ -150,7 +170,7 @@ function confirmEditTunnel(editTunnel) {
                     </div>
                 </template>
             </PickList>
-            <br/>
+            <br />
             <div class="row">
                 <div class="col-12">
                     <InputText type="text" v-model="commentaire" />
@@ -159,22 +179,15 @@ function confirmEditTunnel(editTunnel) {
                     <Button label="Ajouter le tunnel" icon="pi pi-plus" class="p-button-success" @click="createTunnel()" />
                 </div>
             </div>
-            
-            <br/>
 
-            <DataTable
-                ref="dt"
-                :value="tunnels"
-                v-model:selection="selectedTunnels"
-                dataKey="id"
-                :paginator="true"
-                :rows="10"
-                :filters="filters"
+            <br />
+
+            <DataTable ref="dt" :value="tunnels" v-model:selection="selectedTunnels" dataKey="id" :paginator="true"
+                :rows="10" :filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 25]"
                 currentPageReportTemplate="Afficher de {first} à {last} sur {totalRecords} utilisateurs"
-                responsiveLayout="scroll"
-            >
+                responsiveLayout="scroll">
                 <template #header>
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Gestion de tunnels</h5>
@@ -189,7 +202,7 @@ function confirmEditTunnel(editTunnel) {
                 <Column field="commentaire" header="Commentaire" :sortable="true" headerStyle="width:20%; min-width:10rem;">
                     <template #body="slotProps">
                         <span class="p-column-title">Commentaire</span>
-                            {{ slotProps.data.commentaire }}
+                        {{ slotProps.data.commentaire }}
                     </template>
                 </Column>
                 <Column field="createdAt" header="Créer le" :sortable="true" headerStyle="width:20%; min-width:10rem;">
@@ -203,18 +216,21 @@ function confirmEditTunnel(editTunnel) {
                         <span class="p-column-title">Email</span>
                         {{ slotProps.data.updatedAt }}
                     </template>
-                </Column>  
+                </Column>
                 <Column headerStyle="min-width:10rem;">
                     <template #body="slotProps">
-                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mt-2" @click="confirmEditTunnel(slotProps.data)" />
+                        <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mt-2"
+                            @click="confirmEditTunnel(slotProps.data)" />
                     </template>
                 </Column>
             </DataTable>
 
-            <Dialog v-model:visible="tunnelDialog" :style="{width: '450px'}" header="Modifier le tunnel" :modal="true" class="p-fluid">
+            <Dialog v-model:visible="tunnelDialog" :style="{ width: '450px' }" header="Modifier le tunnel" :modal="true"
+                class="p-fluid">
                 <div class="field">
                     <label for="commentaire">Commentaire</label>
-                    <InputText id="commentaire" v-model.trim="tunnel.commentaire" required="true" autofocus :class="{ 'p-invalid': submitted && !tunnel.commentaire }" />
+                    <InputText id="commentaire" v-model.trim="tunnel.commentaire" required="true" autofocus
+                        :class="{ 'p-invalid': submitted && !tunnel.commentaire }" />
                     <small class="p-invalid" v-if="submitted && !tunnel.commentaire">Champ obligatoire.</small>
                 </div>
                 <template #footer>
@@ -223,7 +239,7 @@ function confirmEditTunnel(editTunnel) {
                 </template>
             </Dialog>
         </div>
-    </div>   
+    </div>
 </template>
 
 <style lang="scss">

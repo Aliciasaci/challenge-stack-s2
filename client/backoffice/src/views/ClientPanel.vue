@@ -64,6 +64,7 @@ const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 import { useStore } from 'vuex';
+// import { v } from 'dist/assets/chart-893b7c7b';
 const store = useStore();
 let userMultiAxes = ref([]);
 let userVerticalBars = ref([]);
@@ -96,7 +97,15 @@ const generateParamModal = () => {
 
 async function getUsersMultiAxes() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`);
+        const accessToken = localStorage.getItem('token');
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -110,7 +119,15 @@ async function getUsersMultiAxes() {
 
 async function getUsersVerticalBars() {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`);
+        const accessToken = localStorage.getItem('token');
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
+        requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }

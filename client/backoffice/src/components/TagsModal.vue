@@ -1,7 +1,7 @@
 <template>
-    <div class="flex justify-content-center wrapper" >
+    <div class="flex justify-content-center wrapper">
         <Dialog v-model:visible="visible.visible" modal header="TAGS" :style="{ width: '40vw' }">
-            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" @click="closeModal"/>
+            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" @click="closeModal" />
             <div>
                 <div class="card-modal">
                     <InputText type="text" v-model="generatedTag" placeholder="Cliquer sur générer"
@@ -48,7 +48,16 @@ onMounted(() => {
 
 async function getUsersTags(userId) {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}/tags`);
+        const accessToken = localStorage.getItem('token');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -71,17 +80,18 @@ function generateRandomTag() {
     generatedTag.value = randomTag;
 }
 
-
+const accessToken = localStorage.getItem('token');
 async function createTag() {
     if (!generatedTag.value) {
         alert("Merci de générer un tag avant de cliquer sur Ajouter");
     } else {
         try {
-            const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/`,
+            const response = await fetch(import.meta.env.VITE_SERVER_URL + `/tags/`,
                 {
                     method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({ commentaire: generatedTag.value, id_user: user.id, description: description.value })
                 }
@@ -105,11 +115,14 @@ async function createTag() {
 
 async function deleteTag(tagId) {
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/${tagId}`,
+
+        const accessToken = localStorage.getItem('token');
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/tags/${tagId}`,
             {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
                 },
             });
         if (!response.ok) {
@@ -150,7 +163,8 @@ async function deleteTag(tagId) {
     border-radius: 6px;
 }
 
-.comm, .desc{
+.comm,
+.desc {
     width: 10rem;
 }
 </style>

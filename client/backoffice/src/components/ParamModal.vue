@@ -24,8 +24,9 @@
 
             <div class="card flex justify-content-center choice per_page dont-show">
                 <h5>La page (tracker par nom de page)</h5>
-                <InputText type="text" v-model="selectedPage" placeholder="Nom de la page"/><br/>
-                <small id="username-help">Veuillez saisir exactement le nom de la page sans le domaine. Si la page se trouve à la racine, mettre quand-même "/".</small>
+                <InputText type="text" v-model="selectedPage" placeholder="Nom de la page" /><br />
+                <small id="username-help">Veuillez saisir exactement le nom de la page sans le domaine. Si la page se trouve
+                    à la racine, mettre quand-même "/".</small>
             </div>
             <div class="card flex justify-content-center choice per_tag dont-show">
                 <h5>Tag</h5>
@@ -187,7 +188,16 @@ async function setSelectedTauxType() {
 async function getUsersTags(userId) {
 
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`);
+        const accessToken = localStorage.getItem('token');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`,
+            requestOptions);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -240,10 +250,12 @@ async function createWidget() {
     }
 
     try {
+        const accessToken = localStorage.getItem('token');
         const response = await fetch(import.meta.env.VITE_SERVER_URL + "/widgets/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify(widget),
         });
@@ -271,13 +283,23 @@ async function getEventsAccordingToChoice() {
         tag = selectedTag.value.commentaire ?? '';
     }
     if (selectedPage.value) {
-        console.log(selectedPage.value, import.meta.env.VITE_SERVER_URL+"/"+selectedPage.value)
-        page = encodeURIComponent(import.meta.env.VITE_SERVER_URL+"/"+selectedPage.value) ?? '';
+        console.log(selectedPage.value, import.meta.env.VITE_SERVER_URL + "/" + selectedPage.value)
+        page = encodeURIComponent(import.meta.env.VITE_SERVER_URL + "/" + selectedPage.value) ?? '';
         console.log(page);
     }
 
     try {
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`);
+        const accessToken = localStorage.getItem('token');
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        };
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`,
+            requestOptions
+        );
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
