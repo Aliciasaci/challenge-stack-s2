@@ -11,7 +11,15 @@
 
 <script setup>
 import { ref } from "vue";
-const user = JSON.parse(localStorage.getItem('user'));
+import { mapGetters, mapActions } from '../store/map-state';
+
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const user = ref({});
+if (isLoggedInAsUser.value) {
+    user.value = currentUser.value;
+} else {
+    user.value = JSON.parse(localStorage.getItem('user'));
+}
 
 const items = ref([
     {

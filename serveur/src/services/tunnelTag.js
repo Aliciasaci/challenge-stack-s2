@@ -39,7 +39,7 @@ module.exports = function () {
                 if (!tunnel) {
                     throw new Error("Tunnel not found");
                 }
-                tunnel.create(tag, { through: { order: order } });
+                tunnel.addTag(tag, { through: { order: order } });
                 return tunnel;
             });
         });

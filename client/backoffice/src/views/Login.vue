@@ -103,7 +103,7 @@ async function login() {
         toast.add({ severity: 'success', summary: 'Attention', detail: 'Attendez que votre compte soit validé pour pouvoir vous connecter.', life: 4000 });
       } else {
         if(user.role === "USER_ADMIN") {
-          router.push("/admin-panel");
+          router.push("/users");
         } else {
           router.push("/client-panel");
         }
