@@ -39,7 +39,6 @@ export default {
               x: e.pageX,
               y: e.pageY,
             };
-            console.log(action, binding.arg, binding.modifiers);
             this.createPageClicks(action, options.APPID, data);
           });
         }
@@ -122,7 +121,6 @@ export default {
         }
       });
     } else {
-      console.log("hello");
       alert("Woups ! pas d'autorisation.");
     }
   },
@@ -177,7 +175,6 @@ export default {
       data: otherData,
     };
 
-    console.log(event);
     if (event) {
       let hasError = false;
       try {
@@ -188,7 +185,6 @@ export default {
           },
           body: JSON.stringify(event),
         });
-        console.log(response);
       } catch (error) {
         console.error(error);
       }

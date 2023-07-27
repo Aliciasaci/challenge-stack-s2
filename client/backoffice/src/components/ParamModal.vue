@@ -128,19 +128,6 @@
         />
       </div>
 
-      <h5>Type de représentation</h5>
-      <div class="card flex justify-content-center choice">
-        <Dropdown
-          @change="setSelectedPeriodType"
-          v-model="selectedRepresentation"
-          :options="typeGraphes"
-          optionLabel="name"
-          placeholder="Type de graphe"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
-
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
       >
@@ -160,6 +147,7 @@
       </div>
 
       <Button label="Générer" @click="createWidget()" />
+      <Button label="Fermer" @click="closeModal()" />
     </Dialog>
   </div>
 </template>
@@ -277,9 +265,7 @@ async function createWidget() {
   const dateDebut = transformDate(date1.value) ?? null;
   const dateFin = transformDate(date2.value) ?? null;
   const select = selectedType.value.code;
-  console.log(select);
   if (select !== "heatmap") {
-    console.log(select);
     let data = await getEventsAccordingToChoice();
     data.forEach((element) => {
       countTotal += element.count;
@@ -317,9 +303,9 @@ async function createWidget() {
     }
   } else {
     let data = await getPageClicksAccordingToChoice();
-    console.log(data);
     widget = {
       type: "heatmap",
+      page: selectedPage.value,
       appId: user.appId,
       data: data[0],
     };
@@ -357,8 +343,6 @@ async function getPageClicksAccordingToChoice() {
   let page = "";
   if (selectedPage.value) {
     page = encodeURIComponent(selectedPage.value.raw) ?? "";
-    console.log(selectedPage.value);
-    console.log(page);
   }
 
   try {

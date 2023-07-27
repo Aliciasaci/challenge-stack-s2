@@ -51,22 +51,17 @@
       </div>
     </div>
 
+    <div class="graph" v-if="userHeatMaps">
+      <h1 style="flex-basis: 100%">Heat Maps</h1>
+      <div v-for="heatmap in userHeatMaps" :key="heatmap.id" class="graph-div">
+        <HeatMap :heatmap="heatmap" />
+      </div>
+    </div>
+
     <div class="detail">
       <h1>Dernière activité</h1>
       <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
     </div>
-  </div>
-
-  <div class="graph" v-if="userMultiAxes">
-    <h3 style="flex-basis: 100%">Mutli axes</h3>
-    <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
-      <Graph :graph="graph"></Graph>
-    </div>
-  </div>
-
-  <div class="detail">
-    <h1>Dernière activité</h1>
-    <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
   </div>
 </template>
 
@@ -80,6 +75,7 @@ import AppIDModal from "@/components/AppIDModal.vue";
 import TagsModal from "@/components/TagsModal.vue";
 import ParamModal from "../components/ParamModal.vue";
 import Graph from "@/components/Graph.vue";
+import HeatMap from "@/components/HeatMap.vue";
 import { mapGetters, mapActions } from "../store/map-state";
 
 const isAppIDModalVisible = ref(false);
@@ -90,6 +86,7 @@ import { useStore } from "vuex";
 const store = useStore();
 let userMultiAxes = ref([]);
 let userVerticalBars = ref([]);
+let userHeatMaps = ref([]);
 let appEvents = ref();
 const { isLoggedInAsUser, currentUser } = mapGetters("loginAsUser");
 const { logoutAsUser } = mapActions("loginAsUser");
@@ -99,6 +96,7 @@ onMounted(async () => {
     if (user) {
       userMultiAxes.value = await getUsersMultiAxes();
       userVerticalBars.value = await getUsersVerticalBars();
+      userHeatMaps.value = await getUsersHeatMaps();
     }
   } catch (error) {
     console.error(error);
@@ -141,6 +139,25 @@ async function getUsersVerticalBars() {
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
         `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function getUsersHeatMaps() {
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`
     );
     if (!response.ok) {
       throw new Error(
