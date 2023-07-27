@@ -97,11 +97,14 @@ async function login() {
       } else {
         if (user.role === "USER_ADMIN") {
           router.push("/admin-panel");
-        } else {
-          router.push("/client-panel");
+          if (user.role === "USER_ADMIN") {
+            router.push("/users");
+          } else {
+            router.push("/client-panel");
+          }
         }
+        return Promise.resolve(data);
       }
-      return Promise.resolve(data);
     }
   } catch (error) {
     console.error(error);

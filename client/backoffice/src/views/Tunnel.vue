@@ -3,18 +3,25 @@ import Header from '@/components/ClientHeader.vue';
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount, reactive, computed, watchEffect } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import { mapGetters } from '../store/map-state';
 
 const tunnelDialog = ref(false);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 const toast = useToast();
-const user = JSON.parse(localStorage.getItem('user'));
 const tags = ref([[], []]);
 const commentaire = ref(null);
 const tunnels = reactive([]);
 const selectedTunnels = ref(null);
 const tunnel = ref({});
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const user = ref({});
+if (isLoggedInAsUser.value) {
+    user.value = currentUser.value;
+} else {
+    user.value = JSON.parse(localStorage.getItem('user'));
+}
 
 async function getUsersTags(userId) {
     try {
@@ -49,7 +56,7 @@ async function createTunnel() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
-                body: JSON.stringify({ commentaire: commentaire.value, id_user: user.id })
+                body: JSON.stringify({ commentaire: commentaire.value, id_user: user.value.id })
             }
         );
         if (!response.ok) {
@@ -131,7 +138,7 @@ async function editTunnel(editTunnel) {
 
 onBeforeMount(async () => {
     initFilters();
-    getUsersTags(user.id);
+    getUsersTags(user.value.id);
     getTunnels();
 });
 
