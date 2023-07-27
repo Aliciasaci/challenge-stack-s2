@@ -63,16 +63,6 @@
       <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
     </div>
   </div>
-
-  <div class="graph" v-if="userVerticalBars">
-    <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
-      <Graph :graph="graph"></Graph>
-    </div>
-  </div>
-
-  <div class="detail">
-    <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-  </div>
 </template>
 
 <script setup>

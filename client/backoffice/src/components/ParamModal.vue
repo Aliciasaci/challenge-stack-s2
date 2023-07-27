@@ -3,7 +3,7 @@
     <Dialog
       v-model:visible="visible.visible"
       modal
-      header="Header"
+      header="Créer un widget"
       :style="{ width: '45vw' }"
     >
       <h5>Type de donnée *</h5>
@@ -150,7 +150,6 @@
           required
         />
       </div>
-
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
       >
@@ -170,6 +169,7 @@
       </div>
 
       <Button label="Générer" @click="createWidget()" />
+      <Button label="Fermer" @click="closeModal()" />
     </Dialog>
   </div>
 </template>
@@ -200,8 +200,8 @@ const dataTypes = ref([
 ]);
 
 const Pages = ref([
-  { name: "Accueil", raw: "http://localhost:8080/?#/" },
-  { name: "Contact", raw: "http://localhost:8080/?#/contact" },
+  { name: "Accueil", raw: import.meta.env.VITE_SERVER_URL + "/" },
+  { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + "/contact" },
   { name: "Mention légale" },
 ]);
 
@@ -265,7 +265,9 @@ async function setSelectedTauxType() {
 
 async function getUsersTags(userId) {
   try {
-    const response = await fetch(`http://localhost:3000/users/${userId}/tags`);
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`
+    );
     if (!response.ok) {
       throw new Error(
         `erreur serveur (${response.status} ${response.statusText})`
@@ -295,43 +297,11 @@ async function createWidget() {
     selectedRepresentation.value.code == "multiaxis" ||
     selectedRepresentation.value.code == "verticalbar"
   ) {
-    if (selectedPeriod.value == "day") {
-      WidgetLabels = getAllDatesBetween(dateDebut, dateFin);
-    } else if (selectedPeriod.value == "month") {
-      WidgetLabels = [
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre",
-      ];
-    } else if (selectedPeriod.value == "year") {
-      WidgetLabels = [
-        "2020",
-        "2021",
-        "2023",
-        "2024",
-        "2025",
-        "2026",
-        "2O27",
-        "2028",
-        "2029",
-        "2030",
-      ];
-    }
-
     widget = {
       type: selectedRepresentation.value.code,
       appId: user.appId,
       data: {
-        labels: WidgetLabels,
+        labels: [],
         label: "Nombre de " + selectedType.value.name,
         date_interval:
           transformDate(date1.value) + " - " + transformDate(date2.value),
@@ -352,12 +322,11 @@ async function createWidget() {
         page: selectedPage.value ?? "",
       },
     };
-    console.log(widget);
   } else if (selectedRepresentation.value.code === "heatmap") {
     // append to data the result of the other tags
     for (let i = 0; i < selectedTags.value.length; i++) {
-      const tag = selectedTags.value[i];
-      const dataTag = await getEventsAccordingToChoiceSeveralTags(tag);
+      const tagSelect = selectedTags.value[i];
+      const dataTag = await getEventsAccordingToChoiceSeveralTags(tagSelect);
       dataTag.forEach((element) => {
         data.push(element);
       });
@@ -380,18 +349,22 @@ async function createWidget() {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/widgets/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(widget),
-    });
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL + "/widgets/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(widget),
+      }
+    );
     if (!response.ok) {
       throw new Error(
         `Server error (${response.status} ${response.statusText})`
       );
     }
+    alert("Widget crée avec success");
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -414,12 +387,10 @@ async function getEventsAccordingToChoice() {
     console.log(page);
   }
 
-  console.log(
-    `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
-  );
   try {
     const response = await fetch(
-      `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
+      import.meta.env.VITE_SERVER_URL +
+        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
     );
     if (!response.ok) {
       throw new Error(
@@ -438,7 +409,7 @@ async function getEventsAccordingToChoice() {
   }
 }
 
-async function getEventsAccordingToChoiceSeveralTags(tag) {
+async function getEventsAccordingToChoiceSeveralTags(tagSelect) {
   const dateDebut = transformDate(date1.value) ?? "";
   const dateFin = transformDate(date2.value) ?? "";
   const periode = selectedPeriod.value ?? "day";
@@ -446,15 +417,12 @@ async function getEventsAccordingToChoiceSeveralTags(tag) {
   let page = "";
   if (selectedPage.value) {
     page = encodeURIComponent(selectedPage.value.raw) ?? "";
-    console.log(page);
   }
 
-  console.log(
-    `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
-  );
   try {
     const response = await fetch(
-      `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
+      import.meta.env.VITE_SERVER_URL +
+        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tagSelect}&page=${page}`
     );
     if (!response.ok) {
       throw new Error(
@@ -464,13 +432,13 @@ async function getEventsAccordingToChoiceSeveralTags(tag) {
     const data = await response.json();
     if (data.length > 0) {
       result = {
-        tag: tag,
+        tag: tagSelect,
         arrayData: data,
       };
     } else {
       result = {
-        tag: tag,
-        arrayData: [],
+        tag: tagSelect,
+        arrayData: null,
       };
     }
     console.log(result);
@@ -496,18 +464,6 @@ function transformDate(date) {
     return numericalDate;
   }
   return null;
-}
-
-function getAllDatesBetween(startDate, endDate) {
-  const dateList = [];
-  let currentDate = new Date(startDate);
-
-  // Loop through the dates and add them to the dateList
-  while (currentDate <= endDate) {
-    dateList.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  return dateList;
 }
 
 async function generateSelect() {
