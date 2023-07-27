@@ -2,6 +2,7 @@
   "name": "site-client",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -14,7 +15,9 @@
     "primevue": "^3.29.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "@fingerprintjs/fingerprintjs": "^3.4.2",
+    "detect-url-change": "^1.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
