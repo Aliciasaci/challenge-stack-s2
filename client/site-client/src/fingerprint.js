@@ -42,11 +42,16 @@ export default {
       data: data,
     };
     try {
-      navigator.sendBeacon(
+      const response = await fetch(
         `http://localhost:3000/events/visitor/${visitorId}`,
-        JSON.stringify(event)
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        }
       );
-      console.log("Beacon sent");
     } catch (error) {
       console.error(error);
     }

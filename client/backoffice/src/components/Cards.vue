@@ -1,9 +1,15 @@
-<template>
-    <div class="stat-cards">
+<template >
+    <div class="stat-cards" >
         <div class="box" v-for="kpi in kpis" :key="kpi._id">
-            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" />
-            {{ kpi.data.label }}<br />
-            {{ kpi.data.count }}
+            <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
+            <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
+            <span class="icon-style"><i class="pi pi-database text-blue-500"></i></span>
+            <span v-if="kpi.data.tag != ''" class="font-medium">Tag : {{ kpi.data.tag.commentaire }}</span>
+            <span v-if="kpi.data.page != ''" class="font-medium">Page : {{ kpi.data.page.name }}
+            </span><br />
+            <span v-if="kpi.data.date_interval != 'null - null'" class="font-medium date">{{ kpi.data.date_interval
+            }}</span><br />
+            <span class="text-900 font-medium text-xl">{{ kpi.data.count }}</span>
         </div>
     </div>
 
@@ -22,12 +28,11 @@ const user = JSON.parse(localStorage.getItem('user'));
 
 onMounted(async () => {
     kpis.value = await getUsersKpis();
-    console.log(kpis.value);
 });
 
 async function getUsersKpis() {
     try {
-        const response = await fetch(`http://localhost:3000/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -38,6 +43,8 @@ async function getUsersKpis() {
         throw error;
     }
 }
+
+
 </script>
 
 <style lang="scss">
@@ -55,24 +62,29 @@ async function getUsersKpis() {
     flex-basis: var(--box-width);
     height: 150px;
     position: relative;
+    max-width: 20rem;
+    line-height: 1.8;
+    padding-top: 15px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .box:last-child {
     margin-bottom: 29px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .stat-cards {
     width: 82%;
     display: flex;
     margin: 2rem auto;
-    justify-content: space-around;
+    justify-content: start;
     text-align: start;
 }
 
 .card-title {
-    color: #9e9e9e;
+    color: #707070;
     display: inline-block;
-    width: 70%;
+    font-size: 1.2em;
 }
 
 .title-wrapper {
@@ -89,6 +101,10 @@ async function getUsersKpis() {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: absolute;
+    right: 15px;
+    top: 100px;
 }
 
 .voir-plus {
@@ -109,4 +125,10 @@ async function getUsersKpis() {
     top: 1%;
     right: 9px;
 }
+
+.date {
+    color: var(--green-500) !important
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@300;400;600&family=Roboto:ital,wght@0,400;0,500;1,700&display=swap');
 </style>

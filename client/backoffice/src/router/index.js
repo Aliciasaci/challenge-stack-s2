@@ -64,6 +64,14 @@ const router = createRouter({
       path: "/tunnel",
       name: "tunnel",
       component: () => import("@/views/Tunnel.vue"),
+      meta: {
+        allowedRoles: ["USER_CLIENT", "USER_ADMIN"],
+      }
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: () => import("@/views/LogOut.vue"),
     },
   ],
 })

@@ -9,7 +9,6 @@ export default {
    */
   async isAuthorized(APPID) {
     const allAppIds = await this.getAllAppIds();
-
     if (allAppIds) {
       const isValuePresent = allAppIds.some((obj) => obj.appId === APPID);
       return isValuePresent;
@@ -20,8 +19,8 @@ export default {
    * @param {*} VueInstance
    * @param {*} options
    */
-  install(VueInstance, options) {
-    if (this.isAuthorized(options.APPID)) {
+  async install(VueInstance, options) {
+    if (await this.isAuthorized(options.APPID)) {
       VueInstance.directive("tracker", async (el, binding) => {
         if (binding.modifiers.click) {
           //* tracker tout les boutons du site-client.
@@ -74,26 +73,33 @@ export default {
           const page = window.location.href;
           const tag = binding.arg;
           detectUrlChange.on("change", async () => {
-            const endTime = new Date();
-            const timeSpent = endTime - startTime;
-            let data = {
-              modifier: modifier,
-              page: page,
-              tag: tag,
-              visitor_id: visitorId,
-              timeSpent: timeSpent,
-              timezone: timezone,
-            };
-            await Fingerprint.addTimeSpentOnPage(
+            this.eventMaker(
+              startTime,
+              page,
+              tag,
               visitorId,
               action,
-              options.APPID,
-              data
+              timezone,
+              modifier,
+              options
+            );
+          });
+          window.addEventListener("unload", async () => {
+            this.eventMaker(
+              startTime,
+              page,
+              tag,
+              visitorId,
+              action,
+              timezone,
+              modifier,
+              options
             );
           });
         }
       });
     } else {
+      console.log("hello");
       alert("Woups ! pas d'autorisation.");
     }
   },
@@ -139,5 +145,33 @@ export default {
         console.error(error);
       }
     }
+  },
+
+  async eventMaker(
+    startTime,
+    page,
+    tag,
+    visitorId,
+    action,
+    timezone,
+    modifier,
+    options
+  ) {
+    const endTime = new Date();
+    const timeSpent = endTime - startTime;
+    let data = {
+      modifier: modifier,
+      page: page,
+      tag: tag,
+      visitor_id: visitorId,
+      timeSpent: timeSpent,
+      timezone: timezone,
+    };
+    await Fingerprint.addTimeSpentOnPage(
+      visitorId,
+      action,
+      options.APPID,
+      data
+    );
   },
 };

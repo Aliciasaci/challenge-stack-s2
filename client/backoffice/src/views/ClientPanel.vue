@@ -1,40 +1,83 @@
+<template v-if="user">
+    <Header />
+    <span class="p-buttonset">
+        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
+        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
+        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+    </span>
+
+    <!-- Cards-->
+    <h1>KPIS</h1>
+    <Cards />
+    <!--Cards -->
+
+    <!--Les modals-->
+    <AppIDModal :visible="isAppIDModalVisible" />
+    <TagsModal :visible="isTagsModalVisible" />
+    <ParamModal :visible="isParamModalVisible" />
+    <!--Les modals -->
+
+    <div class="analytics" v-if="userVerticalBars || userMultiAxes">
+        <h1>Graphes</h1>
+        <div class="graph" v-if="userVerticalBars">
+            <h3 style="flex-basis: 100%;">Barre Vericales</h3>
+            <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="graph" v-if="userMultiAxes">
+            <h3 style="flex-basis: 100%;">Mutli axes</h3>
+            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="detail">
+            <h1>Dernière activité</h1>
+            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
+        </div>
+    </div>
+</template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import Header from '@/components/ClientHeader.vue';
-import VerticalBar from '@/components/VerticalBar.vue';
-import MultiAxis from '@/components/MultiAxis.vue';
 import AnalyticsDetail from '@/components/AnalyticsDetail.vue';
 import Cards from '@/components/Cards.vue';
 import AppIDModal from '@/components/AppIDModal.vue';
-import PreferencesModal from '@/components/PreferencesModal.vue';
+// import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
+import ParamModal from "../components/ParamModal.vue";
+import Graph from '@/components/Graph.vue';
 import { mapGetters, mapActions } from '../store/map-state';
 import ParamModal from "../components/ParamModal.vue";
 
 const isAppIDModalVisible = ref(false);
-const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem('user'));
 import { useStore } from 'vuex';
 const store = useStore();
+let userMultiAxes = ref([]);
+let userVerticalBars = ref([]);
 let appEvents = ref();
-let nbVisitsPerMonthArray = [];
-let displayCards = [];
 const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
 const { logoutAsUser } = mapActions('loginAsUser');
 
 onMounted(async () => {
-    appEvents = await getEvents();
-    console.log(appEvents);
+    try {
+        if (user) {
+            userMultiAxes.value = await getUsersMultiAxes();
+            userVerticalBars.value = await getUsersVerticalBars();
+        }
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 const generateAppIDModal = () => {
     isAppIDModalVisible.value = true;
-}
-
-const generatePreferencesModal = () => {
-    isPreferencesModalVisible.value = true;
 }
 
 const generateTagModal = () => {
@@ -45,16 +88,28 @@ const generateParamModal = () => {
     isParamModalVisible.value = true;
 }
 
-async function getEvents() {
+async function getUsersMultiAxes() {
     try {
-        const response = await fetch(`http://localhost:3000/events/?appId=${user.appId}&orderDesc=true`)
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
-        const data = await response.json();
-        return data;
-
+async function getUsersVerticalBars() {
+    try {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`);
+        if (!response.ok) {
+            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
+        }
+        const responseData = await response.json();
+        return responseData;
     } catch (error) {
         console.error(error);
         throw error;
@@ -106,28 +161,6 @@ async function getTags() {
     <PreferencesModal :visible="isPreferencesModalVisible" />
     <TagsModal :visible="isTagsModalVisible" />
     <ParamModal :visible="isParamModalVisible" />
-    <Dialog v-model:visible="tunnelDialog" :style="{ width: '450px' }" header="Créer des tunnels de conversions" :modal="true" class="p-fluid">
-        <!-- <label for="tag" class="mb-3">Inventory Status</label>
-        <Dropdown id="tag" v-model="" :options="statuses" optionLabel="label" placeholder="Select a Status">
-            <template #value="slotProps">
-                <div v-if="slotProps.value && slotProps.value.value">
-                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
-                </div>
-                <div v-else-if="slotProps.value && !slotProps.value.value">
-                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
-                </div>
-                <span v-else>
-                    {{ slotProps.placeholder }}
-                </span>
-            </template>
-        </Dropdown> -->
-
-
-        <template #footer>
-            <Button label="Annuler" icon="pi pi-times" class="p-button-text" @click="tunnelDialog = false" />
-            <Button label="Confirmer" icon="pi pi-check" class="p-button-text" @click="" />
-        </template>
-    </Dialog>
     <!--Les modals -->
 
     <div class="analytics">
@@ -169,13 +202,13 @@ async function getTags() {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
-#graph1,
-#graph2 {
+.graph-div {
     flex-basis: 49%;
-    height: 100%;
+    margin-bottom: 2rem;
 }
 
 .card {

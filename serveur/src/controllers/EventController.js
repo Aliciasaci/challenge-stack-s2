@@ -18,6 +18,8 @@ module.exports = function (eventService, options = {}) {
         type: req.query.type ?? null,
         orderDesc: req.query.orderDesc ?? null,
         appId: req.query.appId ?? null,
+        page_size: req.query.page_size ?? 10,  
+        page_number: req.query.page_number ?? 1,
       }
 
       try {
@@ -35,9 +37,11 @@ module.exports = function (eventService, options = {}) {
         dateDebut: req.query.dateDebut ?? null,
         dateFin: req.query.dateFin ?? null,
         type: req.query.type ?? null,
-        periode : req.query.periode ?? null,
+        periode: req.query.periode ?? null,
         orderDesc: req.query.orderDesc ?? null,
         appId: req.query.appId ?? null,
+        tag: req.query.tag ?? null,
+        page: req.query.page ?? null,  //ce page fait référence au page dans site client
       }
 
 
