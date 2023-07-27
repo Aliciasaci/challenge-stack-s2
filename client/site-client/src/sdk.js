@@ -9,7 +9,6 @@ export default {
    */
   async isAuthorized(APPID) {
     const allAppIds = await this.getAllAppIds();
-
     if (allAppIds) {
       const isValuePresent = allAppIds.some((obj) => obj.appId === APPID);
       return isValuePresent;
@@ -20,8 +19,8 @@ export default {
    * @param {*} VueInstance
    * @param {*} options
    */
-  install(VueInstance, options) {
-    if (this.isAuthorized(options.APPID)) {
+  async install(VueInstance, options) {
+    if (await this.isAuthorized(options.APPID)) {
       VueInstance.directive("tracker", async (el, binding) => {
         if (binding.modifiers.click) {
           //* tracker tout les boutons du site-client.
@@ -107,6 +106,7 @@ export default {
         }
       });
     } else {
+      console.log("hello");
       alert("Woups ! pas d'autorisation.");
     }
   },
