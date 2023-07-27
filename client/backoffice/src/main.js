@@ -31,7 +31,7 @@ import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
 import Password from 'primevue/password';
-
+import PickList from 'primevue/picklist';
 
 
 //theme
@@ -50,6 +50,7 @@ app.use(store);
 app.use(PrimeVue);
 app.use(ToastService);
 
+app.component("PickList", PickList);
 app.component("Button", Button);
 app.component("InputText", InputText);
 app.component("DataTable", DataTable);

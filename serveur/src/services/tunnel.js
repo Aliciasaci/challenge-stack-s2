@@ -1,14 +1,12 @@
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
-const User = require("../db").User;
-const Tag = require("../db").Tag;
 const Tunnel = require("../db").Tunnel;
 
 module.exports = function () {
   return {
     async findAll(criteria, options) {
       try {
-        const users = await User.findAll({
+        const tunnels = await Tunnel.findAll({
           where: criteria,
           offset:
             options && options.page
@@ -17,20 +15,19 @@ module.exports = function () {
           limit: (options && options.limit) || 20,
           order:
             options && options.order ? [options.order.split(":")] : undefined,
-          //attributes: options && options.attributes ? [options.attributes] : undefined,
         });
 
-        return users;
+        return tunnels;
       } catch (error) {
-        console.error("Error while retrieving users:", error);
+        console.error("Error while retrieving tunnels:", error);
         throw error;
       }
     },
 
     async create(data) {
       try {
-        const user = await User.create(data);
-        return user;
+        const tunnel = await Tunnel.create(data);
+        return tunnel;
       } catch (error) {
         if (error instanceof Sequelize.ValidationError) {
           throw ValidationError.createFromSequelizeValidationError(error);
@@ -40,15 +37,15 @@ module.exports = function () {
     },
 
     async findOne(id) {
-      return await User.findByPk(id);
+      return await Tunnel.findByPk(id);
     },
 
     async replaceOne(id, newData) {
       try {
         const deleted = await this.deleteOne(id);
-        const user = await this.create({ ...newData, id });
+        const tunnel = await this.create({ ...newData, id });
 
-        return [user, !deleted];
+        return [tunnel, !deleted];
       } catch (error) {
         if (error instanceof Sequelize.ValidationError) {
           throw ValidationError.createFromSequelizeValidationError(error);
@@ -59,7 +56,7 @@ module.exports = function () {
 
     async updateOne(id, newData) {
       try {
-        const [nbUpdated, newValues] = await User.update(newData, {
+        const [nbUpdated, newValues] = await Tunnel.update(newData, {
           where: { id },
           returning: true,
         });
@@ -76,37 +73,8 @@ module.exports = function () {
     },
 
     async deleteOne(id) {
-      const nbDeleted = await User.destroy({ where: { id } });
+      const nbDeleted = await Tunnel.destroy({ where: { id } });
       return nbDeleted === 1;
-    },
-
-    async getUserTags(userId) {
-      try {
-        const tags = await Tag.findAll({
-          where: {
-            id_user: userId,
-          },
-        });
-
-        return tags;
-      } catch (error) {
-        console.error("Error while retrieving user tags:", error);
-        throw error;
-      }
-    },
-
-    async getUserTunnels(userId) {
-      try {
-        const tunnels = await Tunnel.findAll({
-          where: {
-            id_user: userId,
-          },
-        });
-        return tunnels;
-      } catch (error) {
-        console.error("Error while retrieving user tunnels:", error);
-        throw error;
-      }
     },
   };
 };

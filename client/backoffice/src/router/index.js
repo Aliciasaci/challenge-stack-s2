@@ -25,6 +25,9 @@ const router = createRouter({
           }
         },
       ],
+      meta: {
+        allowedRoles: ["USER_ADMIN"],
+      }
     },
     {
       path: "/login",
@@ -32,9 +35,9 @@ const router = createRouter({
       component: () => import("@/views/Login.vue"),
     },
     {
-      path: "/signin",
-      name: "signin",
-      component: () => import("@/views/Signin.vue"),
+      path: "/register",
+      name: "register",
+      component: () => import("@/views/Register.vue"),
     },
     {
       path: "/client-panel",
@@ -56,6 +59,11 @@ const router = createRouter({
       path: "/unauthorized",
       name: "unauthorized",
       component: () => import("@/views/Access.vue"),
+    },
+    {
+      path: "/tunnel",
+      name: "tunnel",
+      component: () => import("@/views/Tunnel.vue"),
     },
   ],
 })

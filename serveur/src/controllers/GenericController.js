@@ -79,7 +79,6 @@ module.exports = function (Service) {
             }
         },
 
-
         async generateAppId(req, res) {
             const userId = req.params.id;
             const appId = uuidv4();
@@ -89,7 +88,6 @@ module.exports = function (Service) {
                 Service.updateOne(userId, newData)
             } else res.sendStatus(204);
         },
-
 
         async getUserTags(req, res) {
             const userId = req.params.id;
@@ -102,6 +100,13 @@ module.exports = function (Service) {
             }
         },
 
-          
+        // async createTunnelTag(req, res, next) {
+        //     try {
+        //         const item = await Service.create(req.body);
+        //         res.status(201).json(item);
+        //     } catch (error) {
+        //         next(error);
+        //     }
+        // }  
     };
 };

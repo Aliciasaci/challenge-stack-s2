@@ -73,7 +73,7 @@ export default {
           const modifier = binding.modifiers;
           const page = window.location.href;
           const tag = binding.arg;
-          detectUrlChange.addEventListener("change", async () => {
+          detectUrlChange.on("change", async () => {
             const endTime = new Date();
             const timeSpent = endTime - startTime;
             let data = {

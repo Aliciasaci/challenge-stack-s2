@@ -9,8 +9,7 @@ import AppIDModal from '@/components/AppIDModal.vue';
 import PreferencesModal from '@/components/PreferencesModal.vue';
 import TagsModal from '@/components/TagsModal.vue';
 import { mapGetters, mapActions } from '../store/map-state';
-import ParamModal from "../components/ParamModal.vue"
-
+import ParamModal from "../components/ParamModal.vue";
 
 const isAppIDModalVisible = ref(false);
 const isPreferencesModalVisible = ref(false);
@@ -24,6 +23,7 @@ let nbVisitsPerMonthArray = [];
 let displayCards = [];
 const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
 const { logoutAsUser } = mapActions('loginAsUser');
+const tunnelDialog = ref(false);
 
 onMounted(async () => {
     appEvents = await getEvents();
@@ -46,6 +46,10 @@ const generateParamModal = () => {
     isParamModalVisible.value = true;
 }
 
+const generateTunnelModal = () => {
+    tunnelDialog.value = true;
+}
+
 
 async function getEvents() {
     try {
@@ -63,6 +67,23 @@ async function getEvents() {
     }
 }
 
+async function getTags() {
+    try {
+        const response = await fetch(`http://localhost:3000/tags/?appId=${user.appId}`)
+        if (!response.ok) {
+            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 </script>
 
 <template v-if="user">
@@ -72,6 +93,7 @@ async function getEvents() {
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+        <Button @click="generateTunnelModal" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
     </span>
     <div v-if="isLoggedInAsUser">
         <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
@@ -87,8 +109,29 @@ async function getEvents() {
     <PreferencesModal :visible="isPreferencesModalVisible" />
     <TagsModal :visible="isTagsModalVisible" />
     <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals -->
+    <Dialog v-model:visible="tunnelDialog" :style="{ width: '450px' }" header="Créer des tunnels de conversions" :modal="true" class="p-fluid">
+        <!-- <label for="tag" class="mb-3">Inventory Status</label>
+        <Dropdown id="tag" v-model="" :options="statuses" optionLabel="label" placeholder="Select a Status">
+            <template #value="slotProps">
+                <div v-if="slotProps.value && slotProps.value.value">
+                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                </div>
+                <div v-else-if="slotProps.value && !slotProps.value.value">
+                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                </div>
+                <span v-else>
+                    {{ slotProps.placeholder }}
+                </span>
+            </template>
+        </Dropdown> -->
 
+
+        <template #footer>
+            <Button label="Annuler" icon="pi pi-times" class="p-button-text" @click="tunnelDialog = false" />
+            <Button label="Confirmer" icon="pi pi-check" class="p-button-text" @click="" />
+        </template>
+    </Dialog>
+    <!--Les modals -->
 
     <div class="analytics">
         <div class="graph">
