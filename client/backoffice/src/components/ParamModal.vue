@@ -18,6 +18,19 @@
         />
       </div>
 
+      <h5>Type de représentation</h5>
+      <div class="card flex justify-content-center choice">
+        <Dropdown
+          @change="setSelectedPeriodType"
+          v-model="selectedRepresentation"
+          :options="typeGraphes"
+          optionLabel="name"
+          placeholder="Type de graphe"
+          class="w-full md:w-14rem"
+          required
+        />
+      </div>
+
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
       >
@@ -52,16 +65,46 @@
           required
         />
       </div>
-      <div class="card flex justify-content-center choice per_tag dont-show">
+      <div
+        id="tags"
+        class="card flex justify-content-center choice per_tag dont-show"
+      >
         <h5>Tag</h5>
-        <Dropdown
-          v-model="selectedTag"
-          :options="tags"
-          optionLabel="commentaire"
-          placeholder="Tag"
-          class="w-full md:w-14rem"
-          required
-        />
+        <div class="flex flex-wrap">
+          <Dropdown
+            v-model="selectedTag"
+            :options="tags"
+            optionLabel="commentaire"
+            placeholder="Tag"
+            class="w-full md:w-14rem"
+            required
+          />
+          <div v-for="click in clicks" :key="click">
+            <Dropdown
+              v-model="selectedTags[click]"
+              :options="tags"
+              optionLabel="commentaire"
+              placeholder="Tag"
+              class="w-full md:w-14rem"
+              required
+            />
+          </div>
+          <Button
+            icon="pi pi-plus"
+            id="plusButton"
+            class="ml-2"
+            aria-label="Ajouter"
+            rounded
+            text
+            raised
+            v-if="
+              showAddButton &&
+              selectedRepresentation !== undefined &&
+              selectedRepresentation.code === 'heatmap'
+            "
+            @click="generateSelect()"
+          />
+        </div>
       </div>
       <h5>Date</h5>
       <div class="wrapper">
@@ -108,19 +151,6 @@
         />
       </div>
 
-      <h5>Type de représentation</h5>
-      <div class="card flex justify-content-center choice">
-        <Dropdown
-          @change="setSelectedPeriodType"
-          v-model="selectedRepresentation"
-          :options="typeGraphes"
-          optionLabel="name"
-          placeholder="Type de graphe"
-          class="w-full md:w-14rem"
-          required
-        />
-      </div>
-
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
       >
@@ -145,6 +175,8 @@
 </template>
 
 <script setup>
+import { lo } from "plotly.js-dist";
+import Dropdown from "primevue/dropdown";
 import { ref, defineProps, onMounted } from "vue";
 const visible = defineProps(["visible"]);
 const user = JSON.parse(localStorage.getItem("user"));
@@ -152,7 +184,10 @@ const selectedType = ref();
 const date1 = ref();
 const date2 = ref();
 const tags = ref([]);
+const clicks = ref(0);
 const selectedTag = ref();
+const selectedTags = ref([]);
+const showAddButton = ref(true);
 const selectedTypePerChoice = ref();
 const selectedRepresentation = ref();
 const selectedPeriod = ref();
@@ -319,36 +354,13 @@ async function createWidget() {
     };
     console.log(widget);
   } else if (selectedRepresentation.value.code === "heatmap") {
-    if (selectedPeriod.value == "day") {
-      WidgetLabels = getAllDatesBetween(dateDebut, dateFin);
-    } else if (selectedPeriod.value == "month") {
-      WidgetLabels = [
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre",
-      ];
-    } else if (selectedPeriod.value == "year") {
-      WidgetLabels = [
-        "2020",
-        "2021",
-        "2023",
-        "2024",
-        "2025",
-        "2026",
-        "2O27",
-        "2028",
-        "2029",
-        "2030",
-      ];
+    // append to data the result of the other tags
+    for (let i = 0; i < selectedTags.value.length; i++) {
+      const tag = selectedTags.value[i];
+      const dataTag = await getEventsAccordingToChoiceSeveralTags(tag);
+      dataTag.forEach((element) => {
+        data.push(element);
+      });
     }
 
     widget = {
@@ -356,10 +368,12 @@ async function createWidget() {
       appId: user.appId,
       data: {
         label: "Nombre de " + selectedType.value.name,
-        labels: WidgetLabels,
         date_interval:
           transformDate(date1.value) + " - " + transformDate(date2.value),
         arrayData: data,
+        page: selectedPage.value ?? "",
+        tag: selectedTag.value ?? "",
+        extraTags: selectedTags.value ?? "",
         periode: selectedPeriod.value,
       },
     };
@@ -424,6 +438,49 @@ async function getEventsAccordingToChoice() {
   }
 }
 
+async function getEventsAccordingToChoiceSeveralTags(tag) {
+  const dateDebut = transformDate(date1.value) ?? "";
+  const dateFin = transformDate(date2.value) ?? "";
+  const periode = selectedPeriod.value ?? "day";
+  let result = {};
+  let page = "";
+  if (selectedPage.value) {
+    page = encodeURIComponent(selectedPage.value.raw) ?? "";
+    console.log(page);
+  }
+
+  console.log(
+    `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
+  );
+  try {
+    const response = await fetch(
+      `http://localhost:3000/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
+    }
+    const data = await response.json();
+    if (data.length > 0) {
+      result = {
+        tag: tag,
+        arrayData: data,
+      };
+    } else {
+      result = {
+        tag: tag,
+        arrayData: [],
+      };
+    }
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 function transformDate(date) {
   if (date) {
     const dateObj = new Date(date);
@@ -451,6 +508,13 @@ function getAllDatesBetween(startDate, endDate) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
   return dateList;
+}
+
+async function generateSelect() {
+  clicks.value++;
+  if (clicks.value >= tags.value.length - 1) {
+    showAddButton.value = false;
+  }
 }
 </script>
 <style lang="scss">

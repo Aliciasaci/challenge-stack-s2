@@ -1,41 +1,34 @@
 <template lang="">
-  <div id="plot"></div>
+  <div></div>
 </template>
 <script setup>
 import plotly from "plotly.js-dist";
+import { ref, onMounted } from "vue";
 
-const convertDateToDayOfTheWeek = (date) => {
-  const days = [
-    "Dimanche",
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
+const { heatmap } = defineProps(["heatmap"]);
+
+const setHeatMapData = () => {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColor = documentStyle.getPropertyValue("--text-color");
+  const textColorSecondary = documentStyle.getPropertyValue(
+    "--text-color-secondary"
+  );
+  const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
+
+  const data = [
+    {
+      x: heatmap.data.x,
+      y: heatmap.data.y,
+      z: heatmap.data.z,
+      type: "heatmap",
+      colorscale: [
+        [0, "#F72C25DB"],
+        [1, "#216869"],
+      ],
+      hoverongaps: false,
+    },
   ];
-  return days[date.getDay()];
-};
-
-const converDateToMonth = (date) => {
-  const months = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Aout",
-    "Septembre",
-    "Novembre",
-    "Décembre",
-  ];
-  return months[date.getMonth()];
-};
-
-const convertDateToYear = (date) => {
-  return date.getFullYear();
+  return data;
 };
 </script>
 <style lang=""></style>
