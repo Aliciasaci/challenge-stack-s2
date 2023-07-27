@@ -1,6 +1,5 @@
 import Fingerprint from "./fingerprint.js";
 import detectUrlChange from "detect-url-change";
-
 export default {
   /**
    *
