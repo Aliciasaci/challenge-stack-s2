@@ -1,5 +1,6 @@
-<template>
-    <div class="stat-cards">
+<template >
+    <div class="stat-cards" v-if="kpis.value">
+        <h1>KPIS</h1>
         <div class="box" v-for="kpi in kpis" :key="kpi._id">
             <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
             <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
@@ -28,12 +29,11 @@ const user = JSON.parse(localStorage.getItem('user'));
 
 onMounted(async () => {
     kpis.value = await getUsersKpis();
-    console.log(kpis.value);
 });
 
 async function getUsersKpis() {
     try {
-        const response = await fetch(`http://localhost:3000/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=kpi&appId=${user.appId}&orderDesc=true`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -44,6 +44,8 @@ async function getUsersKpis() {
         throw error;
     }
 }
+
+
 </script>
 
 <style lang="scss">

@@ -27,7 +27,7 @@ const toast = useToast();
 
 onBeforeMount(async () => {
     initFilters();
-    const response = await fetch('http://localhost:3000/users', {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users', {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
         }
@@ -39,7 +39,7 @@ onBeforeMount(async () => {
 
 async function deleteUser(userId) {
     try {
-        const response = await fetch('http://localhost:3000/users/' + userId, {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users/' + userId, {
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -58,7 +58,7 @@ async function deleteUser(userId) {
 async function editUser(editUser) {
     editUser.role = selectedRole.value.value; // update role
     editUser.compteIsVerified = selectedStatus.value.value; // update status
-    const response = await fetch('http://localhost:3000/users/' + editUser.id, {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users/' + editUser.id, {
         method: 'PATCH',
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),

@@ -8,11 +8,9 @@ const urlSite = ref(null);
 const user = JSON.parse(localStorage.getItem('user'));
 const generatedAppId = ref(user.appId);
 
-
-//!sortir cette fonction pour en faire une foinction générale
 async function getUserState(userId) {
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -41,7 +39,7 @@ async function generateAppID() {
     //2.Génerer le token
     let hasError = false;
     try {
-        const response = await fetch('http://localhost:3000/users/' + user.id + '/appid/', {
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+'/users/' + user.id + '/appid/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,8 +69,7 @@ async function generateAppID() {
 <template>
     <div class="flex justify-content-center">
         <Dialog v-model:visible="visible.visible" modal header="Générer APP ID" :style="{ width: '600px' }">
-            <p>
-            <div class="card-modal mb-5">
+            <div class="card-modal mb-5" v-if="!user.appId">
                 <span>Saisir Url site</span>
                 <InputText type="text" v-model="urlSite" placeholder="https://example.fr"
                     :style="{ width: '380px' }" />
@@ -83,7 +80,6 @@ async function generateAppID() {
                 <InputText type="text" placeholder="" :style="{ width: '380px' }" disabled v-model="generatedAppId" />
                 <Button label="Copier" outlined />
             </div>
-            </p>
         </Dialog>
     </div>
 </template>

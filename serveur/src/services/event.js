@@ -1,232 +1,285 @@
-const { pipeline } = require('stream');
-const Event = require('../db/models/event');
-const { options } = require('mongoose');
+const { pipeline } = require("stream");
+const Event = require("../db/models/event");
+const { options } = require("mongoose");
 
 module.exports = function () {
     return {
         /**
-         * @param {*} eventData 
-         * @returns 
+         * @param {*} eventData
+         * @returns
          */
         async createEvent(eventData) {
             try {
                 const event = new Event(eventData);
                 return await event.save();
             } catch (error) {
-                throw new Error('Error while creating the event');
+                throw new Error("Error while creating the event");
             }
         },
 
-
         async getAllEvents(options) {
-
             console.log(options);
             const dateDebut = options.dateDebut;
             const dateFin = options.dateFin;
             const type = options.type;
             const orderDesc = options.orderDesc;
             const appId = options.appId;
-            // Pagination parameters
-            const pageSize = parseInt(options.page_size); // Number of documents per page
-            const pageNumber = parseInt(options.page_number); // Current page number, you can change this dynamically
+            const page_size = parseInt(options.page_size);
+            const page_number = parseInt(options.page_number);
 
             try {
-
-                let pipeline = []
+                let pipeline = [];
                 if (type) {
-                    pipeline.push({ $match: { "type": type } })
+                    pipeline.push({ $match: { type: type } });
                 }
 
                 if (appId) {
-                    pipeline.push({ $match: { "appId": appId } })
+                    pipeline.push({ $match: { appId: appId } });
                 }
 
                 if (dateDebut && dateFin) {
-                    console.log(new Date(dateFin))
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut), "$lte": new Date(dateFin) } } })
-                }
-                else if (dateDebut) {
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut) } } })
-                }
-                else if (dateFin) {
-                    pipeline.push({ $match: { createdAt: { "$lte": new Date(dateFin) } } })
+                    console.log(new Date(dateFin));
+                    pipeline.push({
+                        $match: {
+                            createdAt: { $gte: new Date(dateDebut), $lte: new Date(dateFin) },
+                        },
+                    });
+                } else if (dateDebut) {
+                    pipeline.push({
+                        $match: { createdAt: { $gte: new Date(dateDebut) } },
+                    });
+                } else if (dateFin) {
+                    pipeline.push({ $match: { createdAt: { $lte: new Date(dateFin) } } });
                 }
 
                 if (orderDesc) {
-                    pipeline.push({ $sort: { createdAt: -1 } })
-                }
-                else {
-                    pipeline.push({ $sort: { createdAt: 1 } })
+                    pipeline.push({ $sort: { createdAt: -1 } });
+                } else {
+                    pipeline.push({ $sort: { createdAt: 1 } });
                 }
 
-                // Add pagination stages
-                pipeline.push({ $skip: (pageNumber - 1) * pageSize });
-                pipeline.push({ $limit: pageSize });
+                pipeline.push({ $skip: (page_number - 1) * page_size });
+                pipeline.push({ $limit: page_size });
 
                 console.log(pipeline);
 
-                return Event.aggregate(pipeline).then(resultats => {
-                    console.log(typeof (resultats));
+                return Event.aggregate(pipeline)
+                    .then((resultats) => {
+                        console.log(typeof resultats);
 
-                    return resultats;
-                }).catch(error => {
-                    console.log("here", error);
-                    throw new Error('an error has occured');
-                });
+                        return resultats;
+                    })
+                    .catch((error) => {
+                        console.log("here", error);
+                        throw new Error("an error has occured");
+                    });
             } catch (error) {
                 console.log(error);
             }
-
         },
 
         async getCount(options) {
-
             const dateDebut = options.dateDebut;
             const dateFin = options.dateFin;
             const type = options.type;
             const periode = options.periode;
             const orderDesc = options.orderDesc;
             const appId = options.appId;
-            const tag = options.tag;
-            const page = options.page;
 
             console.log(options.periode);
 
             try {
-
-                let pipeline = []
+                let pipeline = [];
 
                 if (type) {
-                    pipeline.push({ $match: { "type": type } })
+                    pipeline.push({ $match: { type: type } });
                 }
 
                 if (appId) {
-                    pipeline.push({ $match: { "appId": appId } })
-                }
-
-                if (tag) {
-                    pipeline.push({ $match: { 'data.tag': tag } })
-                }
-
-                if (page) {
-                    pipeline.push({ $match: { "data.page": page } })
+                    pipeline.push({ $match: { appId: appId } });
                 }
 
                 if (dateDebut && dateFin) {
-                    console.log(new Date(dateFin))
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut), "$lte": new Date(dateFin) } } })
-                }
-                else if (dateDebut) {
-                    pipeline.push({ $match: { createdAt: { "$gte": new Date(dateDebut) } } })
-                }
-                else if (dateFin) {
-                    pipeline.push({ $match: { createdAt: { "$lte": new Date(dateFin) } } })
+                    console.log(new Date(dateFin));
+                    pipeline.push({
+                        $match: {
+                            createdAt: { $gte: new Date(dateDebut), $lte: new Date(dateFin) },
+                        },
+                    });
+                } else if (dateDebut) {
+                    pipeline.push({
+                        $match: { createdAt: { $gte: new Date(dateDebut) } },
+                    });
+                } else if (dateFin) {
+                    pipeline.push({ $match: { createdAt: { $lte: new Date(dateFin) } } });
                 }
 
-                if (periode == 'day') {
+                if (periode == "day") {
                     pipeline.push({
                         $group: {
-                            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                            count: { $sum: 1 }
-                        }
-                    })
-                }
-                else if (periode == 'month') {
+                            _id: {
+                                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+                            },
+                            count: { $sum: 1 },
+                        },
+                    });
+                } else if (periode == "month") {
                     pipeline.push({
                         $group: {
                             _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
-                            count: { $sum: 1 }
-                        }
-                    })
-                }
-                else if (periode == 'year') {
+                            count: { $sum: 1 },
+                        },
+                    });
+                } else if (periode == "year") {
                     pipeline.push({
                         $group: {
                             _id: { $dateToString: { format: "%Y", date: "$createdAt" } },
-                            count: { $sum: 1 }
-                        }
-                    })
+                            count: { $sum: 1 },
+                        },
+                    });
                 }
-
 
                 if (orderDesc) {
-                    pipeline.push({ $sort: { createdAt: -1 } })
-                }
-                else {
-                    pipeline.push({ $sort: { createdAt: 1 } })
+                    pipeline.push({ $sort: { createdAt: -1 } });
+                } else {
+                    pipeline.push({ $sort: { createdAt: 1 } });
                 }
 
                 pipeline.push({
                     $project: {
                         _id: 0,
-                        periode: '$_id',
-                        count: '$count'
-                    }
-                })
+                        periode: "$_id",
+                        count: "$count",
+                    },
+                });
                 console.log(pipeline);
 
-                return Event.aggregate(pipeline).then(resultats => {
-                    console.log(typeof (resultats));
+                return Event.aggregate(pipeline)
+                    .then((resultats) => {
+                        console.log(typeof resultats);
 
-                    return resultats;
-                }).catch(error => {
-                    console.log("here", error);
-                    throw new Error('Error');
-                });
+                        return resultats;
+                    })
+                    .catch((error) => {
+                        console.log("here", error);
+                        throw new Error("Error");
+                    });
             } catch (error) {
                 console.log(error);
             }
-
         },
 
-
-
         /**
-         * @param {*} eventId 
-         * @returns 
+         * @param {*} eventId
+         * @returns
          */
         async getEventById(eventId) {
             try {
                 return await Event.findOne({ _id: eventId });
             } catch (error) {
-                throw new Error('Error while retrieving the event');
+                throw new Error("Error while retrieving the event");
             }
         },
 
         /**
-         * @param {*} eventId 
-         * @param {*} eventData 
-         * @returns 
+         * @param {*} eventId
+         * @param {*} eventData
+         * @returns
          */
         async updateEventById(eventId, eventData) {
             try {
-                return await Event.findOneAndUpdate({ _id: eventId }, eventData, { new: true });
+                return await Event.findOneAndUpdate({ _id: eventId }, eventData, {
+                    new: true,
+                });
             } catch (error) {
-                throw new Error('Error while updating the event');
+                throw new Error("Error while updating the event");
             }
         },
 
         /**
-         * @param {*} eventId 
-         * @returns 
+         * @param {*} eventId
+         * @returns
          */
         async deleteEventById(eventId) {
             try {
                 return await Event.findOneAndDelete({ _id: eventId });
             } catch (error) {
-                throw new Error('Error while deleting the event');
+                throw new Error("Error while deleting the event");
             }
         },
-
 
         async getEventsByAppId(appId) {
             try {
                 const events = await Event.find({ appId: appId });
                 return events;
             } catch (error) {
-                console.error('Error in service:', error);
+                console.error("Error in service:", error);
                 throw error;
             }
-        }
-    }
-}
+        },
+
+        async getEventsByVisitorId(visitorId) {
+            try {
+                const events = await Event.find({ "data.visitor_id": visitorId });
+                return events;
+            } catch (error) {
+                console.error("Error in service:", error);
+                throw error;
+            }
+        },
+
+        async addTimeSpentOnPage(data) {
+            const thirtyMinsAgo = new Date(Date.now() - 1800000);
+            try {
+                if (!data.data.session) {
+                    data.data.session = 1;
+                }
+                const event = await Event.findOneAndUpdate(
+                    {
+                        type: "visited",
+                        "data.visitor_id": { $eq: data.data.visitor_id },
+                        "data.page": { $eq: data.data.page },
+                        updatedAt: { $gte: thirtyMinsAgo },
+                    },
+                    {
+                        $inc: { "data.timeSpent": data.data.timeSpent },
+                        $set: { updatedAt: Date.now() },
+                        $set: { "data.session": data.data.session },
+                    },
+                    { new: true }
+                );
+                console.log("Found less than 30mins ago", event);
+                if (!event) {
+                    const event = await Event.findOne({
+                        "data.visitor_id": { $eq: data.data.visitor_id },
+                        "data.page": { $eq: data.data.page },
+                        updatedAt: { $lt: thirtyMinsAgo },
+                    });
+                    if (event) {
+                        console.log("Found more than 30mins ago", event);
+                        data.data.session = data.data.session + 1;
+                        const newEvent = new Event({
+                            type: data.type,
+                            appId: data.appId,
+                            data: data.data,
+                        });
+                        return await newEvent.save();
+                    } else {
+                        console.log("Not found at all", event);
+                        data.data.session = 1;
+                        const newEvent = new Event({
+                            type: data.type,
+                            appId: data.appId,
+                            data: data.data,
+                        });
+                        return await newEvent.save();
+                    }
+                }
+                return event;
+            } catch (error) {
+                console.error("Error in service:", error);
+                throw error;
+            }
+        },
+    };
+};

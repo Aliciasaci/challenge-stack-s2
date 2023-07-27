@@ -31,15 +31,6 @@
       outlined
     />
   </span>
-  <div v-if="isLoggedInAsUser">
-    <p>
-      Vous êtes connecté en tant que {{ currentUser.firstname }} ({{
-        currentUser.role
-      }})
-    </p>
-    <Button @click="logoutAsUser">Se déconnecter</Button>
-    <!-- fix using only one button -->
-  </div>
 
   <!-- Cards-->
   <Cards />
@@ -47,27 +38,40 @@
 
   <!--Les modals-->
   <AppIDModal :visible="isAppIDModalVisible" />
-  <!-- <PreferencesModal :visible="isPreferencesModalVisible" /> -->
   <TagsModal :visible="isTagsModalVisible" />
   <ParamModal :visible="isParamModalVisible" />
   <!--Les modals -->
 
-  <div class="analytics">
-    <div class="graph" v-if="userMultiAxes">
-      <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
-        <Graph :graph="graph"></Graph>
-      </div>
-    </div>
-
+  <div class="analytics" v-if="userVerticalBars || userMultiAxes">
+    <h1>Graphes</h1>
     <div class="graph" v-if="userVerticalBars">
+      <h3 style="flex-basis: 100%">Barre Vericales</h3>
       <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
         <Graph :graph="graph"></Graph>
       </div>
     </div>
 
+    <div class="graph" v-if="userMultiAxes">
+      <h3 style="flex-basis: 100%">Mutli axes</h3>
+      <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+        <Graph :graph="graph"></Graph>
+      </div>
+    </div>
+
     <div class="detail">
+      <h1>Dernière activité</h1>
       <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
     </div>
+  </div>
+
+  <div class="graph" v-if="userVerticalBars">
+    <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+      <Graph :graph="graph"></Graph>
+    </div>
+  </div>
+
+  <div class="detail">
+    <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
   </div>
 </template>
 
@@ -84,7 +88,6 @@ import Graph from "@/components/Graph.vue";
 import { mapGetters, mapActions } from "../store/map-state";
 
 const isAppIDModalVisible = ref(false);
-const isPreferencesModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
 const user = JSON.parse(localStorage.getItem("user"));
@@ -99,12 +102,8 @@ const { logoutAsUser } = mapActions("loginAsUser");
 onMounted(async () => {
   try {
     if (user) {
-      appEvents.value = await getEvents();
       userMultiAxes.value = await getUsersMultiAxes();
       userVerticalBars.value = await getUsersVerticalBars();
-
-      console.log(userMultiAxes.value);
-      console.log(userVerticalBars.value);
     }
   } catch (error) {
     console.error(error);
@@ -115,10 +114,6 @@ const generateAppIDModal = () => {
   isAppIDModalVisible.value = true;
 };
 
-const generatePreferencesModal = () => {
-  isPreferencesModalVisible.value = true;
-};
-
 const generateTagModal = () => {
   isTagsModalVisible.value = true;
 };
@@ -127,29 +122,11 @@ const generateParamModal = () => {
   isParamModalVisible.value = true;
 };
 
-async function getEvents() {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/events/?appId=${user.appId}&orderDesc=true&page_size=10&page_number=1`
-    );
-    if (!response.ok) {
-      throw new Error(
-        `erreur serveur (${response.status} ${response.statusText})`
-      );
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
 async function getUsersMultiAxes() {
   try {
     const response = await fetch(
-      `http://localhost:3000/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`
     );
     if (!response.ok) {
       throw new Error(
@@ -167,7 +144,8 @@ async function getUsersMultiAxes() {
 async function getUsersVerticalBars() {
   try {
     const response = await fetch(
-      `http://localhost:3000/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`
     );
     if (!response.ok) {
       throw new Error(
@@ -204,11 +182,13 @@ async function getUsersVerticalBars() {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .graph-div {
-  flex-basis: 48%;
+  flex-basis: 49%;
+  margin-bottom: 2rem;
 }
 
 .card {

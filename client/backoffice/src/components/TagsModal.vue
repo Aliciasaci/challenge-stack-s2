@@ -12,9 +12,9 @@
                 </div>
                 <div class="tags-list">
                     <ul>
-                        <li class="tag-element" v-for="tag in tags" :key="tag.code"><span><b>Tag : </b>{{ tag.commentaire }} |
-                            <b>Description</b> : {{
-                                tag.description }}</span>
+                        <li class="tag-element" v-for="tag in tags" :key="tag.code">
+                            <span class="comm">Tag : {{ tag.commentaire }}</span> |
+                            <span class="desc">Description: {{ tag.description }}</span>
                             <div class="actions">
                                 <Button icon="pi pi-times" severity="danger" text raised rounded aria-label="Cancel"
                                     @click="deleteTag(tag.id)" />
@@ -46,7 +46,7 @@ onMounted(() => {
 
 async function getUsersTags(userId) {
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}/tags`);
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/users/${userId}/tags`);
         if (!response.ok) {
             throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
         }
@@ -75,7 +75,7 @@ async function createTag() {
         alert("Merci de générer un tag avant de cliquer sur Ajouter");
     } else {
         try {
-            const response = await fetch(`http://localhost:3000/tags/`,
+            const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/`,
                 {
                     method: "POST",
                     headers: {
@@ -103,7 +103,7 @@ async function createTag() {
 
 async function deleteTag(tagId) {
     try {
-        const response = await fetch(`http://localhost:3000/tags/${tagId}`,
+        const response = await fetch(import.meta.env.VITE_SERVER_URL+`/tags/${tagId}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -147,5 +147,9 @@ async function deleteTag(tagId) {
     align-items: center;
     padding: 5px;
     border-radius: 6px;
+}
+
+.comm, .desc{
+    width: 10rem;
 }
 </style>

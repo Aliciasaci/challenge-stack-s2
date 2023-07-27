@@ -57,6 +57,11 @@ const router = createRouter({
       name: "unauthorized",
       component: () => import("@/views/Access.vue"),
     },
+    {
+      path: "/logout",
+      name: "logout",
+      component: () => import("@/views/LogOut.vue"),
+    },
   ],
 })
 

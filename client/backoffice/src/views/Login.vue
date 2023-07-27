@@ -1,15 +1,8 @@
 <template>
-  <div
-    class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
-  >
+  <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
     <div class="flex flex-column align-items-center justify-content-center">
-      <img
-        :src="logoUrl"
-        alt="FlutterEase logo"
-        class="mb-5 w-6rem flex-shrink-0"
-      />
-      <div
-        style="
+      <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" />
+      <div style="
           border-radius: 56px;
           padding: 0.3rem;
           background: linear-gradient(
@@ -17,81 +10,36 @@
             var(--primary-color) 10%,
             rgba(33, 150, 243, 0) 30%
           );
-        "
-      >
-        <div
-          class="w-full surface-card py-4 px-5 sm:px-8"
-          style="border-radius: 53px"
-        >
+        ">
+        <div class="w-full surface-card py-4 px-5 sm:px-8" style="border-radius: 53px">
           <form @submit.prevent="login()">
-            <div
-              v-if="response_message"
-              class="notification is-danger is-light"
-            >
+            <div v-if="response_message" class="notification is-danger is-light">
               {{ response_message }}
             </div>
             <div class="text-center mb-5">
               <div class="text-900 text-3xl font-medium mb-3">Bienvenue</div>
-              <span class="text-600 font-medium"
-                >Entrer vos identifiants pour vous connecter</span
-              >
+              <span class="text-600 font-medium">Entrer vos identifiants pour vous connecter</span>
             </div>
 
             <div>
-              <label for="email" class="block text-900 text-xl font-medium mb-2"
-                >Email</label
-              >
-              <InputText
-                v-model="email"
-                id="email"
-                type="text"
-                placeholder="Email"
-                class="w-full md:w-30rem mb-5"
-                style="padding: 1rem"
-                required
-              />
+              <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
+              <InputText v-model="email" id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-5"
+                style="padding: 1rem" required />
 
-              <label
-                for="password"
-                class="block text-900 font-medium text-xl mb-2"
-                >Mot de passe</label
-              >
-              <InputText
-                v-model="password"
-                id="password"
-                type="password"
-                placeholder="Mot de passe"
-                class="w-full md:w-30rem mb-5"
-                style="padding: 1rem"
-                required
-              />
+              <label for="password" class="block text-900 font-medium text-xl mb-2">Mot de passe</label>
+              <InputText v-model="password" id="password" type="password" placeholder="Mot de passe"
+                class="w-full md:w-30rem mb-5" style="padding: 1rem" required />
 
-              <div
-                class="flex align-items-center justify-content-between mb-5 gap-5"
-              >
-                <a
-                  class="font-medium no-underline ml-2 text-right cursor-pointer"
-                  style="color: var(--primary-color)"
-                  >Mot de passe oublié ?</a
-                >
+              <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Mot
+                  de passe oublié ?</a>
               </div>
-              <div
-                class="flex align-items-center justify-content-between mb-5 gap-5"
-              >
-                <a
-                  class="font-medium no-underline ml-2 text-right cursor-pointer"
-                  style="color: var(--primary-color)"
-                >
-                  <router-link to="/signin"
-                    >Pas de compte ? Inscrivez vous.</router-link
-                  >
+              <div class="flex align-items-center justify-content-between mb-5 gap-5">
+                <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">
+                  <router-link to="/signin">Pas de compte ? Inscrivez vous.</router-link>
                 </a>
               </div>
-              <Button
-                type="submit"
-                label="Se connecter"
-                class="w-full p-3 text-xl"
-              />
+              <Button type="submit" label="Se connecter" class="w-full p-3 text-xl" />
             </div>
           </form>
         </div>
@@ -115,9 +63,10 @@ const logoUrl = computed(() => {
 });
 
 async function login() {
+
   let hasError = false;
   try {
-    const response = await fetch("http://localhost:3000/login/", {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL+"/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -141,7 +90,7 @@ async function login() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      if(user.role === "USER_ADMIN") {
+      if (user.role === "USER_ADMIN") {
         router.push("/admin-panel");
       } else {
         router.push("/client-panel");
