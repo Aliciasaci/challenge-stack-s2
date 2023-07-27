@@ -4,20 +4,15 @@ const { v4: uuidv4 } = require('uuid');
 module.exports = function (Service) {
     return {
         async getAll(req, res) {
-            const {
-                _page = 1,
-                _itemsPerPage = 30,
-                _attributes = {},
-                _sort = {},
-                ...criteria
-              } = req.query;
-            
-              const options = {
-                page: _page,
-                itemsPerPage: _itemsPerPage,
-                attributes: _attributes,
-                sort: _sort,
-              };
+            const criteria = {};
+            const attributes = req.query._attributes ? req.query._attributes.split(',') : undefined;
+
+            const options = {
+                attributes,
+                page: req.query.page,
+                limit: req.query.limit,
+                order: req.query.order,
+            };
 
             const items = await Service.findAll(criteria, options);
             res.json(items);
@@ -102,6 +97,6 @@ module.exports = function (Service) {
             }
         },
 
-          
+
     };
 };

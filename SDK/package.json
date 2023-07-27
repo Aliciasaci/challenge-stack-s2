@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@fingerprintjs/fingerprintjs": "^3.4.2",
-    "detect-url-change": "^1.0.2"
-  }
-}
