@@ -126,4 +126,8 @@ async function login() {
   transform: scale(1.6);
   margin-right: 1rem;
 }
+
+.surface-ground{
+  background-color: none !important;
+}
 </style>

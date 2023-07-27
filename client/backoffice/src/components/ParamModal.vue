@@ -24,8 +24,8 @@
 
             <div class="card flex justify-content-center choice per_page dont-show">
                 <h5>La page (tracker par nom de page)</h5>
-                <Dropdown v-model="selectedPage" :options="Pages" optionLabel="name" placeholder="Page"
-                    class="w-full md:w-14rem" required />
+                <InputText type="text" v-model="selectedPage" placeholder="Nom de la page"/><br/>
+                <small id="username-help">Veuillez saisir exactement le nom de la page sans le domaine. Si la page se trouve à la racine, mettre quand-même "/".</small>
             </div>
             <div class="card flex justify-content-center choice per_tag dont-show">
                 <h5>Tag</h5>
@@ -112,11 +112,11 @@ const dataTypes = ref([
 ]);
 
 
-const Pages = ref([
-    { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL + "/" },
-    { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + '/contact' },
-    { name: 'Mention légale', },
-]);
+// const Pages = ref([
+//     { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL + "/" },
+//     { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + '/contact' },
+//     { name: 'Mention légale', },
+// ]);
 
 
 const typeGraphes = ref([
@@ -226,7 +226,6 @@ async function createWidget() {
             }
         }
     } else if (selectedRepresentation.value.code == "kpi") {
-
         widget = {
             type: "kpi",
             appId: user.appId,
@@ -272,7 +271,8 @@ async function getEventsAccordingToChoice() {
         tag = selectedTag.value.commentaire ?? '';
     }
     if (selectedPage.value) {
-        page = encodeURIComponent(selectedPage.value.raw) ?? '';
+        console.log(selectedPage.value, import.meta.env.VITE_SERVER_URL+"/"+selectedPage.value)
+        page = encodeURIComponent(import.meta.env.VITE_SERVER_URL+"/"+selectedPage.value) ?? '';
         console.log(page);
     }
 

@@ -21,7 +21,6 @@ import Listbox from 'primevue/listbox';
 import SplitButton from 'primevue/splitbutton';
 import Chart from 'primevue/chart';
 import InputSwitch from 'primevue/inputswitch';
-import FileUpload from 'primevue/fileupload';
 import Avatar from 'primevue/avatar';
 import AvatarGroup from 'primevue/avatargroup';
 import TreeSelect from 'primevue/treeselect';
@@ -31,8 +30,12 @@ import Badge from 'primevue/badge';
 import Tag from 'primevue/tag';
 import ToastService from 'primevue/toastservice';
 import Password from 'primevue/password';
+<<<<<<< HEAD
+import FileUpload from 'primevue/fileupload';
+=======
 import PickList from 'primevue/picklist';
 
+>>>>>>> 8758682f9c757c999131425f1ee22ae5b530263d
 //theme
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 //core
@@ -67,7 +70,6 @@ app.component("Listbox", Listbox);
 app.component("SplitButton", SplitButton);
 app.component("Chart", Chart);
 app.component("InputSwitch", InputSwitch);
-app.component("FileUpload", FileUpload);
 app.component("Avatar", Avatar);
 app.component("AvatarGroup", AvatarGroup);
 app.component("TreeSelect", TreeSelect);
@@ -76,6 +78,9 @@ app.component("Badge", Badge);
 app.component("Tag", Tag);
 app.component("Password", Password);
 app.component("Paginator", Paginator);
+app.component("FileUpload", FileUpload);
+
+
 
 app.mount('#app');
 

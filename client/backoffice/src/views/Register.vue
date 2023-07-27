@@ -11,7 +11,7 @@
                         </div>
                         <div class="text-center mb-5">
                             <div class="text-900 text-3xl font-medium mb-3">Bienvenue</div>
-                            <span class="text-600 font-medium">Entrer vos identifiants pour vous inscrire</span>
+                            <span class="text-600 font-medium">Entrez vos identifiants pour vous inscrire</span>
                         </div>
                         <div>
                             <div class="formgrid grid">
@@ -107,39 +107,43 @@ async function accountAlreadyExists(email) {
 
 async function createAccount() {
     if (nom.value && prenom.value && email.value && password.value) {
-        if (!(await accountAlreadyExists(email.value))) {
-            try {
-                const response = await fetch(import.meta.env.VITE_SERVER_URL + "/register/", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        firstname: nom.value,
-                        lastname: prenom.value,
-                        email: email.value,
-                        password: password.value,
-                        societe: societe.value,
-                        kbis: kbis.value,
-                        telephone: telephone.value,
-                        compteIsVerified: compteIsVerified.value
-                    })
-                });
-
-                if (response.status === 422) {
-                    const data = await response.json();
-                    throw data;
-                } else {
-                    const data = await response.json();
-                    console.log(data);
-                    response_message.value = "Compte crée avec success.";
-                }
-            } catch (error) {
-                console.error(error);
-                response_message.value = error.message;
-            }
+        if (telephone.value.length > 10) {
+            response_message.value = "Numéro de téléphone trop long.";
         } else {
-            response_message.value = "Utilisateur existe déjà";
+            if (!(await accountAlreadyExists(email.value))) {
+                try {
+                    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/register/", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            firstname: nom.value,
+                            lastname: prenom.value,
+                            email: email.value,
+                            password: password.value,
+                            societe: societe.value,
+                            kbis: kbis.value,
+                            telephone: telephone.value,
+                            compteIsVerified: compteIsVerified.value
+                        })
+                    });
+
+                    if (response.status === 422) {
+                        const data = await response.json();
+                        throw data;
+                    } else {
+                        const data = await response.json();
+                        console.log(data);
+                        response_message.value = "Compte crée avec success.";
+                    }
+                } catch (error) {
+                    console.error(error);
+                    response_message.value = error.message;
+                }
+            } else {
+                response_message.value = "Utilisateur existe déjà";
+            }
         }
     }
 }
@@ -154,6 +158,10 @@ async function createAccount() {
 .pi-eye-slash {
     transform: scale(1.6);
     margin-right: 1rem;
+}
+
+.surface-ground{
+  background-color: none !important;
 }
 </style>
   

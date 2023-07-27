@@ -5,7 +5,7 @@
             <span class="card-title">Donnée : {{ kpi.data.label }}</span><br />
             <span class="icon-style"><i class="pi pi-database text-blue-500"></i></span>
             <span v-if="kpi.data.tag != ''" class="font-medium">Tag : {{ kpi.data.tag.commentaire }}</span>
-            <span v-if="kpi.data.page != ''" class="font-medium">Page : {{ kpi.data.page.name }}
+            <span v-if="kpi.data.page != ''" class="font-medium">Page : {{ kpi.data.page }}
             </span><br />
             <span v-if="kpi.data.date_interval != 'null - null'" class="font-medium date">{{ kpi.data.date_interval
             }}</span><br />
@@ -79,6 +79,7 @@ async function getUsersKpis() {
     margin: 2rem auto;
     justify-content: start;
     text-align: start;
+    flex-wrap: wrap;
 }
 
 .card-title {

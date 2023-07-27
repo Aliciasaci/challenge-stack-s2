@@ -99,7 +99,6 @@ export default {
         }
       });
     } else {
-      console.log("hello");
       alert("Woups ! pas d'autorisation.");
     }
   },
