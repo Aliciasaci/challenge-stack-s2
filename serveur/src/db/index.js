@@ -21,11 +21,10 @@ const tunnel = Tunnel(connection);
 const user = User(connection);
 
 //relations tag et tunnel
-tag.belongsToMany(tunnel, { through: "tunnel_tag" });
 tunnel.belongsToMany(tag, { through: "tunnel_tag" });
+tag.belongsToMany(tunnel, { through: "tunnel_tag" });
 
 //relations tag et user
 user.hasMany(tag, { foreignKey: "id_user" });
-
 
 module.exports = db;
