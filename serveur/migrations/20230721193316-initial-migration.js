@@ -79,6 +79,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       id_user: {
         type: Sequelize.INTEGER,
         allowNull: false,

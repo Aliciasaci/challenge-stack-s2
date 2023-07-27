@@ -62,7 +62,7 @@ export default {
         }
 
         if (binding.modifiers.visited) {
-                    //* tracker les visites de pages
+          //* tracker les visites de pages
           const action = Object.keys(binding.modifiers)[0];
           const visitorId = (await Fingerprint.loadFingerPrint()).visitorId;
           const timezone = (await Fingerprint.loadFingerPrint()).components
@@ -86,9 +86,8 @@ export default {
             await Fingerprint.addTimeSpentOnPage(
               visitorId,
               action,
-              timezone,
-              modifier,
-              options
+              options.APPID,
+              data
             );
           });
           window.addEventListener("unload", async () => {
