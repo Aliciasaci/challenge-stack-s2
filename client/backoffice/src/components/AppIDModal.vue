@@ -23,6 +23,8 @@ async function getUserState(userId) {
     }
 }
 
+
+
 function isURLValid(url) {
   const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]+)?(\/[^\s]*)?$/;
   return urlPattern.test(url);

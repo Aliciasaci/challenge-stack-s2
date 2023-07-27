@@ -1,6 +1,7 @@
 <template>
-    <div class="flex justify-content-center">
+    <div class="flex justify-content-center wrapper" >
         <Dialog v-model:visible="visible.visible" modal header="TAGS" :style="{ width: '40vw' }">
+            <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" @click="closeModal"/>
             <div>
                 <div class="card-modal">
                     <InputText type="text" v-model="generatedTag" placeholder="Cliquer sur générer"
@@ -37,6 +38,7 @@ const generatedTag = ref(null);
 const description = ref(null);
 const user = JSON.parse(localStorage.getItem('user'));
 const tags = ref(null);
+let display = true;
 
 
 onMounted(() => {
@@ -124,7 +126,6 @@ async function deleteTag(tagId) {
         throw error;
     }
 }
-
 
 </script>
 <style>

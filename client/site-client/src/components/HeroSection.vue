@@ -18,14 +18,14 @@
           type="button"
           class="mr-3 p-button-raised"
           @click="visible = true"
-          v-tracker:OHNCUJ.click
+          v-tracker:Y35TFN.click
         />
         <ContactForm v-model:visible="visible" />
         <Button
           label="En savoir plus"
           type="button"
           class="p-button-outlined"
-          v-tracker:9YE9NB.click
+          v-tracker:VSKXBL.click
         />
       </section>
       <div class="col-12 md:col-6 overflow-hidden">
