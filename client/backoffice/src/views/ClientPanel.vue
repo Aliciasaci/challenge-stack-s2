@@ -4,7 +4,14 @@
         <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
         <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
         <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+        <router-link to="/tunnel">
+            <Button label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
+        </router-link>
     </span>
+    <div v-if="isLoggedInAsUser">
+        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
+        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
+    </div>
 
     <!-- Cards-->
     <h1>KPIS</h1>
@@ -51,7 +58,6 @@ import TagsModal from '@/components/TagsModal.vue';
 import ParamModal from "../components/ParamModal.vue";
 import Graph from '@/components/Graph.vue';
 import { mapGetters, mapActions } from '../store/map-state';
-import ParamModal from "../components/ParamModal.vue";
 
 const isAppIDModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
@@ -116,69 +122,8 @@ async function getUsersVerticalBars() {
     }
 }
 
-async function getTags() {
-    try {
-        const response = await fetch(`http://localhost:3000/tags/?appId=${user.appId}`)
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-
-        const data = await response.json();
-        console.log(data);
-        return data;
-
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
 </script>
 
-<template v-if="user">
-    <Header />
-    <span class="p-buttonset">
-        <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined />
-        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-        <router-link to="/tunnel">
-            <Button label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
-        </router-link>
-        
-    </span>
-    <div v-if="isLoggedInAsUser">
-        <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
-        <Button @click="logoutAsUser">Se déconnecter</Button> <!-- fix using only one button -->
-    </div>
-
-    <!-- Cards-->
-    <Cards />
-    <!--Cards -->
-
-    <!--Les modals-->
-    <AppIDModal :visible="isAppIDModalVisible" />
-    <PreferencesModal :visible="isPreferencesModalVisible" />
-    <TagsModal :visible="isTagsModalVisible" />
-    <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals -->
-
-    <div class="analytics">
-        <div class="graph">
-            <div id="graph1">
-                <VerticalBar></VerticalBar>
-            </div>
-            <div id="graph2">
-                <MultiAxis></MultiAxis>
-            </div>
-        </div>
-
-        <div class="detail">
-            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-        </div>
-    </div>
-
-</template>
 <style>
 .top-btns {
     display: flex;
