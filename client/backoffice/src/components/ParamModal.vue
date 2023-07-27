@@ -127,6 +127,20 @@
           required
         />
       </div>
+
+      <h5>Type de représentation</h5>
+      <div class="card flex justify-content-center choice">
+        <Dropdown
+          @change="setSelectedPeriodType"
+          v-model="selectedRepresentation"
+          :options="typeGraphes"
+          optionLabel="name"
+          placeholder="Type de graphe"
+          class="w-full md:w-14rem"
+          required
+        />
+      </div>
+
       <div
         class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
       >
@@ -146,7 +160,6 @@
       </div>
 
       <Button label="Générer" @click="createWidget()" />
-      <Button label="Fermer" @click="closeModal()" />
     </Dialog>
   </div>
 </template>

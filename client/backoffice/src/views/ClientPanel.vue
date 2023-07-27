@@ -1,54 +1,42 @@
 <template v-if="user">
-  <Header />
-  <span class="p-buttonset">
-    <!-- <Button @click="generatePreferencesModal" label="Préférences" icon="pi pi-heart" severity="secondary" outlined /> -->
-    <Button
-      @click="generateAppIDModal"
-      label="APP ID"
-      icon="pi pi-key"
-      severity="secondary"
-      outlined
-    />
-    <Button
-      @click="generateTagModal"
-      label="TAGS"
-      icon="pi pi-tags"
-      severity="secondary"
-      outlined
-    />
-    <Button
-      @click="generateParamModal"
-      label="Widgets"
-      icon="pi pi-plus"
-      severity="secondary"
-      outlined
-    />
-    <Button
-      @click=""
-      label="Mon site"
-      icon="pi pi-plus"
-      severity="secondary"
-      outlined
-    />
-  </span>
+<Header />
+    <span class="p-buttonset">
+        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
+        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
+        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
+    </span>
 
-  <!-- Cards-->
-  <Cards />
-  <!--Cards -->
+    <!-- Cards-->
+    <h1>KPIS</h1>
+    <Cards />
+    <!--Cards -->
 
-  <!--Les modals-->
-  <AppIDModal :visible="isAppIDModalVisible" />
-  <TagsModal :visible="isTagsModalVisible" />
-  <ParamModal :visible="isParamModalVisible" />
-  <!--Les modals -->
+    <!--Les modals-->
+    <AppIDModal :visible="isAppIDModalVisible" />
+    <TagsModal :visible="isTagsModalVisible" />
+    <ParamModal :visible="isParamModalVisible" />
+    <!--Les modals -->
 
-  <div class="analytics" v-if="userVerticalBars || userMultiAxes">
-    <h1>Graphes</h1>
-    <div class="graph" v-if="userVerticalBars">
-      <h3 style="flex-basis: 100%">Barre Vericales</h3>
-      <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
-        <Graph :graph="graph"></Graph>
-      </div>
+    <div class="analytics" v-if="userVerticalBars || userMultiAxes">
+        <h1>Graphes</h1>
+        <div class="graph" v-if="userVerticalBars">
+            <h3 style="flex-basis: 100%;">Barre Vericales</h3>
+            <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="graph" v-if="userMultiAxes">
+            <h3 style="flex-basis: 100%;">Mutli axes</h3>
+            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+                <Graph :graph="graph"></Graph>
+            </div>
+        </div>
+
+        <div class="detail">
+            <h1>Dernière activité</h1>
+            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
+        </div>
     </div>
 
     <div class="graph" v-if="userMultiAxes">
