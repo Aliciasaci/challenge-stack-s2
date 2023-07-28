@@ -11,7 +11,7 @@ import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import SDK from "./sdk.js";
 const app = createApp(App);
-app.use(SDK, { APPID: "3fb28de7-25c1-4eca-a526-9bef25ecdd19" });
+app.use(SDK, { APPID: "52ff0cd3-ca32-4614-a1f6-d4bcba999a49" });
 
 app.component("Header", Header);
 app.use(store).use(router).mount("#app");
