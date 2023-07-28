@@ -52,6 +52,8 @@ export default {
           body: JSON.stringify(event),
         }
       );
+      console.log("Beacon sent");
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
