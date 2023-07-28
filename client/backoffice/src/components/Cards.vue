@@ -40,6 +40,7 @@ const user = JSON.parse(localStorage.getItem('user'));
 onMounted(async () => {
     kpis.value = await getUsersKpis();
     activeSessions.value = await getActiveSessions();
+    console.log(activeSessions.value);
     checkEventChange();
 });
 
@@ -112,11 +113,12 @@ async function getActiveSessions() {
         }
         const data = await response.json();
 
+        console.log(data.length);
+        console.log(Array.from(new Set(data.map(function(element){ return element.data.visitor_id }))).length);
+        
         if (data.length >= 0) {
-            console.log(data.length);
             return Array.from(new Set(data.map(function(element){ return element.data.visitor_id }))).length;
         }
-        console.log(data.length);
     } catch (error) {
         console.error(error);
         throw error;
