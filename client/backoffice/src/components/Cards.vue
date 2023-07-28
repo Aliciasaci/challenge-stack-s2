@@ -103,6 +103,7 @@ async function getActiveSessions() {
                 'Authorization': `Bearer ${accessToken}`
             }
         };
+        console.log(import.meta.env.VITE_SERVER_URL + `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`);
         const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`,
             requestOptions
         );
@@ -114,6 +115,7 @@ async function getActiveSessions() {
         if (data.length > 0) {
             return Array.from(new Set(data.map(function(element){ return element.data.visitor_id }))).length;
         }
+        console.log(data.length);
     } catch (error) {
         console.error(error);
         throw error;
