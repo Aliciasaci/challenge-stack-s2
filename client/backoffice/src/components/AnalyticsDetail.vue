@@ -59,7 +59,7 @@ async function getEvents() {
             }
         };
 
-      console.log(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value});
+      console.log(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
         const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`,
             requestOptions
         );
