@@ -21,6 +21,28 @@ export default {
    */
   async install(VueInstance, options) {
     if (await this.isAuthorized(options.APPID)) {
+      VueInstance.directive("saveClick", async (el, binding) => {
+        if (binding) {
+          //tracker et enregistrer la position des clics sur la page
+          const visitorId = (await Fingerprint.loadFingerPrint()).visitorId;
+          const timezone = (await Fingerprint.loadFingerPrint()).components
+            .timezone.value;
+          const body = document.querySelector("body");
+          body.addEventListener("click", async (e) => {
+            const action = "clickOnPage";
+            let data = {
+              modifier: binding.modifiers,
+              page: window.location.href,
+              tag: action,
+              visitor_id: visitorId,
+              timezone: timezone,
+              x: e.pageX,
+              y: e.pageY,
+            };
+            this.createPageClicks(action, options.APPID, data);
+          });
+        }
+      });
       VueInstance.directive("tracker", async (el, binding) => {
         if (binding.modifiers.click) {
           //* tracker tout les boutons du site-client.
@@ -140,6 +162,29 @@ export default {
           body: JSON.stringify(event),
         });
         console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+
+  async createPageClicks(eventType, appId, otherData = {}) {
+    const event = {
+      type: eventType,
+      appId: appId,
+      data: otherData,
+    };
+
+    if (event) {
+      let hasError = false;
+      try {
+        const response = await fetch("http://localhost:3000/pageClicks/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        });
       } catch (error) {
         console.error(error);
       }

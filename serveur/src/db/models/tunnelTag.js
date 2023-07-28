@@ -3,7 +3,7 @@ module.exports = function (connection) {
     const Tag = require("../models/tag");
     const Tunnel = require("../models/tunnel");
 
-    const tunnel_tag = connection.define("tunnel_tag", {
+    const TunnelTag = connection.define("TunnelTag", {
         id_tunnel: {
             type: DataTypes.INTEGER,
             references: {
@@ -28,6 +28,6 @@ module.exports = function (connection) {
       tableName: "tunnel_tag"
     });
     
-    return tunnel_tag;
+    return TunnelTag;
 };
   
