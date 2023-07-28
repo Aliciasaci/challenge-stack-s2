@@ -217,10 +217,9 @@ async function createWidget() {
     const dateFin = transformDate(date2.value) ?? null;
 
     let data = await getEventsAccordingToChoice();
-    data.forEach(element => {
-
-        countTotal += element.count;
-    });
+        data.forEach(element => {
+            countTotal += element.count;
+        });
 
 
     if (selectedRepresentation.value.code == "multiaxis" || selectedRepresentation.value.code == "verticalbar") {
@@ -229,7 +228,7 @@ async function createWidget() {
             appId: user.appId,
             data: {
                 labels: [],
-                label: "nombre de " + selectedType.value.name,
+                label: "nombre de " + selectedType.value.name + selectedPage.value ?? null,
                 date_interval: transformDate(date1.value) + " - " + transformDate(date2.value),
                 arrayData: data,
                 periode: selectedPeriod.value,
@@ -262,7 +261,6 @@ async function createWidget() {
         if (!response.ok) {
             throw new Error(`Server error (${response.status} ${response.statusText})`);
         }
-        location.reload();
         const responseData = await response.json();
         return responseData;
     } catch (error) {

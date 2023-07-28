@@ -50,7 +50,6 @@ function getPageName(url) {
 
 async function getEvents() {
     const accessToken = localStorage.getItem('token');
-    console.log(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`);
     try {
         const requestOptions = {
             method: 'GET',

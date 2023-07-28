@@ -69,7 +69,6 @@ let appEvents = ref();
 onMounted(async () => {
 
     const accessToken = localStorage.getItem('token');
-    console.log(accessToken);
     try {
         if (user) {
             userMultiAxes.value = await getUsersMultiAxes();
