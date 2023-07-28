@@ -23,6 +23,19 @@ module.exports = function AuthController(UserService) {
         );
       }
       //return token and user
+
+      const response = {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+          "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+        },
+        body: JSON.stringify({ message: "Hello World!" }),
+      };
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+
       res.json({
         token: jwt.sign(
           { id: user.id, email: user.email },
@@ -30,6 +43,8 @@ module.exports = function AuthController(UserService) {
         ),
         user: user,
       });
+
+
     },
   };
 };
