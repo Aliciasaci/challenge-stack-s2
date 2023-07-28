@@ -1,180 +1,234 @@
 <template v-if="user">
-    <Header />
-    <span class="p-buttonset">
-        <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-        <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-        <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-        <Button @click="$router.push('/tunnel')" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary" outlined />
-    </span>
+  <Header />
+  <span class="p-buttonset">
+    <Button
+      @click="generateAppIDModal"
+      label="APP ID"
+      icon="pi pi-key"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateTagModal"
+      label="TAGS"
+      icon="pi pi-tags"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateParamModal"
+      label="Widgets"
+      icon="pi pi-plus"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="$router.push('/tunnel')"
+      label="Tunnel"
+      icon="pi pi-arrow-right-arrow-left"
+      severity="secondary"
+      outlined
+    />
+  </span>
 
-    <!-- Cards-->
-    <h1>KPIS</h1>
-    <Cards />
-    <!--Cards -->
+  <!-- Cards-->
+  <h1>KPIS</h1>
+  <Cards />
+  <!--Cards -->
 
-    <!--Les modals-->
-    <AppIDModal :visible="isAppIDModalVisible" />
-    <TagsModal :visible="isTagsModalVisible" />
-    <ParamModal :visible="isParamModalVisible" />
-    <!--Les modals -->
+  <!--Les modals-->
+  <AppIDModal :visible="isAppIDModalVisible" />
+  <TagsModal :visible="isTagsModalVisible" />
+  <ParamModal :visible="isParamModalVisible" />
+  <!--Les modals -->
 
-    <div class="analytics" v-if="userVerticalBars || userMultiAxes">
-        <h1>Graphes</h1>
-        <div class="graph" v-if="userVerticalBars">
-            <h3 style="flex-basis: 100%;">Barre Vericales</h3>
-            <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
-                <Graph :graph="graph"></Graph>
-            </div>
-        </div>
-
-        <div class="graph" v-if="userMultiAxes">
-            <h3 style="flex-basis: 100%;">Mutli axes</h3>
-            <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
-                <Graph :graph="graph"></Graph>
-            </div>
-        </div>
-
-        <div class="detail">
-            <h1>Dernière activité</h1>
-            <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-        </div>
+  <div class="analytics" v-if="userVerticalBars || userMultiAxes">
+    <h1>Graphes</h1>
+    <div class="graph" v-if="userVerticalBars">
+      <h3 style="flex-basis: 100%">Barre Vericales</h3>
+      <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+        <Graph :graph="graph"></Graph>
+      </div>
     </div>
+
+    <div class="graph" v-if="userMultiAxes">
+      <h3 style="flex-basis: 100%">Mutli axes</h3>
+      <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+        <Graph :graph="graph"></Graph>
+      </div>
+    </div>
+
+    <div class="graph" v-if="userHeatMaps">
+      <h1 style="flex-basis: 100%">Heat Maps</h1>
+      <div v-for="heatmap in userHeatMaps" :key="heatmap.id" class="graph-div">
+        <HeatMap :heatmap="heatmap" />
+      </div>
+    </div>
+
+    <div class="detail">
+      <h1>Dernière activité</h1>
+      <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import Header from '@/components/ClientHeader.vue';
-import AnalyticsDetail from '@/components/AnalyticsDetail.vue';
-import Cards from '@/components/Cards.vue';
-import AppIDModal from '@/components/AppIDModal.vue';
+import { ref, onMounted } from "vue";
+import Header from "@/components/ClientHeader.vue";
+import AnalyticsDetail from "@/components/AnalyticsDetail.vue";
+import Cards from "@/components/Cards.vue";
+import AppIDModal from "@/components/AppIDModal.vue";
 // import PreferencesModal from '@/components/PreferencesModal.vue';
-import TagsModal from '@/components/TagsModal.vue';
+import TagsModal from "@/components/TagsModal.vue";
 import ParamModal from "../components/ParamModal.vue";
-import Graph from '@/components/Graph.vue';
-import { mapGetters, mapActions } from '../store/map-state';
+import Graph from "@/components/Graph.vue";
+import HeatMap from "@/components/HeatMap.vue";
+import { mapGetters, mapActions } from "../store/map-state";
 
 const isAppIDModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
-const user = JSON.parse(localStorage.getItem('user'));
-import { useStore } from 'vuex';
+const user = JSON.parse(localStorage.getItem("user"));
+import { useStore } from "vuex";
 // import { v } from 'dist/assets/chart-893b7c7b';
 const store = useStore();
 let userMultiAxes = ref([]);
 let userVerticalBars = ref([]);
+let userHeatMaps = ref([]);
 let appEvents = ref();
-// const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
-// const { logoutAsUser } = mapActions('loginAsUser');
+//const { isLoggedInAsUser, currentUser } = mapGetters("loginAsUser");
+//const { logoutAsUser } = mapActions("loginAsUser");
 
 onMounted(async () => {
-
-    const accessToken = localStorage.getItem('token');
-    console.log(accessToken);
-    try {
-        if (user) {
-            userMultiAxes.value = await getUsersMultiAxes();
-            userVerticalBars.value = await getUsersVerticalBars();
-        }
-    } catch (error) {
-        console.error(error);
+  try {
+    if (user) {
+      userMultiAxes.value = await getUsersMultiAxes();
+      userVerticalBars.value = await getUsersVerticalBars();
+      userHeatMaps.value = await getUsersHeatMaps();
     }
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 const generateAppIDModal = () => {
-    isAppIDModalVisible.value = true;
-}
+  isAppIDModalVisible.value = true;
+};
 
 const generateTagModal = () => {
-    isTagsModalVisible.value = true;
-}
+  isTagsModalVisible.value = true;
+};
 
 const generateParamModal = () => {
-    isParamModalVisible.value = true;
-}
+  isParamModalVisible.value = true;
+};
 
 async function getUsersMultiAxes() {
-    try {
-        const accessToken = localStorage.getItem('token');
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        };
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
-            requestOptions);
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-        const responseData = await response.json();
-        return responseData;
-    } catch (error) {
-        console.error(error);
-        throw error;
+  try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
     }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 async function getUsersVerticalBars() {
-    try {
-        const accessToken = localStorage.getItem('token');
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        };
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
-        requestOptions);
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-        const responseData = await response.json();
-        return responseData;
-    } catch (error) {
-        console.error(error);
-        throw error;
+  try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
     }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
+async function getUsersHeatMaps() {
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 </script>
 
 <style>
 .top-btns {
-    display: flex;
-    align-items: end;
-    justify-content: end;
+  display: flex;
+  align-items: end;
+  justify-content: end;
 }
 
-
 .p-buttonset {
-    display: flex;
-    margin-right: 26px;
-    justify-content: end;
+  display: flex;
+  margin-right: 26px;
+  justify-content: end;
 }
 
 .analytics {
-    width: 80%;
-    margin: auto;
+  width: 80%;
+  margin: auto;
 }
 
 .graph {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .graph-div {
-    flex-basis: 49%;
-    margin-bottom: 2rem;
+  flex-basis: 49%;
+  margin-bottom: 2rem;
 }
 
 .card {
-    border: white;
+  border: white;
 }
 </style>
-  
-
-
-  
