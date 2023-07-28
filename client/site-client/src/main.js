@@ -11,13 +11,10 @@ import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import SDK from "./sdk.js";
 const app = createApp(App);
+app.use(SDK, { APPID: "3fb28de7-25c1-4eca-a526-9bef25ecdd19" });
 
 app.component("Header", Header);
-
 app.use(store).use(router).mount("#app");
 app.use(PrimeVue);
 
-//passer le APPID en options.
-
-app.use(SDK, { APPID: "3fb28de7-25c1-4eca-a526-9bef25ecdd19" });
 app.use(ToastService);

@@ -18,18 +18,15 @@
           type="button"
           class="mr-3 p-button-raised"
           @click="visible = true"
-          v-tracker:NP6Y83.click
+          v-tracker:Y35TFN.click
         />
         <ContactForm v-model:visible="visible" />
         <Button
           label="En savoir plus"
           type="button"
           class="p-button-outlined"
-          v-tracker:BMXAQP.click
-        />
-      </section>
+          v-tracker:VSKXBL.click
       <div class="col-12 md:col-6 overflow-hidden">
-        <img
           src="https://static.vecteezy.com/system/resources/previews/017/033/095/original/abstract-purple-and-pink-bokeh-background-soft-blur-light-effect-wallpaper-dreamy-backdrop-with-copy-space-for-text-party-pastel-lovely-bubble-bokeh-background-vector.jpg"
           alt="Image"
           class="md:ml-auto block md:h-full"

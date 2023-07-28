@@ -8,6 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vue/reactivity": "^3.3.4",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
     "chartjs-adapter-date-fns": "^3.0.0",
@@ -15,12 +16,14 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "moment": "^2.29.4",
+    "plotly.js-dist": "^2.25.0",
     "primeflex": "^3.2.1",
     "primeicons": "^6.0.1",
     "primevue": "^3.29.2",
     "vue": "^3.2.13",
     "vue-router": "^4.2.4",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

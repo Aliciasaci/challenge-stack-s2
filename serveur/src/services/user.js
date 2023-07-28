@@ -1,24 +1,29 @@
-const tag = require("../db/models/tag");
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
 const Tag = require("../db").Tag;
+const Tunnel = require("../db").Tunnel;
 
 module.exports = function () {
   return {
     async findAll(criteria, options) {
       try {
-        const users = await User.findAll({
+        const queryOptions = {
           where: criteria,
-          offset:
-            options && options.page
-              ? (options.page - 1) * (options.limit || 20)
-              : undefined,
-          limit: (options && options.limit) || 20,
-          order:
-            options && options.order ? [options.order.split(":")] : undefined,
-          //attributes: options && options.attributes ? [options.attributes] : undefined,
-        });
+          offset: options && options.page ? (options.page - 1) * (options.limit || 20) : undefined,
+          limit: options && options.limit ? options.limit : 20,
+          order: options && options.order ? [options.order.split(":")] : undefined,
+        };
+
+        if (options && options.attributes) {
+          if (Array.isArray(options.attributes)) {
+            queryOptions.attributes = options.attributes;
+          } else if (typeof options.attributes === "object") {
+            queryOptions.attributes = options.attributes;
+          }
+        }
+
+        const users = await User.findAll(queryOptions);
 
         return users;
       } catch (error) {
@@ -26,6 +31,7 @@ module.exports = function () {
         throw error;
       }
     },
+
 
     async create(data) {
       try {
@@ -91,6 +97,20 @@ module.exports = function () {
         return tags;
       } catch (error) {
         console.error("Error while retrieving user tags:", error);
+        throw error;
+      }
+    },
+
+    async getUserTunnels(userId) {
+      try {
+        const tunnels = await Tunnel.findAll({
+          where: {
+            id_user: userId,
+          },
+        });
+        return tunnels;
+      } catch (error) {
+        console.error("Error while retrieving user tunnels:", error);
         throw error;
       }
     },

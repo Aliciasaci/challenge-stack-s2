@@ -1,12 +1,10 @@
-import { createStore, createLogger } from 'vuex'
-import checkedBtn from './modules/checkedBtn'
-import loginAsUser from './modules/loginAsUser'
+import { createStore } from 'vuex';
+import loginAsUser from './modules/loginAsUser';
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   modules: {
-      checkedBtn,
       loginAsUser
   },
-  // strict: debug,
-  // plugins: debug ? [createLogger()] : []
+  plugins: [createPersistedState()]
 })

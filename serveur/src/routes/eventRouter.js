@@ -1,11 +1,12 @@
 module.exports = function (Controller, options = {}) {
   const { Router } = require("express");
   const router = Router();
+  const checkAuth = require("../middlewares/checkAuth");
 
 
 
   router.get("/", Controller.getAllEvents);
-  router.get("/count/", Controller.getCount);
+  router.get("/count/",Controller.getCount);
   router.get("/:id", Controller.getEventById);
 
   

@@ -26,14 +26,6 @@ module.exports = function (connection) {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      id_user: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: User, // Reference the 'User' model
-          key: "id",
-        },
-      },
     },
     {
       connection,

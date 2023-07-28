@@ -8,7 +8,6 @@ export default {
    */
   async isAuthorized(APPID) {
     const allAppIds = await this.getAllAppIds();
-
     if (allAppIds) {
       const isValuePresent = allAppIds.some((obj) => obj.appId === APPID);
       return isValuePresent;
@@ -19,8 +18,30 @@ export default {
    * @param {*} VueInstance
    * @param {*} options
    */
-  install(VueInstance, options) {
-    if (this.isAuthorized(options.APPID)) {
+  async install(VueInstance, options) {
+    if (await this.isAuthorized(options.APPID)) {
+      VueInstance.directive("saveClick", async (el, binding) => {
+        if (binding) {
+          //tracker et enregistrer la position des clics sur la page
+          const visitorId = (await Fingerprint.loadFingerPrint()).visitorId;
+          const timezone = (await Fingerprint.loadFingerPrint()).components
+            .timezone.value;
+          const body = document.querySelector("body");
+          body.addEventListener("click", async (e) => {
+            const action = "clickOnPage";
+            let data = {
+              modifier: binding.modifiers,
+              page: window.location.href,
+              tag: action,
+              visitor_id: visitorId,
+              timezone: timezone,
+              x: e.pageX,
+              y: e.pageY,
+            };
+            this.createPageClicks(action, options.APPID, data);
+          });
+        }
+      });
       VueInstance.directive("tracker", async (el, binding) => {
         if (binding.modifiers.click) {
           //* tracker tout les boutons du site-client.
@@ -62,7 +83,7 @@ export default {
         }
 
         if (binding.modifiers.visited) {
-                    //* tracker les visites de pages
+          //* tracker les visites de pages
           const action = Object.keys(binding.modifiers)[0];
           const visitorId = (await Fingerprint.loadFingerPrint()).visitorId;
           const timezone = (await Fingerprint.loadFingerPrint()).components
@@ -73,21 +94,15 @@ export default {
           const page = window.location.href;
           const tag = binding.arg;
           detectUrlChange.on("change", async () => {
-            const endTime = new Date();
-            const timeSpent = endTime - startTime;
-            let data = {
-              modifier: modifier,
-              page: page,
-              tag: tag,
-              visitor_id: visitorId,
-              timeSpent: timeSpent,
-              timezone: timezone,
-            };
-            await Fingerprint.addTimeSpentOnPage(
+            this.eventMaker(
+              startTime,
+              page,
+              tag,
               visitorId,
               action,
-              options.APPID,
-              data,
+              timezone,
+              modifier,
+              options
             );
           });
           window.addEventListener("unload", async () => {
@@ -146,6 +161,29 @@ export default {
           body: JSON.stringify(event),
         });
         console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+
+  async createPageClicks(eventType, appId, otherData = {}) {
+    const event = {
+      type: eventType,
+      appId: appId,
+      data: otherData,
+    };
+
+    if (event) {
+      let hasError = false;
+      try {
+        const response = await fetch("http://vps-34811de6.vps.ovh.net:3000/pageClicks/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        });
       } catch (error) {
         console.error(error);
       }
