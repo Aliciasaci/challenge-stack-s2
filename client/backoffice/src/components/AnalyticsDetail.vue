@@ -49,7 +49,6 @@ function getPageName(url) {
 }
 
 async function getEvents() {
-<<<<<<< HEAD
     const accessToken = localStorage.getItem('token');
     try {
         const requestOptions = {
@@ -69,36 +68,7 @@ async function getEvents() {
     } catch (error) {
         console.error(error);
         throw error;
-=======
-  const accessToken = localStorage.getItem("token");
-  console.log(
-    import.meta.env.VITE_SERVER_URL +
-      `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`
-  );
-  try {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    const response = await fetch(
-      import.meta.env.VITE_SERVER_URL +
-        `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`,
-      requestOptions
-    );
-    if (!response.ok) {
-      throw new Error(
-        `erreur serveur (${response.status} ${response.statusText})`
-      );
->>>>>>> cf1281d16fc5a0c480163534806a80710c10886b
     }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
 }
 
 async function getEventsCount() {
