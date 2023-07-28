@@ -1,11 +1,34 @@
 <template v-if="user">
   <Header />
   <span class="p-buttonset">
-    <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-    <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-    <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-    <Button @click="$router.push('/tunnel')" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary"
-      outlined />
+    <Button
+      @click="generateAppIDModal"
+      label="APP ID"
+      icon="pi pi-key"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateTagModal"
+      label="TAGS"
+      icon="pi pi-tags"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateParamModal"
+      label="Widgets"
+      icon="pi pi-plus"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="$router.push('/tunnel')"
+      label="Tunnel"
+      icon="pi pi-arrow-right-arrow-left"
+      severity="secondary"
+      outlined
+    />
   </span>
 
   <!-- Cards-->
@@ -80,8 +103,7 @@ let appEvents = ref();
 //const { logoutAsUser } = mapActions("loginAsUser");
 
 onMounted(async () => {
-
-  const accessToken = localStorage.getItem('token');
+  const accessToken = localStorage.getItem("token");
   try {
     if (user) {
       userMultiAxes.value = await getUsersMultiAxes();
@@ -116,7 +138,7 @@ async function getUsersMultiAxes() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
+        `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
       requestOptions
     );
     if (!response.ok) {
@@ -143,7 +165,7 @@ async function getUsersVerticalBars() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
+        `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
       requestOptions
     );
     if (!response.ok) {
@@ -170,12 +192,8 @@ async function getUsersHeatMaps() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-<<<<<<< HEAD
         `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`,
       requestOptions
-=======
-      `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`
->>>>>>> main
     );
     if (!response.ok) {
       throw new Error(
