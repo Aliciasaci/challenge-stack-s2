@@ -3,13 +3,10 @@ module.exports = function (Controller, options = {}) {
   const router = Router();
   const checkAuth = require("../middlewares/checkAuth");
 
-
-
-  router.get("/", Controller.getAllEvents);
-  router.get("/count/",Controller.getCount);
+  router.get("/", checkAuth, Controller.getAllEvents);
+  router.get("/count/", checkAuth, Controller.getCount);
   router.get("/:id", Controller.getEventById);
 
-  
   router.post("/", Controller.createEvent);
   router.patch("/:id", Controller.updateEventById);
   router.delete("/:id", Controller.deleteEventById);
