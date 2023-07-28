@@ -127,7 +127,7 @@ export default {
   async getAllAppIds() {
     try {
       const response = await fetch(
-        `http://vps-34811de6.vps.ovh.net:3000/users?_attributes=appId`
+        `https://cosywithme.com/users?_attributes=appId`
       );
       if (!response.ok) {
         throw new Error(
@@ -153,7 +153,7 @@ export default {
     if (event) {
       let hasError = false;
       try {
-        const response = await fetch("http://vps-34811de6.vps.ovh.net:3000/events/", {
+        const response = await fetch("https://cosywithme.com/events/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -177,7 +177,7 @@ export default {
     if (event) {
       let hasError = false;
       try {
-        const response = await fetch("http://vps-34811de6.vps.ovh.net:3000/pageClicks/", {
+        const response = await fetch("https://cosywithme.com/pageClicks/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

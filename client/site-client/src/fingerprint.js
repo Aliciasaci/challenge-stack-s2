@@ -22,7 +22,7 @@ export default {
   async getAllVisitorIds() {
     try {
       const response = await fetch(
-        "http://vps-34811de6.vps.ovh.net:3000/events?_attributes=visitorId"
+        "https://cosywithme.com/events?_attributes=visitorId"
       );
       if (!response.ok) {
         throw new Error("Error in service:", response);
@@ -43,7 +43,7 @@ export default {
     };
     try {
       const response = await fetch(
-        `http://vps-34811de6.vps.ovh.net:3000/events/visitor/${visitorId}`,
+        `https://cosywithme.com/events/visitor/${visitorId}`,
         {
           method: "PATCH",
           headers: {
