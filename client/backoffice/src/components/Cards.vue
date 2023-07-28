@@ -76,7 +76,7 @@ function dateToString(dateObj){
     let date = dateObj.getDate();
     date = ('0' + date).slice(-2);
 
-    let hour = dateObj.getHours();
+    let hour = dateObj.getHours() +2;
     hour = ('0' + hour).slice(-2);
 
     let minute = dateObj.getMinutes();
