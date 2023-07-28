@@ -37,7 +37,6 @@ describe("Tag Router", () => {
       const response = await request(app).get("/tags");
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.any(Array));
-      console.log(response.body);
     });
   });
 

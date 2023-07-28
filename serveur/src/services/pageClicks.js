@@ -94,15 +94,12 @@ module.exports = function () {
             arrayData: 1,
           },
         });
-        console.log(JSON.stringify(pipeline));
 
         return await PageClicks.aggregate(pipeline)
           .then((resultats) => {
-            console.log(typeof resultats);
             return resultats;
           })
           .catch((error) => {
-            console.log("here", error);
             throw new Error("Error");
           });
       } catch (error) {
@@ -131,7 +128,6 @@ module.exports = function () {
         }
 
         if (dateDebut && dateFin) {
-          console.log(new Date(dateFin));
           pipeline.push({
             $match: {
               createdAt: { $gte: new Date(dateDebut), $lte: new Date(dateFin) },
@@ -183,16 +179,12 @@ module.exports = function () {
             count: "$count",
           },
         });
-        console.log(pipeline);
 
         return Event.aggregate(pipeline)
           .then((resultats) => {
-            console.log(typeof resultats);
-
             return resultats;
           })
           .catch((error) => {
-            console.log("here", error);
             throw new Error("Error");
           });
       } catch (error) {

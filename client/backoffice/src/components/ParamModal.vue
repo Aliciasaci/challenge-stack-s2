@@ -290,7 +290,10 @@ async function createWidget() {
         data: {
           labels: [],
           label:
-            "nombre de " + selectedType.value.name + selectedPage.value ?? null,
+            "Nombre de " +
+              selectedType.value.name +
+              import.meta.env.VITE_CLIENT_URL +
+              selectedPage.value ?? null,
           date_interval:
             transformDate(date1.value) + " - " + transformDate(date2.value),
           arrayData: data,
@@ -307,7 +310,7 @@ async function createWidget() {
             transformDate(date1.value) + " - " + transformDate(date2.value),
           count: countTotal,
           tag: selectedTag.value ?? "",
-          page: selectedPage.value ?? "",
+          page: import.meta.env.VITE_CLIENT_URL + selectedPage.value,
         },
       };
     }
@@ -319,7 +322,6 @@ async function createWidget() {
       appId: user.appId,
       data: data[0],
     };
-    console.log(widget);
   }
 
   try {
@@ -356,15 +358,10 @@ async function getPageClicksAccordingToChoice() {
   const periode = selectedPeriod.value ?? "day";
   let page = "";
   if (selectedPage.value) {
-    console.log(
-      selectedPage.value,
-      import.meta.env.VITE_CLIENT_URL + selectedPage.value
-    );
     page =
       encodeURIComponent(
         import.meta.env.VITE_CLIENT_URL + selectedPage.value
       ) ?? "";
-    console.log(page);
   }
 
   try {
@@ -407,15 +404,10 @@ async function getEventsAccordingToChoice() {
     tag = selectedTag.value.commentaire ?? "";
   }
   if (selectedPage.value) {
-    console.log(
-      selectedPage.value,
-      import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
-    );
     page =
       encodeURIComponent(
         import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
       ) ?? "";
-    console.log(page);
   }
 
   try {

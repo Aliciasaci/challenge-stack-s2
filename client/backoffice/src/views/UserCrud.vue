@@ -32,13 +32,13 @@ const toast = useToast();
 
 onBeforeMount(async () => {
   initFilters();
-  const accessToken = localStorage.getItem('token');
+  const accessToken = localStorage.getItem("token");
   const response = await fetch(import.meta.env.VITE_SERVER_URL + "/users", {
     headers: {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
   });
   const data = await response.json();
@@ -47,14 +47,14 @@ onBeforeMount(async () => {
 
 async function deleteUser(userId) {
   try {
-    const accessToken = localStorage.getItem('token');
+    const accessToken = localStorage.getItem("token");
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL + "/users/" + userId,
       {
         method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -74,7 +74,7 @@ async function deleteUser(userId) {
 }
 
 async function editUser(editUser) {
-  const accessToken = localStorage.getItem('token');
+  const accessToken = localStorage.getItem("token");
   editUser.role = selectedRole.value.value; // update role
   editUser.compteIsVerified = selectedStatus.value.value; // update status
   const response = await fetch(
@@ -82,13 +82,12 @@ async function editUser(editUser) {
     {
       method: "PUT",
       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(editUser),
     }
   );
-  console.log(JSON.stringify(editUser), response);
   if (response.ok) {
     users.splice(
       users.findIndex((_u) => _u.id === editUser.id),
@@ -137,7 +136,6 @@ function confirmEditUser(editUser) {
 const confirmDeleteUser = (deleteUser) => {
   user.value = deleteUser;
   deleteUserDialog.value = true;
-  console.log(user.value.id);
 };
 
 // many users

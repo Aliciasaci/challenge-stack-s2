@@ -29,7 +29,6 @@ describe("User Router", () => {
       const response = await request(app).get("/users");
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.any(Array));
-      console.log(response.body);
     });
   });
 

@@ -65,7 +65,6 @@ module.exports = function (connection) {
   );
 
   async function hashPassword(user) {
-    console.log("hashPassword");
     user.password = await bcrypt.hash(user.password, await bcrypt.genSalt());
   }
 

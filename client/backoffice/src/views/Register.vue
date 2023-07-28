@@ -240,7 +240,6 @@ async function createAccount() {
             throw data;
           } else {
             const data = await response.json();
-            console.log(data);
             response_message.value = "Compte crée avec success.";
           }
         } catch (error) {

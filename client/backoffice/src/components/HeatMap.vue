@@ -18,7 +18,6 @@ const canvasId = computed(() => {
 
 onMounted(() => {
   const canvas = document.getElementById(canvasId.value);
-  console.log(props.heatmap._id);
   const ctx = canvas.getContext("2d");
   const img = new window.Image();
   img.crossOrigin = "anonymous";

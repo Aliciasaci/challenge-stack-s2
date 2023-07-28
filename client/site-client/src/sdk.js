@@ -58,7 +58,6 @@ export default {
               visitor_id: visitorId,
               timezone: timezone,
             };
-            console.log(action, binding.arg, binding.modifiers);
             this.createEvent(action, options.APPID, data);
           });
         }
@@ -78,7 +77,6 @@ export default {
               visitor_id: visitorId,
               timezone: timezone,
             };
-            console.log(action, binding.arg, data);
             this.createEvent(action, options.APPID, data);
           });
         }
@@ -150,7 +148,6 @@ export default {
       data: otherData,
     };
 
-    console.log(event);
     if (event) {
       let hasError = false;
       try {
@@ -161,7 +158,6 @@ export default {
           },
           body: JSON.stringify(event),
         });
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
