@@ -272,7 +272,7 @@ async function createWidget() {
         `Server error (${response.status} ${response.statusText})`
       );
     }
-    alert("Widget créé avec success");
+    location.reload();
     const responseData = await response.json();
     return responseData;
   } catch (error) {

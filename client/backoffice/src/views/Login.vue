@@ -1,6 +1,6 @@
 <template>
   <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
-    <Toast />
+  <Toast />
     <div class="flex flex-column align-items-center justify-content-center">
       <img :src="logoUrl" alt="FlutterEase logo" class="mb-5 w-6rem flex-shrink-0" />
       <div style="
@@ -35,9 +35,16 @@
                 <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Mot
                   de passe oublié ?</a>
               </div>
-              <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">
-                  <router-link to="/register">Pas de compte ? Inscrivez vous.</router-link>
+              <div
+                class="flex align-items-center justify-content-between mb-5 gap-5"
+              >
+                <a
+                  class="font-medium no-underline ml-2 text-right cursor-pointer"
+                  style="color: var(--primary-color)"
+                >
+                  <router-link to="/register"
+                    >Pas de compte ? Inscrivez vous.</router-link
+                  >
                 </a>
               </div>
               <Button type="submit" label="Se connecter" class="w-full p-3 text-xl" />
@@ -69,10 +76,11 @@ async function login() {
 
   let hasError = false;
   try {
-    const response = await fetch(import.meta.env.VITE_SERVER_URL + "/login/", {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL+"/login/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({ email: email.value, password: password.value }),
     });
@@ -92,19 +100,16 @@ async function login() {
       //stocker le token et le user dans le store.
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      if (user.compteIsVerified === false) {
+      if(user.compteIsVerified === false) {
         toast.add({ severity: 'success', summary: 'Attention', detail: 'Attendez que votre compte soit validé pour pouvoir vous connecter.', life: 4000 });
       } else {
-        if (user.role === "USER_ADMIN") {
-          router.push("/admin-panel");
-          if (user.role === "USER_ADMIN") {
-            router.push("/users");
-          }
+        if(user.role === "USER_ADMIN") {
+          router.push("/users");
         } else {
           router.push("/client-panel");
         }
-        return Promise.resolve(data);
       }
+      return Promise.resolve(data);
     }
   } catch (error) {
     console.error(error);
@@ -123,7 +128,7 @@ async function login() {
   margin-right: 1rem;
 }
 
-.surface-ground {
+.surface-ground{
   background-color: none !important;
 }
 </style>

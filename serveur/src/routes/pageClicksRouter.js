@@ -1,8 +1,9 @@
 module.exports = function (Controller, options = {}) {
   const { Router } = require("express");
   const router = Router();
+  const checkAuth = require("../middlewares/checkAuth");
 
-  router.get("/", Controller.getAllPageClicks);
+  router.get("/", checkAuth, Controller.getAllPageClicks);
   router.post("/", Controller.createPageClicks);
   router.get("/count/", Controller.getPageClicksCount);
   router.get("/:id", Controller.getPageClicksById);
