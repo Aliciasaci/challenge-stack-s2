@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div v-tracker:5S20FH.visited>
+  <div v-tracker:RE3GKK.visited>
     <section class="hero">
       <div class="hero-body">
         <p class="title">Mention légales</p>

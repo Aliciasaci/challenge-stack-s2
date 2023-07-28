@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <section class="hero" v-tracker:TMMLZK.visited>
+  <section class="hero" v-tracker:N28N2I.visited>
     <div class="hero-body">
       <p class="title">Contacts</p>
     </div>

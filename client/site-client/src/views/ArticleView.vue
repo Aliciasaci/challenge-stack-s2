@@ -1,7 +1,7 @@
 <template lang="">
   <div>
     <Header />
-    <div class="flex justify-center mt-8" v-tracker:D71RLG.visited>
+    <div class="flex justify-center mt-8" v-tracker:I9Y5ZV.visited>
       <Fieldset class="w-[80%]" :toggleable="true" :legend="article.title">
         <div class="p-grid">
           <div class="p-col-12 p-md-6">
