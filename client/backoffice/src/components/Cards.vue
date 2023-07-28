@@ -112,7 +112,8 @@ async function getActiveSessions() {
         }
         const data = await response.json();
 
-        if (data.length > 0) {
+        if (data.length >= 0) {
+            console.log(data.length);
             return Array.from(new Set(data.map(function(element){ return element.data.visitor_id }))).length;
         }
         console.log(data.length);
