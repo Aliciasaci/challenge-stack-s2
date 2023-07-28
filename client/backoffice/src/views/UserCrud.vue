@@ -34,7 +34,7 @@ onBeforeMount(async () => {
   initFilters();
   const response = await fetch(import.meta.env.VITE_SERVER_URL + "/users", {
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
+      // Authorization: "Bearer " + localStorage.getItem("token"),
     },
   });
   const data = await response.json();
@@ -48,7 +48,7 @@ async function deleteUser(userId) {
       {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          // Authorization: "Bearer " + localStorage.getItem("token"),
         },
       }
     );
@@ -75,7 +75,7 @@ async function editUser(editUser) {
     {
       method: "PATCH",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        // Authorization: "Bearer " + localStorage.getItem("token"),
         "Content-Type": "application/json",
       },
       body: JSON.stringify(editUser),
