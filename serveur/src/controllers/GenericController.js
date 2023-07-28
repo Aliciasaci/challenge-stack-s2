@@ -51,17 +51,36 @@ module.exports = function (Service) {
             }
         },
 
+        // async update(req, res, next) {
+        //     try {
+        //         const item = await Service.updateOne(
+        //             parseInt(req.params.id, 10),
+        //             req.body
+        //         );
+        //         if (!item) {
+        //             res.sendStatus(404);
+        //         } else res.json(item);
+        //     } catch (error) {
+        //         next(error);
+        //     }
+        // },
+
         async update(req, res, next) {
             try {
-                const item = await Service.updateOne(
-                    parseInt(req.params.id, 10),
-                    req.body
-                );
+                const itemId = parseInt(req.params.id, 10);
+                const updatedItem = req.body;
+        
+                // Assuming Service.updateOne returns the updated item or null if not found
+                const item = await Service.updateOne(itemId, updatedItem);
+        
                 if (!item) {
-                    res.sendStatus(404);
-                } else res.json(item);
+                    return res.status(404).json({ error: 'Item not found' });
+                }
+        
+                return res.json(item);
             } catch (error) {
-                next(error);
+                // Handle specific errors if needed, e.g., validation errors, database errors, etc.
+                return next(error);
             }
         },
 
