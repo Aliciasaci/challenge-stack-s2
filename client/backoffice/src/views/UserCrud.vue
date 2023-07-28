@@ -32,9 +32,13 @@ const toast = useToast();
 
 onBeforeMount(async () => {
   initFilters();
+  const accessToken = localStorage.getItem('token');
   const response = await fetch(import.meta.env.VITE_SERVER_URL + "/users", {
     headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
     },
   });
   const data = await response.json();
@@ -43,12 +47,14 @@ onBeforeMount(async () => {
 
 async function deleteUser(userId) {
   try {
+    const accessToken = localStorage.getItem('token');
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL + "/users/" + userId,
       {
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
       }
     );
@@ -68,6 +74,7 @@ async function deleteUser(userId) {
 }
 
 async function editUser(editUser) {
+  const accessToken = localStorage.getItem('token');
   editUser.role = selectedRole.value.value; // update role
   editUser.compteIsVerified = selectedStatus.value.value; // update status
   const response = await fetch(
@@ -75,8 +82,8 @@ async function editUser(editUser) {
     {
       method: "PATCH",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-        "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
       },
       body: JSON.stringify(editUser),
     }
