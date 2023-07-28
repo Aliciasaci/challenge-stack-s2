@@ -89,11 +89,11 @@ function dateToString(dateObj){
 }
 
 async function getActiveSessions() {
-    var MS_PER_MINUTE = 60000;
+    let ms_per_minute = 60000;
 
     const dateFinObj = new Date();
     const dateFin = dateToString(dateFinObj)
-    const dateDebutObj = new Date(dateFinObj - 15 * MS_PER_MINUTE);
+    const dateDebutObj = new Date(dateFinObj - 15 * ms_per_minute);
     const dateDebut = dateToString(dateDebutObj)
 
     try {
