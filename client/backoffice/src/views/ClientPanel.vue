@@ -88,8 +88,8 @@ import { mapGetters, mapActions } from "../store/map-state";
 const isAppIDModalVisible = ref(false);
 const isTagsModalVisible = ref(false);
 const isParamModalVisible = ref(false);
-const user = JSON.parse(localStorage.getItem('user'));
-import { useStore } from 'vuex';
+const user = JSON.parse(localStorage.getItem("user"));
+import { useStore } from "vuex";
 // import { v } from 'dist/assets/chart-893b7c7b';
 const store = useStore();
 let userMultiAxes = ref([]);
@@ -124,24 +124,23 @@ const generateParamModal = () => {
 };
 
 async function getUsersMultiAxes() {
-    try {
-        const accessToken = localStorage.getItem('token');
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        };
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
-            requestOptions);
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-        const responseData = await response.json();
-        return responseData;
-    } catch (error) {
-        console.error(error);
-        throw error;
+  try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
     }
     const responseData = await response.json();
     return responseData;
@@ -152,24 +151,23 @@ async function getUsersMultiAxes() {
 }
 
 async function getUsersVerticalBars() {
-    try {
-        const accessToken = localStorage.getItem('token');
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        };
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
-        requestOptions);
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-        const responseData = await response.json();
-        return responseData;
-    } catch (error) {
-        console.error(error);
-        throw error;
+  try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
     }
     const responseData = await response.json();
     return responseData;
