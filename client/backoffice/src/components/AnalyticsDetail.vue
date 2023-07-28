@@ -11,7 +11,7 @@ const currentPage = ref(0);
 onMounted(async () => {
   try {
     appEvents.value = await getEvents();
-    console.log("eventsss" + appEvents);
+    console.log("eventsss" + appEvents.value);
     nbPages.value = await getNbPages();
     //check for event changes
     checkEventChange();
