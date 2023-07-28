@@ -1,15 +1,37 @@
 <template v-if="user">
   <Header />
   <span class="p-buttonset">
-    <Button @click="generateAppIDModal" label="APP ID" icon="pi pi-key" severity="secondary" outlined />
-    <Button @click="generateTagModal" label="TAGS" icon="pi pi-tags" severity="secondary" outlined />
-    <Button @click="generateParamModal" label="Widgets" icon="pi pi-plus" severity="secondary" outlined />
-    <Button @click="$router.push('/tunnel')" label="Tunnel" icon="pi pi-arrow-right-arrow-left" severity="secondary"
-      outlined />
+    <Button
+      @click="generateAppIDModal"
+      label="APP ID"
+      icon="pi pi-key"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateTagModal"
+      label="TAGS"
+      icon="pi pi-tags"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="generateParamModal"
+      label="Widgets"
+      icon="pi pi-plus"
+      severity="secondary"
+      outlined
+    />
+    <Button
+      @click="$router.push('/tunnel')"
+      label="Tunnel"
+      icon="pi pi-arrow-right-arrow-left"
+      severity="secondary"
+      outlined
+    />
   </span>
 
   <!-- Cards-->
-  <h1>KPIS</h1>
   <Cards />
   <!--Cards -->
 
@@ -20,32 +42,36 @@
   <!--Les modals -->
 
   <div class="analytics" v-if="userVerticalBars || userMultiAxes">
-    <h1>Graphes</h1>
-    <div class="graph" v-if="userVerticalBars">
-      <h3 style="flex-basis: 100%">Barre Vericales</h3>
-      <div v-for="graph in userVerticalBars" :key="graph.id" class="graph-div">
+    <div class="graph">
+      <div
+        v-if="userVerticalBars"
+        v-for="graph in userVerticalBars"
+        :key="graph.id"
+        class="graph-div mx-1.5"
+      >
         <Graph :graph="graph"></Graph>
       </div>
-    </div>
-
-    <div class="graph" v-if="userMultiAxes">
-      <h3 style="flex-basis: 100%">Mutli axes</h3>
-      <div v-for="graph in userMultiAxes" :key="graph.id" class="graph-div">
+      <div
+        v-if="userMultiAxes"
+        v-for="graph in userMultiAxes"
+        :key="graph.id"
+        class="graph-div mx-1.5"
+      >
         <Graph :graph="graph"></Graph>
       </div>
-    </div>
-
-    <div class="graph" v-if="userHeatMaps">
-      <h1 style="flex-basis: 100%">Heat Maps</h1>
-      <div v-for="heatmap in userHeatMaps" :key="heatmap.id" class="graph-div">
+      <div
+        v-if="userHeatMaps"
+        v-for="heatmap in userHeatMaps"
+        :key="heatmap.id"
+        class="graph-div mx-1.5"
+      >
         <HeatMap :heatmap="heatmap" />
       </div>
     </div>
+  </div>
 
-    <div class="detail">
-      <h1>Dernière activité</h1>
-      <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
-    </div>
+  <div class="detail">
+    <AnalyticsDetail :events="appEvents"></AnalyticsDetail>
   </div>
 </template>
 
@@ -77,8 +103,7 @@ let appEvents = ref();
 //const { logoutAsUser } = mapActions("loginAsUser");
 
 onMounted(async () => {
-
-  const accessToken = localStorage.getItem('token');
+  const accessToken = localStorage.getItem("token");
   try {
     if (user) {
       userMultiAxes.value = await getUsersMultiAxes();
@@ -113,7 +138,7 @@ async function getUsersMultiAxes() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
+        `/widgets/?type=multiaxis&appId=${user.appId}&orderDesc=true`,
       requestOptions
     );
     if (!response.ok) {
@@ -140,7 +165,7 @@ async function getUsersVerticalBars() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
+        `/widgets/?type=verticalbar&appId=${user.appId}&orderDesc=true`,
       requestOptions
     );
     if (!response.ok) {
@@ -158,9 +183,17 @@ async function getUsersVerticalBars() {
 
 async function getUsersHeatMaps() {
   try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`
+        `/widgets/?type=heatmap&appId=${user.appId}&orderDesc=true`,
+      requestOptions
     );
     if (!response.ok) {
       throw new Error(
@@ -191,6 +224,7 @@ async function getUsersHeatMaps() {
 
 .analytics {
   width: 80%;
+  display: grid;
   margin: auto;
 }
 
@@ -203,8 +237,12 @@ async function getUsersHeatMaps() {
 }
 
 .graph-div {
-  flex-basis: 49%;
   margin-bottom: 2rem;
+}
+
+.detail {
+  width: 80%;
+  margin: auto;
 }
 
 .card {

@@ -1,16 +1,17 @@
 <template lang="">
   <div class="container">
+    <h5 v-text="page"></h5>
     <canvas ref="canvas" id="canvas" style="width: 300px"></canvas>
   </div>
 </template>
 <script setup>
 import { ref, onMounted, watch, defineProps } from "vue";
-import Screenshot from "../assets/Screenshot_1.png";
+import Screenshot from "../assets/Screenshot_2.png";
 import Image from "primevue/image";
 const props = defineProps(["heatmap"]);
 
 const canvasRef = ref(null);
-const result = ref(null);
+const page = ref(`Heatmap ` + props.heatmap.page);
 
 onMounted(() => {
   const canvas = document.getElementById("canvas");
@@ -70,6 +71,9 @@ function drawHeatmap(context, data, image) {
   transition: transform 0.5s;
   background-color: #fff;
   padding: 1.5rem;
+  -webkit-box-shadow: 7px 6px 23px 1px rgba(0, 0, 0, 0.22);
+  box-shadow: 7px 6px 23px 1px rgba(0, 0, 0, 0.041);
+  border-radius: 18px;
 }
 .container:hover {
   transform: scale(2);

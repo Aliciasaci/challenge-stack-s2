@@ -147,7 +147,10 @@ function checkEventChange() {
 }
 </script>
 <template>
-  <div class="card mb-5">
+  <div class="card mb-5 graphcard">
+    <div class="card-header">
+      <div class="card-header-title">Détail des évènements</div>
+    </div>
     <table class="table full is-fullwidth is-hoverable is-bordered">
       <thead>
         <tr>
@@ -185,5 +188,10 @@ function checkEventChange() {
 <style lang="scss">
 .table th:not([align]) {
   text-align: center;
+}
+
+.graphcard {
+  -webkit-box-shadow: 7px 6px 23px 1px rgba(0, 0, 0, 0.22);
+  box-shadow: 7px 6px 23px 1px rgba(0, 0, 0, 0.041);
 }
 </style>

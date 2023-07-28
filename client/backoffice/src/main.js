@@ -1,40 +1,40 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import axios from 'axios';
-import PrimeVue from 'primevue/config';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Toast from 'primevue/toast';
-import Toolbar from 'primevue/toolbar';
-import Dialog from 'primevue/dialog';
-import InputNumber from 'primevue/inputnumber';
-import Textarea from 'primevue/textarea';
-import Dropdown from 'primevue/dropdown';
-import RadioButton from 'primevue/radiobutton';
-import Menubar from 'primevue/menubar';
-import Card from 'primevue/card';
-import Listbox from 'primevue/listbox';
-import SplitButton from 'primevue/splitbutton';
-import Chart from 'primevue/chart';
-import InputSwitch from 'primevue/inputswitch';
-import Avatar from 'primevue/avatar';
-import AvatarGroup from 'primevue/avatargroup';
-import TreeSelect from 'primevue/treeselect';
-import Calendar from 'primevue/calendar';
-import Paginator from 'primevue/paginator';
-import Badge from 'primevue/badge';
-import Tag from 'primevue/tag';
-import ToastService from 'primevue/toastservice';
-import Password from 'primevue/password';
-import FileUpload from 'primevue/fileupload';
-import PickList from 'primevue/picklist';
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import axios from "axios";
+import PrimeVue from "primevue/config";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Toast from "primevue/toast";
+import Toolbar from "primevue/toolbar";
+import Dialog from "primevue/dialog";
+import InputNumber from "primevue/inputnumber";
+import Textarea from "primevue/textarea";
+import Dropdown from "primevue/dropdown";
+import RadioButton from "primevue/radiobutton";
+import Menubar from "primevue/menubar";
+import Card from "primevue/card";
+import Listbox from "primevue/listbox";
+import SplitButton from "primevue/splitbutton";
+import Chart from "primevue/chart";
+import InputSwitch from "primevue/inputswitch";
+import Avatar from "primevue/avatar";
+import AvatarGroup from "primevue/avatargroup";
+import TreeSelect from "primevue/treeselect";
+import Calendar from "primevue/calendar";
+import Paginator from "primevue/paginator";
+import Badge from "primevue/badge";
+import Tag from "primevue/tag";
+import ToastService from "primevue/toastservice";
+import Password from "primevue/password";
+import FileUpload from "primevue/fileupload";
+import PickList from "primevue/picklist";
 
 //theme
-import "primevue/resources/themes/lara-light-indigo/theme.css";
+import "./assets/layout/styles/theme.css";
 //core
 import "primevue/resources/primevue.min.css";
 //icons
@@ -77,7 +77,4 @@ app.component("Password", Password);
 app.component("Paginator", Paginator);
 app.component("FileUpload", FileUpload);
 
-
-
-app.mount('#app');
-
+app.mount("#app");
