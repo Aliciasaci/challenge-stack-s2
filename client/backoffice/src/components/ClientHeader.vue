@@ -1,6 +1,10 @@
 
 <template v-if="user">
     <div class="card relative z-2 card-header">
+        <div v-if="isLoggedInAsUser">
+            <p>Vous êtes connecté en tant que {{ currentUser.firstname }} ({{ currentUser.role }})</p>
+            <Button @click="logoutAsUser" severity="secondary">Arrêtez cette session</Button> <!-- fix using only one button -->
+        </div>
         <Menubar :model="items">
             <template #start>
                 <div id="hello-message">Bonjour {{ user.firstname }} ! </div>
@@ -11,7 +15,16 @@
 
 <script setup>
 import { ref } from "vue";
-const user = JSON.parse(localStorage.getItem('user'));
+import { mapGetters, mapActions } from '../store/map-state';
+
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const { logoutAsUser } = mapActions('loginAsUser');
+const user = ref({});
+if (isLoggedInAsUser.value) {
+    user.value = currentUser.value;
+} else {
+    user.value = JSON.parse(localStorage.getItem('user'));
+}
 
 const items = ref([
     {

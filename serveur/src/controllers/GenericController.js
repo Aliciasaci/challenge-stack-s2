@@ -74,7 +74,6 @@ module.exports = function (Service) {
             }
         },
 
-
         async generateAppId(req, res) {
             const userId = req.params.id;
             const appId = uuidv4();
@@ -84,7 +83,6 @@ module.exports = function (Service) {
                 Service.updateOne(userId, newData)
             } else res.sendStatus(204);
         },
-
 
         async getUserTags(req, res) {
             const userId = req.params.id;
@@ -96,7 +94,5 @@ module.exports = function (Service) {
                 else res.sendStatus(204);
             }
         },
-
-
     };
 };

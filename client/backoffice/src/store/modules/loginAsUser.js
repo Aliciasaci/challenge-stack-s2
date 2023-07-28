@@ -25,7 +25,8 @@ const actions = {
     },
     logoutAsUser({ commit }) {
         commit('clearCurrentUser');
-        router.push({ name: 'adminpanel' });
+        localStorage.removeItem('vuex');
+        router.push({ name: 'usercrud' });
     }
 }
 

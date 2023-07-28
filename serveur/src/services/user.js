@@ -1,8 +1,8 @@
-const tag = require("../db/models/tag");
 const ValidationError = require("../errors/ValidationError");
 const Sequelize = require("sequelize");
 const User = require("../db").User;
 const Tag = require("../db").Tag;
+const Tunnel = require("../db").Tunnel;
 
 module.exports = function () {
   return {
@@ -97,6 +97,20 @@ module.exports = function () {
         return tags;
       } catch (error) {
         console.error("Error while retrieving user tags:", error);
+        throw error;
+      }
+    },
+
+    async getUserTunnels(userId) {
+      try {
+        const tunnels = await Tunnel.findAll({
+          where: {
+            id_user: userId,
+          },
+        });
+        return tunnels;
+      } catch (error) {
+        console.error("Error while retrieving user tunnels:", error);
         throw error;
       }
     },

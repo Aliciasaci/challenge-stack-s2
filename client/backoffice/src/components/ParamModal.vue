@@ -58,14 +58,15 @@
       </div>
       <div class="card flex justify-content-center choice per_page dont-show">
         <h5>La page (tracker par nom de page)</h5>
-        <Dropdown
+        <InputText
+          type="text"
           v-model="selectedPage"
-          :options="Pages"
-          optionLabel="name"
-          placeholder="Page"
-          class="w-full md:w-14rem"
-          required
-        />
+          placeholder="Nom de la page"
+        /><br />
+        <small id="username-help"
+          >Veuillez saisir exactement le nom de la page sans le domaine. Si la
+          page se trouve à la racine, mettre quand-même "/".</small
+        >
       </div>
       <div
         id="tags"
@@ -147,7 +148,6 @@
       </div>
 
       <Button label="Générer" @click="createWidget()" />
-      <Button label="Fermer" @click="closeModal()" />
     </Dialog>
   </div>
 </template>
@@ -177,11 +177,11 @@ const dataTypes = ref([
   { name: "Heatmap", code: "heatmap" },
 ]);
 
-const Pages = ref([
-  { name: "Accueil", raw: import.meta.env.VITE_LOCAL_URL + "/" },
-  { name: "Contact", raw: import.meta.env.VITE_LOCAL_URL + "/contact" },
-  { name: "Mention légale" },
-]);
+// const Pages = ref([
+//     { name: 'Accueil', raw: import.meta.env.VITE_SERVER_URL + "/" },
+//     { name: "Contact", raw: import.meta.env.VITE_SERVER_URL + '/contact' },
+//     { name: 'Mention légale', },
+// ]);
 
 const typeGraphes = ref([
   { name: "KPI", code: "kpi" },
@@ -242,8 +242,17 @@ async function setSelectedTauxType() {
 
 async function getUsersTags(userId) {
   try {
+    const accessToken = localStorage.getItem("token");
+
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     const response = await fetch(
-      import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`
+      import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`,
+      requestOptions
     );
     if (!response.ok) {
       throw new Error(
@@ -312,12 +321,14 @@ async function createWidget() {
   }
 
   try {
+    const accessToken = localStorage.getItem("token");
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL + "/widgets/",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(widget),
       }
@@ -327,7 +338,7 @@ async function createWidget() {
         `Server error (${response.status} ${response.statusText})`
       );
     }
-    alert("Widget crée avec success");
+    alert("Widget créé avec success");
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -342,13 +353,29 @@ async function getPageClicksAccordingToChoice() {
   const periode = selectedPeriod.value ?? "day";
   let page = "";
   if (selectedPage.value) {
-    page = encodeURIComponent(selectedPage.value.raw) ?? "";
+    console.log(
+      selectedPage.value,
+      import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+    );
+    page =
+      encodeURIComponent(
+        import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+      ) ?? "";
+    console.log(page);
   }
 
   try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-        `/pageClicks/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&periode=${periode}&page=${page}`
+        `/pageClicks/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&periode=${periode}&page=${page}`,
+      requestOptions
     );
     if (!response.ok) {
       throw new Error(
@@ -377,14 +404,29 @@ async function getEventsAccordingToChoice() {
     tag = selectedTag.value.commentaire ?? "";
   }
   if (selectedPage.value) {
-    page = encodeURIComponent(selectedPage.value.raw) ?? "";
+    console.log(
+      selectedPage.value,
+      import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+    );
+    page =
+      encodeURIComponent(
+        import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+      ) ?? "";
     console.log(page);
   }
 
   try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`
+        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`,
+      requestOptions
     );
     if (!response.ok) {
       throw new Error(

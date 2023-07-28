@@ -1,7 +1,17 @@
 <script setup>
 import Header from '@/components/ClientHeader.vue';
-import Password from 'primevue/password';
-const user = JSON.parse(localStorage.getItem('user'));
+import { mapGetters } from '../store/map-state';
+// import { on } from 'formidable/src/PersistentFile';
+import { onMounted, onBeforeMount, ref } from 'vue';
+
+const { isLoggedInAsUser, currentUser } = mapGetters('loginAsUser');
+const user = ref({});
+if (isLoggedInAsUser.value) {
+    user.value = currentUser.value;
+} else {
+    user.value = JSON.parse(localStorage.getItem('user'));
+}
+
 </script>
 
 <template v-if="user">
