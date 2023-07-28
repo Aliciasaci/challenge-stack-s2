@@ -80,7 +80,7 @@ async function editUser(editUser) {
   const response = await fetch(
     import.meta.env.VITE_SERVER_URL + "/users/" + editUser.id,
     {
-      method: "PATCH",
+      method: "PUT",
       headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
