@@ -100,7 +100,7 @@ const accessToken = localStorage.getItem('token');
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${accessToken}`
                     },
-                    body: JSON.stringify({ commentaire: generatedTag.value, id_user: user.id, description: description.value })
+                    body: JSON.stringify({ commentaire: generatedTag.value, id_user: user.value.id, description: description.value })
                 }
             );
             if (!response.ok) {
@@ -138,7 +138,7 @@ async function deleteTag(tagId) {
 
         if (response.status == 204) {
             alert("Tag supprimé avec success");
-            getUsersTags(user.id);
+            getUsersTags(user.value.id);
         }
 
     } catch (error) {

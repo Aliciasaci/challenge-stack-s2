@@ -33,6 +33,7 @@ module.exports = function () {
         return tag;
       } catch (error) {
         if (error instanceof Sequelize.ValidationError) {
+          console.log(error);
           throw ValidationError.createFromSequelizeValidationError(error);
         }
         throw error;

@@ -18,8 +18,8 @@ module.exports = function (eventService, options = {}) {
         type: req.query.type ?? null,
         orderDesc: req.query.orderDesc ?? null,
         appId: req.query.appId ?? null,
-        page_size: req.query.page_size ?? 10,  
-        page_number: req.query.page_number ?? 1,
+        page_size: req.query.page_size ?? null,  
+        page_number: req.query.page_number ?? null,
       }
 
       try {

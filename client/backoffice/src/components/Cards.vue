@@ -1,5 +1,16 @@
 <template>
   <div class="stat-cards">
+    <div class="box">
+      <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
+      <span class="card-title"
+        >Sessions actives <Badge severity="success"></Badge></span
+      ><br />
+      <span class="icon-style"
+        ><i class="pi pi-database text-blue-500"></i
+      ></span>
+      <br />
+      <span class="text-900 font-medium text-xl">{{ activeSessions }}</span>
+    </div>
     <div class="box" v-for="kpi in kpis" :key="kpi._id">
       <!-- <Button icon="pi pi-times" severity="danger" text rounded aria-label="Cancel" class="cancel" /> -->
       <span class="card-title">{{ kpi.data.label }}</span
@@ -40,10 +51,14 @@ import { ref, onMounted } from "vue";
 
 const isModalVisible = ref(false);
 const kpis = ref([]);
+const activeSessions = ref({});
 const user = JSON.parse(localStorage.getItem("user"));
 
 onMounted(async () => {
   kpis.value = await getUsersKpis();
+  activeSessions.value = await getActiveSessions();
+  console.log(activeSessions.value);
+  checkEventChange();
 });
 
 async function getUsersKpis() {
@@ -72,6 +87,106 @@ async function getUsersKpis() {
     console.error(error);
     throw error;
   }
+}
+
+function dateToString(dateObj) {
+  let year = dateObj.getFullYear();
+
+  let month = dateObj.getMonth();
+  month = ("0" + (month + 1)).slice(-2);
+
+  let date = dateObj.getDate();
+  date = ("0" + date).slice(-2);
+
+  let hour = dateObj.getHours() - 2;
+  hour = ("0" + hour).slice(-2);
+
+  let minute = dateObj.getMinutes();
+  minute = ("0" + minute).slice(-2);
+
+  let second = dateObj.getSeconds();
+  second = ("0" + second).slice(-2);
+
+  return `${year}-${month}-${date}%20${hour}:${minute}:${second}`;
+}
+
+async function getActiveSessions() {
+  let ms_per_minute = 60000;
+
+  const dateFinObj = new Date();
+  const dateFin = dateToString(dateFinObj);
+  const dateDebutObj = new Date(dateFinObj - 15 * ms_per_minute);
+  const dateDebut = dateToString(dateDebutObj);
+
+  try {
+    const accessToken = localStorage.getItem("token");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    console.log(
+      import.meta.env.VITE_SERVER_URL +
+        `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`
+    );
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
+    }
+    const data = await response.json();
+
+    console.log(data.length);
+    console.log(
+      Array.from(
+        new Set(
+          data.map(function (element) {
+            return element.data.visitor_id;
+          })
+        )
+      ).length
+    );
+
+    if (data.length >= 0) {
+      return Array.from(
+        new Set(
+          data.map(function (element) {
+            return element.data.visitor_id;
+          })
+        )
+      ).length;
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+function checkEventChange() {
+  const eventSource = new EventSource(
+    import.meta.env.VITE_SERVER_URL + "/watch/events"
+  );
+
+  eventSource.onopen = function () {
+    console.log("Connexion établie.");
+  };
+
+  eventSource.onerror = function (event) {
+    console.error("Erreur de connexion :", event);
+    eventSource.close();
+  };
+
+  eventSource.onmessage = async function (event) {
+    if (event) {
+      activeSessions.value = await getActiveSessions();
+    }
+  };
 }
 </script>
 

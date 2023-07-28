@@ -17,15 +17,16 @@ module.exports = function () {
       }
     },
 
-    async getAllEvents(options) {
-      console.log(options);
-      const dateDebut = options.dateDebut;
-      const dateFin = options.dateFin;
-      const type = options.type;
-      const orderDesc = options.orderDesc;
-      const appId = options.appId;
-      const page_size = parseInt(options.page_size);
-      const page_number = parseInt(options.page_number);
+        async getAllEvents(options) {
+            console.log("options",options);
+            const dateDebut = options.dateDebut;
+            const dateFin = options.dateFin;
+            const type = options.type;
+            const orderDesc = options.orderDesc;
+            const appId = options.appId;
+
+            const page_size = ((options.page_size) ? parseInt(options.page_size) : null); 
+            const page_number = ((options.page_number) ? parseInt(options.page_number) : null); 
 
       try {
         let pipeline = [];
@@ -52,14 +53,17 @@ module.exports = function () {
           pipeline.push({ $match: { createdAt: { $lte: new Date(dateFin) } } });
         }
 
-        if (orderDesc) {
-          pipeline.push({ $sort: { createdAt: -1 } });
-        } else {
-          pipeline.push({ $sort: { createdAt: 1 } });
-        }
+                if (orderDesc) {
+                    pipeline.push({ $sort: { createdAt: -1 } });
+                } else {
+                    pipeline.push({ $sort: { createdAt: 1 } });
+                }
+                if(page_size){
+                    console.log("page")
+                    pipeline.push({ $skip: (page_number - 1) * page_size });
+                    pipeline.push({ $limit: page_size });
+                }
 
-        pipeline.push({ $skip: (page_number - 1) * page_size });
-        pipeline.push({ $limit: page_size });
 
         return Event.aggregate(pipeline)
           .then((resultats) => {
