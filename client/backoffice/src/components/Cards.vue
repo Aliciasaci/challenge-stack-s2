@@ -57,7 +57,6 @@ const user = JSON.parse(localStorage.getItem("user"));
 onMounted(async () => {
   kpis.value = await getUsersKpis();
   activeSessions.value = await getActiveSessions();
-  console.log(activeSessions.value);
   checkEventChange();
 });
 
@@ -126,10 +125,6 @@ async function getActiveSessions() {
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    console.log(
-      import.meta.env.VITE_SERVER_URL +
-        `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`
-    );
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
         `/events/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&orderDesc=true`,
@@ -141,17 +136,6 @@ async function getActiveSessions() {
       );
     }
     const data = await response.json();
-
-    console.log(data.length);
-    console.log(
-      Array.from(
-        new Set(
-          data.map(function (element) {
-            return element.data.visitor_id;
-          })
-        )
-      ).length
-    );
 
     if (data.length >= 0) {
       return Array.from(

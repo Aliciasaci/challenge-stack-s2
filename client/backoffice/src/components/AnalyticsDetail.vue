@@ -11,7 +11,6 @@ const currentPage = ref(0);
 onMounted(async () => {
   try {
     appEvents.value = await getEvents();
-    console.log("eventsss" + appEvents.value);
     nbPages.value = await getNbPages();
     //check for event changes
     checkEventChange();
@@ -50,27 +49,31 @@ function getPageName(url) {
 }
 
 async function getEvents() {
-    const accessToken = localStorage.getItem('token');
-    try {
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        };
+  const accessToken = localStorage.getItem("token");
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
 
-        const response = await fetch(import.meta.env.VITE_SERVER_URL + `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`,
-            requestOptions
-        );
-        if (!response.ok) {
-            throw new Error(`erreur serveur (${response.status} ${response.statusText})`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error);
-        throw error;
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_URL +
+        `/events/?appId=${user.appId}&orderDesc=true&page_size=${pageSize.value}&page_number=${pageNumber.value}`,
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(
+        `erreur serveur (${response.status} ${response.statusText})`
+      );
     }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 async function getEventsCount() {
