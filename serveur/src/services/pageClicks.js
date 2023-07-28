@@ -119,8 +119,6 @@ module.exports = function () {
       const orderDesc = options.orderDesc;
       const appId = options.appId;
 
-      console.log(options.periode);
-
       try {
         let pipeline = [];
 

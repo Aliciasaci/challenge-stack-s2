@@ -1,42 +1,87 @@
 <template>
   <div class="flex justify-content-center">
-    <Dialog v-model:visible="visible.visible" modal header="Créer un widget" :style="{ width: '45vw' }">
+    <Dialog
+      v-model:visible="visible.visible"
+      modal
+      header="Créer un widget"
+      :style="{ width: '45vw' }"
+    >
       <h5>Type de donnée *</h5>
       <div class="card flex justify-content-center choice">
-        <Dropdown v-model="selectedType" :options="dataTypes" optionLabel="name" placeholder="Type de données"
-          class="w-full md:w-14rem" required />
+        <Dropdown
+          v-model="selectedType"
+          :options="dataTypes"
+          optionLabel="name"
+          placeholder="Type de données"
+          class="w-full md:w-14rem"
+          required
+        />
       </div>
 
-      <div v-show="selectedType !== undefined && selectedType.code !== 'heatmap'">
+      <div
+        v-show="selectedType !== undefined && selectedType.code !== 'heatmap'"
+      >
         <h5>Type de représentation</h5>
         <div class="card flex justify-content-center choice">
-          <Dropdown @change="setSelectedPeriodType" v-model="selectedRepresentation" :options="typeGraphes"
-            optionLabel="name" placeholder="Type de graphe" class="w-full md:w-14rem" required />
+          <Dropdown
+            @change="setSelectedPeriodType"
+            v-model="selectedRepresentation"
+            :options="typeGraphes"
+            optionLabel="name"
+            placeholder="Type de graphe"
+            class="w-full md:w-14rem"
+            required
+          />
         </div>
       </div>
-      <div class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice">
+      <div
+        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
+      >
         <div class="flex align-items-center">
-          <RadioButton @change="setSelectedTypePerChoice" v-model="selectedTypePerChoice" name="per_tag"
-            value="per_tag" />
+          <RadioButton
+            @change="setSelectedTypePerChoice"
+            v-model="selectedTypePerChoice"
+            name="per_tag"
+            value="per_tag"
+          />
           <label for="ingredient3" class="ml-2">Par Tag</label>
         </div>
         <div class="flex align-items-center">
-          <RadioButton @change="setSelectedTypePerChoice" v-model="selectedTypePerChoice" name="per_page"
-            value="per_page" />
+          <RadioButton
+            @change="setSelectedTypePerChoice"
+            v-model="selectedTypePerChoice"
+            name="per_page"
+            value="per_page"
+          />
           <label for="ingredient4" class="ml-2">Par Page</label>
         </div>
       </div>
       <div class="card flex justify-content-center choice per_page dont-show">
         <h5>La page (tracker par nom de page)</h5>
-        <InputText type="text" v-model="selectedPage" placeholder="Nom de la page" /><br />
-        <small id="username-help">Veuillez saisir exactement le nom de la page sans le domaine. Si la
-          page se trouve à la racine, mettre quand-même "/".</small>
+        <InputText
+          type="text"
+          v-model="selectedPage"
+          placeholder="Nom de la page"
+        /><br />
+        <small id="username-help"
+          >Veuillez saisir exactement le nom de la page sans le domaine. Si la
+          page se trouve à la racine, mettre quand-même "/".</small
+        >
       </div>
-      <div id="tags" class="card flex justify-content-center choice per_tag dont-show">
+      <div
+        id="tags"
+        class="card flex justify-content-center choice per_tag dont-show"
+      >
         <h5>Tag</h5>
         <div class="flex flex-wrap">
-          <Dropdown v-model="selectedTag" :options="tags" optionLabel="commentaire" placeholder="Tag"
-            class="w-full md:w-14rem" required />
+          <Dropdown
+            v-model="selectedTag"
+            :options="tags"
+            optionLabel="commentaire"
+            placeholder="Tag"
+            class="w-full md:w-14rem"
+            required
+          />
         </div>
       </div>
       <h5>Date</h5>
@@ -50,25 +95,43 @@
       </div>
 
       <h5>Taux ou valeur *</h5>
-      <div class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice">
+      <div
+        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice"
+      >
         <div class="flex align-items-center">
-          <RadioButton @change="setSelectedTauxType" v-model="choix" name="taux" value="taux" />
+          <RadioButton
+            @change="setSelectedTauxType"
+            v-model="choix"
+            name="taux"
+            value="taux"
+          />
           <label for="ingredient3" class="ml-2">Taux</label>
         </div>
         <div class="flex align-items-center">
-          <RadioButton @change="setSelectedTauxType" v-model="choix" name="valeur_absolue" value="valeur_absolue" />
+          <RadioButton
+            @change="setSelectedTauxType"
+            v-model="choix"
+            name="valeur_absolue"
+            value="valeur_absolue"
+          />
           <label for="ingredient4" class="ml-2">Valeur absolue</label>
         </div>
       </div>
 
       <div class="card flex justify-content-center choice per-taux dont-show">
         <h5>Comparer à</h5>
-        <Dropdown v-model="typeComparaison" optionLabel="name" placeholder="Comparer à" class="w-full md:w-14rem"
-          required />
+        <Dropdown
+          v-model="typeComparaison"
+          optionLabel="name"
+          placeholder="Comparer à"
+          class="w-full md:w-14rem"
+          required
+        />
       </div>
 
       <div
-        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show">
+        class="card flex flex-wrap gap-3 mt-5 flex align-items-center justify-content-center choice per-representation dont-show"
+      >
         <h5>Représentation par jour / mois / année</h5>
         <div class="flex align-items-center">
           <RadioButton v-model="selectedPeriod" name="Jour" value="day" />
@@ -106,7 +169,7 @@ const selectedTypePerChoice = ref();
 const selectedRepresentation = ref();
 const selectedPeriod = ref();
 const choix = ref();
-const selectedPage = ref();
+const selectedPage = ref("");
 const dataTypes = ref([
   { name: "Click", code: "click" },
   { name: "Soumission de formulaire", code: "submit" },
@@ -213,23 +276,27 @@ async function createWidget() {
   const select = selectedType.value.code;
   if (select !== "heatmap") {
     let data = await getEventsAccordingToChoice();
-    data.forEach(element => {
+    data.forEach((element) => {
       countTotal += element.count;
     });
 
-
-    if (selectedRepresentation.value.code == "multiaxis" || selectedRepresentation.value.code == "verticalbar") {
+    if (
+      selectedRepresentation.value.code == "multiaxis" ||
+      selectedRepresentation.value.code == "verticalbar"
+    ) {
       widget = {
         type: selectedRepresentation.value.code,
         appId: user.appId,
         data: {
           labels: [],
-          label: "nombre de " + selectedType.value.name + selectedPage.value ?? null,
-          date_interval: transformDate(date1.value) + " - " + transformDate(date2.value),
+          label:
+            "nombre de " + selectedType.value.name + selectedPage.value ?? null,
+          date_interval:
+            transformDate(date1.value) + " - " + transformDate(date2.value),
           arrayData: data,
           periode: selectedPeriod.value,
-        }
-      }
+        },
+      };
     } else if (selectedRepresentation.value.code == "kpi") {
       widget = {
         type: "kpi",
@@ -248,10 +315,11 @@ async function createWidget() {
     let data = await getPageClicksAccordingToChoice();
     widget = {
       type: "heatmap",
-      page: selectedPage.value,
+      page: import.meta.env.VITE_CLIENT_URL + selectedPage.value,
       appId: user.appId,
       data: data[0],
     };
+    console.log(widget);
   }
 
   try {
@@ -272,7 +340,8 @@ async function createWidget() {
         `Server error (${response.status} ${response.statusText})`
       );
     }
-    location.reload();
+    //location.reload();
+    alert("Widget créé");
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -289,11 +358,11 @@ async function getPageClicksAccordingToChoice() {
   if (selectedPage.value) {
     console.log(
       selectedPage.value,
-      import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+      import.meta.env.VITE_CLIENT_URL + selectedPage.value
     );
     page =
       encodeURIComponent(
-        import.meta.env.VITE_CLIENT_URL + "/" + selectedPage.value
+        import.meta.env.VITE_CLIENT_URL + selectedPage.value
       ) ?? "";
     console.log(page);
   }
@@ -308,7 +377,7 @@ async function getPageClicksAccordingToChoice() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/pageClicks/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&periode=${periode}&page=${page}`,
+        `/pageClicks/?dateDebut=${dateDebut}&dateFin=${dateFin}&appId=${user.appId}&periode=${periode}&page=${page}`,
       requestOptions
     );
     if (!response.ok) {
@@ -359,7 +428,7 @@ async function getEventsAccordingToChoice() {
     };
     const response = await fetch(
       import.meta.env.VITE_SERVER_URL +
-      `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`,
+        `/events/count/?type=${selectedType.value.code}&dateDebut=${dateDebut}&dateFin=${dateFin}&periode=${periode}&appId=${user.appId}&orderDesc=true&tag=${tag}&page=${page}`,
       requestOptions
     );
     if (!response.ok) {

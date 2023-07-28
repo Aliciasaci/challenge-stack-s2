@@ -11,6 +11,10 @@ const pageClicksSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    page: {
+      type: String,
+      required: true,
+    },
     data: {
       type: mongoose.Schema.Types.Mixed,
     },

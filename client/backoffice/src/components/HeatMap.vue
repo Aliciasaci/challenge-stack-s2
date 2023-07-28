@@ -1,22 +1,27 @@
 <template lang="">
   <div class="container">
     <h5 v-text="page"></h5>
-    <canvas ref="canvas" id="canvas" style="width: 300px"></canvas>
+    <canvas ref="canvas" :id="canvasId" style="width: 300px"></canvas>
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, defineProps } from "vue";
+import { ref, onMounted, watch, defineProps, computed } from "vue";
 import Screenshot from "../assets/Screenshot_2.png";
 import Image from "primevue/image";
 const props = defineProps(["heatmap"]);
 
 const canvasRef = ref(null);
 const page = ref(`Heatmap ` + props.heatmap.page);
+const canvasId = computed(() => {
+  return `heatmap-canvas-${props.heatmap._id}`;
+});
 
 onMounted(() => {
-  const canvas = document.getElementById("canvas");
+  const canvas = document.getElementById(canvasId.value);
+  console.log(props.heatmap._id);
   const ctx = canvas.getContext("2d");
   const img = new window.Image();
+  img.crossOrigin = "anonymous";
   img.src = Screenshot;
   img.onload = () => {
     canvas.width = 1920;
@@ -44,20 +49,20 @@ watch(
 
 function drawHeatmap(context, data, image) {
   const maxClicks = Math.max(...data.map((d) => d.totalClicks));
-  const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
-  gradient.addColorStop(0, "green");
-  gradient.addColorStop(0.5, "yellow");
-  gradient.addColorStop(1, "red");
+  const gradient = context.createLinearGradient(0, 0, 1920, 0);
+  //gradient.addColorStop(0, "green");
+  //gradient.addColorStop(0.5, "yellow");
+  //gradient.addColorStop(1, "red");
   const img = new window.Image();
   img.crossOrigin = "anonymous";
   img.src = image;
   img.onload = () => {
     context.drawImage(img, 0, 0);
     data.forEach((d) => {
-      const radius = (d.totalClicks / maxClicks) * 50;
+      const radius = (d.totalClicks / maxClicks) * 100;
       const colorValue = Math.floor((d.totalClicks / maxClicks) * 255);
-      const color = `rgb(${colorValue}, 0, ${255 - colorValue})`;
-      context.filter = "blur(30px)";
+      const color = `rgb(${colorValue}, ${255 - colorValue}, 0)`;
+      context.filter = "blur(10px)";
       context.fillStyle = color;
       context.beginPath();
       context.arc(d.x, d.y, radius, 0, 2 * Math.PI);
