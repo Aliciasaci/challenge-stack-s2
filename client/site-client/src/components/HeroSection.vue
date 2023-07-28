@@ -25,9 +25,12 @@
           label="En savoir plus"
           type="button"
           class="p-button-outlined"
-          v-tracker:B8COMF.click
+          v-tracker:ZQ9IHA.click
+        />
+      </section>
       <div class="col-12 md:col-6 overflow-hidden">
-          <img src="https://static.vecteezy.com/system/resources/previews/017/033/095/original/abstract-purple-and-pink-bokeh-background-soft-blur-light-effect-wallpaper-dreamy-backdrop-with-copy-space-for-text-party-pastel-lovely-bubble-bokeh-background-vector.jpg"
+        <img
+          src="https://static.vecteezy.com/system/resources/previews/017/033/095/original/abstract-purple-and-pink-bokeh-background-soft-blur-light-effect-wallpaper-dreamy-backdrop-with-copy-space-for-text-party-pastel-lovely-bubble-bokeh-background-vector.jpg"
           alt="Image"
           class="md:ml-auto block md:h-full"
           style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)"
