@@ -2,32 +2,39 @@ process.env.NODE_ENV = "test";
 import request from "supertest";
 import app, { listen } from "../../server.js";
 import { describe } from "node:test";
+const bcrypt = require("bcrypt");
+
+jest.mock("../../middlewares/checkAuth.js", () => {
+  return jest.fn((req, res, next) => {
+    next();
+  });
+});
 
 describe("Auth Router", () => {
   let server;
   let createdUser;
   beforeAll(async () => {
-    server = listen(3000, () => {
-      console.log("App listening on port 3000!");
-    });
+    server = listen(0); // Listen on a random port
+    const address = server.address();
+    console.log(`Auth App listening on port ${address.port}!`);
   });
 
-  afterAll(async () => {
-    await server.close();
-    await request(app).delete(`/users/${createdUser.id}`);
+  afterAll(() => {
+    server.close();
   });
 
   describe("POST /register", () => {
     it("should create a user", async () => {
-      const response = await request(app).post("/register").send({
+      const user = {
         firstname: "Authtest",
         lastname: "Authtest",
         email: "auth@test.com",
         password: "testtest",
-      });
+      };
+      const response = await request(app).post("/register").send(user);
       createdUser = response.body;
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.any(Object));
+      compareAllExceptId(createdUser, user);
     });
   });
 
@@ -38,7 +45,24 @@ describe("Auth Router", () => {
         password: "testtest",
       });
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.any(Object));
+      compareAllExceptId(createdUser, response.body.user);
     });
   });
+
+  describe("DELETE /users/:id", () => {
+    it("should delete a user", async () => {
+      const response = await request(app).delete(`/users/${createdUser.id}`);
+      expect(response.status).toBe(204);
+    });
+  });
+
+  async function compareAllExceptId(expectedUser, actualUser) {
+    expect(actualUser).toEqual(expect.any(Object));
+    expect(actualUser).toHaveProperty("firstname", expectedUser.firstname);
+    expect(actualUser).toHaveProperty("lastname", expectedUser.lastname);
+    expect(actualUser).toHaveProperty("email", expectedUser.email);
+    bcrypt.compare(actualUser.password, expectedUser.password, (err, res) => {
+      expect(res).toBe(true);
+    });
+  }
 });
