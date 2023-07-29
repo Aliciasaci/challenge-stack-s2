@@ -113,16 +113,5 @@ module.exports = function (Service) {
                 else res.sendStatus(204);
             }
         },
-
-        async getUserTunnels(req, res) {
-            const userId = req.params.id;
-            if (userId) {
-                const userTunnels = await Service.getUserTunnels(userId);
-                if (userTunnels) {
-                    res.json(userTunnels);
-                }
-                else res.sendStatus(204);
-            }
-        },
     };
 };
