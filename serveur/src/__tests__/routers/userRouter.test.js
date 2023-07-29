@@ -87,4 +87,12 @@ describe("User Router", () => {
       expect(response.body).toEqual(expect.any(Array));
     });
   });
+
+  describe("GET /:id/tunnels/", () => {
+    it("should return a list of tunnels", async () => {
+      const response = await request(app).get(`/users/${testUser.id}/tunnels/`);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(expect.any(Array));
+    });
+  });
 });

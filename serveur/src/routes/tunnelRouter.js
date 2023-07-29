@@ -7,7 +7,6 @@ module.exports = function (Controller, options = {}) {
   router.post("/", checkAuth, Controller.create);
   router.patch("/:id", checkAuth, Controller.update);
   router.delete("/:id", Controller.delete);
-  // router.post("/addTunnelTag", Controller.createTunnelTag);
-
+  
   return router;
 };
