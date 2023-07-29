@@ -40,7 +40,7 @@ async function getUsersTags(userId) {
       },
     };
     const response = await fetch(
-      `http://localhost:3000/users/${userId}/tags`,
+      import.meta.env.VITE_SERVER_URL + `/users/${userId}/tags`,
       requestOptions
     );
     if (!response.ok) {
@@ -58,7 +58,7 @@ async function getUsersTags(userId) {
 async function createTunnel() {
   try {
     const accessToken = localStorage.getItem("token");
-    const response = await fetch(`http://localhost:3000/tunnels/`, {
+    const response = await fetch(import.meta.env.VITE_SERVER_URL + `/tunnels/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +79,7 @@ async function createTunnel() {
       if (data) {
         // now post tunnel_tag
         tags.value[1].forEach(async (item, idx) => {
-          const response2 = await fetch(`http://localhost:3000/tunneltag/`, {
+          const response2 = await fetch(import.meta.env.VITE_SERVER_URL + `/tunneltag/`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -102,9 +102,9 @@ async function createTunnel() {
   }
 }
 
-async function getTunnels() {
+async function getUserTunnels(userId) {
+  const accessToken = localStorage.getItem("token");
   try {
-    const accessToken = localStorage.getItem("token");
     const requestOptions = {
       method: "GET",
       headers: {
@@ -112,7 +112,7 @@ async function getTunnels() {
       },
     };
     const response = await fetch(
-      `http://localhost:3000/tunnels/`,
+      import.meta.env.VITE_SERVER_URL + `/users/${userId}/tunnels/`,
       requestOptions
     );
     if (!response.ok) {
@@ -129,12 +129,13 @@ async function getTunnels() {
 }
 
 async function editTunnel(editTunnel) {
+  const accessToken = localStorage.getItem("token");
   const response = await fetch(
-    `http://localhost:3000/tunnels/${editTunnel.id}`,
+    import.meta.env.VITE_SERVER_URL + `/tunnels/${editTunnel.id}`,
     {
       method: "PATCH",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ commentaire: editTunnel.commentaire }),
@@ -165,7 +166,7 @@ async function editTunnel(editTunnel) {
 onBeforeMount(async () => {
   initFilters();
   getUsersTags(user.value.id);
-  getTunnels();
+  getUserTunnels(user.value.id);
 });
 
 const initFilters = () => {
