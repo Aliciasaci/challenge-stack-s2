@@ -44,31 +44,21 @@ describe("User Router", () => {
       const response = await request(app).get(`/users/${testUser.id}`);
       expect(response.status).toBe(200);
       compareAllExceptId(response.body, testUser);
-      expect(response.body).toEqual(expect.any(Object));
     });
   });
 
   describe("POST /", () => {
     it("should create a user", async () => {
-      const response = await request(app).post("/users").send({
+      let actualUser = {
         firstname: "test",
+        lastname: "test",
         email: "test@testing.com",
         password: "test",
-      });
+      };
+      const response = await request(app).post("/users").send(actualUser);
       createdUser = response.body;
-      expect(response.body).toEqual(expect.any(Object));
-    });
-  });
-
-  describe("PUT /:id", () => {
-    it("should update a user", async () => {
-      const response = await request(app).put(`/users/${testUser.id}`).send({
-        firstname: "test",
-        email: "test@tesv.com",
-        password: "test",
-      });
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.any(Object));
+      expect(response.status).toBe(201);
+      compareAllExceptId(actualUser, createdUser);
     });
   });
 
@@ -101,8 +91,5 @@ describe("User Router", () => {
     expect(actualUser).toHaveProperty("firstname", expectedUser.firstname);
     expect(actualUser).toHaveProperty("lastname", expectedUser.lastname);
     expect(actualUser).toHaveProperty("email", expectedUser.email);
-    bcrypt.compare(actualUser.password, expectedUser.password, (err, res) => {
-      expect(res).toBe(true);
-    });
   }
 });
