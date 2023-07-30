@@ -33,18 +33,13 @@ module.exports = function AuthController(UserService) {
         body: JSON.stringify({ message: "Hello World!" }),
       };
 
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Credentials", "true");
 
       res.json({
-        token: jwt.sign(
-          { id: user.id, email: user.email },
-          process.env.JWT_SECRET
-        ),
+        token: jwt.sign({ id: user.id, email: user.email }, "d9ff903b"),
         user: user,
       });
-
-
     },
   };
 };
