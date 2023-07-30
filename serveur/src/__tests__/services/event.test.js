@@ -1,11 +1,15 @@
-import { url, options } from "../../../config/mongotest.config";
+// import { url, options } from "../../../config/mongotest.config";
 import { connect, connection } from "mongoose";
 import EventService from "../../services/event";
 
 describe("EventService", () => {
   let eventService;
+  const url = "mongodb://79.137.86.197:27017/mongodatabase_test"
+  const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
 
-  const mongo = connect(url,options);
 
   beforeAll(async () => {
     await connect(url, options);
