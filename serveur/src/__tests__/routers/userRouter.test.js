@@ -1,15 +1,21 @@
-process.env.NODE_ENV = "test";
 import request from "supertest";
+process.env.NODE_ENV = "test";
 const app = require("../../server.js");
+
+jest.mock("../../middlewares/checkAuth.js", () => {
+  return jest.fn((req, res, next) => {
+    next();
+  });
+});
 
 describe("User Router", () => {
   let server;
   let testUser;
   let createdUser;
   beforeAll(async () => {
-    server = app.listen(3000, () => {
-      console.log("App listening on port 3000!");
-    });
+    server = listen(0); // Listen on a random port
+    const address = server.address();
+    console.log(`userRouter listening on port ${address.port}!`);
     const response = await request(app).post("/users").send({
       firstname: "testsTing",
       lastname: "test",
@@ -36,6 +42,7 @@ describe("User Router", () => {
     it("should return a user", async () => {
       const response = await request(app).get(`/users/${testUser.id}`);
       expect(response.status).toBe(200);
+      compareAllExceptId(testUser, response.body);
       expect(response.body).toEqual(expect.any(Object));
     });
   });
@@ -87,4 +94,14 @@ describe("User Router", () => {
       expect(response.body).toEqual(expect.any(Array));
     });
   });
+
+  async function compareAllExceptId(expectedUser, actualUser) {
+    expect(actualUser).toEqual(expect.any(Object));
+    expect(actualUser).toHaveProperty("firstname", expectedUser.firstname);
+    expect(actualUser).toHaveProperty("lastname", expectedUser.lastname);
+    expect(actualUser).toHaveProperty("email", expectedUser.email);
+    bcrypt.compare(actualUser.password, expectedUser.password, (err, res) => {
+      expect(res).toBe(true);
+    });
+  }
 });

@@ -2,6 +2,12 @@ process.env.NODE_ENV = "test";
 const request = require("supertest");
 const app = require("../../server.js");
 
+jest.mock("../../middlewares/checkAuth.js", () => {
+  return jest.fn((req, res, next) => {
+    next();
+  });
+});
+
 describe("Tag Router", () => {
   let server;
   let testTag;
@@ -9,8 +15,8 @@ describe("Tag Router", () => {
   let testUser;
 
   beforeAll(async () => {
-    server = app.listen(3000, () => {
-      console.log("App listening on port 3000!");
+    server = app.listen(3002, () => {
+      console.log("Tag App listening on port 3002!");
     });
     const userResponse = await request(app).post("/users").send({
       firstname: "testsTing",

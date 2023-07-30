@@ -3,13 +3,19 @@ const request = require("supertest");
 const app = require("../../server.js");
 const { describe } = require("node:test");
 
+jest.mock("../../middlewares/checkAuth.js", () => {
+  return jest.fn((req, res, next) => {
+    next();
+  });
+});
+
 describe("Event Router", () => {
   let server;
   let testEvent;
   let createdEvent;
   beforeAll(async () => {
-    server = app.listen(3000, () => {
-      console.log("App listening on port 3000!");
+    server = app.listen(0, () => {
+      console.log(`Auth App listening on port ${address.port}!`);
     });
     const response = await request(app)
       .post("/events")
