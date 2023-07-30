@@ -1,4 +1,4 @@
-process.env.NODE_ENV = "Servicetest";
+process.env.NODE_ENV = "test";
 import { url, options } from "../../../config/mongotest.config";
 import { connect, connection } from "mongoose";
 import EventService from "../../services/event";
