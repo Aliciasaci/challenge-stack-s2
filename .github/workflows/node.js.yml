@@ -38,7 +38,7 @@ jobs:
       - name: Create ENV file
         run: |
           touch .env
-          echo DB_URL_POSTGRES=${{ secrets.ENDB_URL_POSTGRESGINE_API_KEY }} >> .env
+          echo DB_URL_POSTGRES=${{ secrets.ENDB_URL_POSTGRESGINE_API_KEY }} >> ./serveur/.env
         shell: bash
         env:
           DATABASE_URL: ${{ secrets.DB_URL_POSTGRES }}
