@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 require("dotenv").config();
 
 const connection = new Sequelize(
-  "$DATABASE_URL",
+  process.env && process.env.DB_URL_POSTGRES,
   {
     dialect: "postgres",
   }
