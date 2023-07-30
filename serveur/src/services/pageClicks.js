@@ -32,7 +32,7 @@ module.exports = function () {
             dateFormat = "%Y";
             break;
           default:
-            throw new Error("Invalid period parameter");
+            dateFormat = "%Y-%m-%d";
         }
 
         if (appId) {
@@ -105,90 +105,6 @@ module.exports = function () {
       } catch (error) {
         console.log(error);
         throw new Error("Error while retrieving events");
-      }
-    },
-
-    async getPageClickCount(options) {
-      const dateDebut = options.dateDebut;
-      const dateFin = options.dateFin;
-      const type = options.type;
-      const periode = options.periode;
-      const orderDesc = options.orderDesc;
-      const appId = options.appId;
-
-      try {
-        let pipeline = [];
-
-        if (type) {
-          pipeline.push({ $match: { type: type } });
-        }
-
-        if (appId) {
-          pipeline.push({ $match: { appId: appId } });
-        }
-
-        if (dateDebut && dateFin) {
-          pipeline.push({
-            $match: {
-              createdAt: { $gte: new Date(dateDebut), $lte: new Date(dateFin) },
-            },
-          });
-        } else if (dateDebut) {
-          pipeline.push({
-            $match: { createdAt: { $gte: new Date(dateDebut) } },
-          });
-        } else if (dateFin) {
-          pipeline.push({ $match: { createdAt: { $lte: new Date(dateFin) } } });
-        }
-
-        if (periode == "day") {
-          pipeline.push({
-            $group: {
-              _id: {
-                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
-              },
-              count: { $sum: 1 },
-            },
-          });
-        } else if (periode == "month") {
-          pipeline.push({
-            $group: {
-              _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
-              count: { $sum: 1 },
-            },
-          });
-        } else if (periode == "year") {
-          pipeline.push({
-            $group: {
-              _id: { $dateToString: { format: "%Y", date: "$createdAt" } },
-              count: { $sum: 1 },
-            },
-          });
-        }
-
-        if (orderDesc) {
-          pipeline.push({ $sort: { createdAt: -1 } });
-        } else {
-          pipeline.push({ $sort: { createdAt: 1 } });
-        }
-
-        pipeline.push({
-          $project: {
-            _id: 0,
-            periode: "$_id",
-            count: "$count",
-          },
-        });
-
-        return Event.aggregate(pipeline)
-          .then((resultats) => {
-            return resultats;
-          })
-          .catch((error) => {
-            throw new Error("Error");
-          });
-      } catch (error) {
-        console.log(error);
       }
     },
 

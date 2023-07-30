@@ -5,7 +5,6 @@ module.exports = function (Controller, options = {}) {
 
   router.get("/", checkAuth, Controller.getAllPageClicks);
   router.post("/", Controller.createPageClicks);
-  router.get("/count/", Controller.getPageClicksCount);
   router.get("/:id", Controller.getPageClicksById);
   router.get("/visitor/:id", Controller.getPageClicksByVisitorId);
 
