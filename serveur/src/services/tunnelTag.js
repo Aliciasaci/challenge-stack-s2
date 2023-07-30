@@ -39,7 +39,6 @@ module.exports = function () {
                 if (!tunnel) {
                     throw new Error("Tunnel not found");
                 }
-                // await tunnel.addTag(tag, { through: TunnelTag });
                 const tunnelTag = await TunnelTag.create({ id_tag: idTag, id_tunnel: idTunnel, ordre: ordre });
                 return tunnelTag;
             });
@@ -48,6 +47,11 @@ module.exports = function () {
 
     async findOne(id) {
         return await TunnelTag.findByPk(id);
+    },
+
+    async deleteOne(id) {
+        const nbDeleted = await TunnelTag.destroy({ where: { id } });
+        return nbDeleted === 1;
     },
   };
 };

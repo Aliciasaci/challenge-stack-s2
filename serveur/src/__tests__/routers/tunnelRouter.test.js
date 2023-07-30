@@ -9,25 +9,25 @@ jest.mock("../../middlewares/checkAuth.js", () => {
 });
 
 describe("Tunnel Router", () => {
-  let server;
-  let testTunnel;
-  let createdTunnel;
-  let testUser;
+    let server;
+    let testTunnel;
+    let createdTunnel;
+    let testUser;
 
     beforeAll(async () => {
         server = app.listen(0); // Listen on a random port
         const address = server.address();
         console.log(`userRouter listening on port ${address.port}!`);
         const userResponse = await request(app).post("/users").send({
-        firstname: "testFname",
-        lastname: "testLname",
-        email: "test1@testing.com",
-        password: "12345",
+            firstname: "testFname",
+            lastname: "testLname",
+            email: "test1@testing.com",
+            password: "12345",
         });
         testUser = userResponse.body;
         const response = await request(app).post("/tunnels").send({
-        id_user: testUser.id,
-        commentaire: "TunnelTest",
+            id_user: testUser.id,
+            commentaire: "TunnelTest",
         });
         testTunnel = response.body;
     });
@@ -40,10 +40,10 @@ describe("Tunnel Router", () => {
 
     describe("GET /", () => {
         it("should return a list of tunnels", async () => {
-        const response = await request(app).get("/tunnels");
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(expect.any(Array));
-        expect(response.body).toContainEqual(expect.objectContaining(testTunnel));
+            const response = await request(app).get("/tunnels");
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(expect.any(Array));
+            expect(response.body).toContainEqual(expect.objectContaining(testTunnel));
         });
     });
 
@@ -54,17 +54,17 @@ describe("Tunnel Router", () => {
             commentaire: "testTunnel",
         };
         const response = await request(app).post("/tunnels").send(actualTunnel);
-        createdTunnel = response.body;
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.status).toBe(201);
-        compareAllExceptId(actualTunnel, response.body);
+            createdTunnel = response.body;
+            expect(response.body).toEqual(expect.any(Object));
+            expect(response.status).toBe(201);
+            compareAllExceptId(actualTunnel, createdTunnel);
         });
     });
 
     describe("DELETE /:id", () => {
         it("should delete a tunnel", async () => {
-        const response = await request(app).delete(`/tunnels/${createdTunnel.id}`);
-        expect(response.status).toBe(204);
+            const response = await request(app).delete(`/tunnels/${createdTunnel.id}`);
+            expect(response.status).toBe(204);
         });
     });
 
