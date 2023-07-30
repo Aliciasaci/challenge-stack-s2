@@ -1,7 +1,6 @@
 //*POSTGRE SQL
 const { Sequelize, DataTypes } = require("sequelize");
-require('dotenv').config();
-
+require("dotenv").config();
 
 const connection = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
@@ -15,8 +14,8 @@ connection
   .catch((error) => {
     console.error("Connexion à POSTGRES échouée:", error);
   });
-
-if (process.env.NODE_ENV !== "Servicetest") {
+if (process.env.NODE_ENV !== "test") {
+  console.log(process.env.NODE_ENV);
   //*MongoDB
   const mongoose = require("mongoose");
 
