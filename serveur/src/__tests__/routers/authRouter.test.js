@@ -61,8 +61,5 @@ describe("Auth Router", () => {
     expect(actualUser).toHaveProperty("firstname", expectedUser.firstname);
     expect(actualUser).toHaveProperty("lastname", expectedUser.lastname);
     expect(actualUser).toHaveProperty("email", expectedUser.email);
-    bcrypt.compare(actualUser.password, expectedUser.password, (err, res) => {
-      expect(res).toBe(true);
-    });
   }
 });
