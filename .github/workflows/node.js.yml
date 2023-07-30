@@ -36,12 +36,17 @@ jobs:
         working-directory: ${{ matrix.folder }}
 
       - name: Create ENV file
+        working-directory: ./serveur
         run: |
           touch .env
-          echo DB_URL_POSTGRES=${{ secrets.ENDB_URL_POSTGRESGINE_API_KEY }} >> ./serveur/.env
+          echo DB_URL_POSTGRES=${{ secrets.ENDB_URL_POSTGRESGINE_API_KEY }} >> .env
         shell: bash
         env:
           DATABASE_URL: ${{ secrets.DB_URL_POSTGRES }}
+
+      - name: Test ENV file
+        working-directory: ./serveur
+        run: cat .env
       
       - name: Run tests
         run: npm test
