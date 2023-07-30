@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "test";
 const request = require("supertest");
 const app = require("../../server.js");
-const testConfig = require("../../../config/mongotest.config");
+const testConfig = require("../../../config/mongotest.config.js");
 const mongoose = require("mongoose");
 const { describe } = require("node:test");
 
@@ -11,20 +11,17 @@ jest.mock("../../middlewares/checkAuth.js", () => {
   });
 });
 
-describe("Event Router", () => {
+describe("Widgets Router", () => {
   let server;
   let testEvent;
   let createdEvent;
   beforeAll(async () => {
     server = app.listen(0); // Listen on a random port
     const address = server.address();
-    console.log(`Events test app listening on port ${address.port}!`);
-    // await mongoose.connect(testConfig.url, testConfig.options);
-    // console.log("=> Connexion à MongoDB réussie");
     const response = await request(app)
-      .post("/events")
+      .post("/widgets")
       .send({
-        type: "test",
+        type: "click",
         appId: "testint",
 
         data: {
@@ -36,15 +33,15 @@ describe("Event Router", () => {
   });
 
   afterAll(async () => {
-    await request(app).delete(`/events/${testEvent._id}`);
+    await request(app).delete(`/widgets/${testEvent._id}`);
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
     await server.close();
   });
 
   describe("GET /", () => {
-    it("should return a list of events", async () => {
-      const response = await request(app).get("/events");
+    it("should return a list of widgets", async () => {
+      const response = await request(app).get("/widgets");
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.any(Array));
       expect(response.body.length).toEqual(1);
@@ -52,8 +49,8 @@ describe("Event Router", () => {
   });
 
   describe("GET /:id", () => {
-    it("should return a event", async () => {
-      const response = await request(app).get(`/events/${testEvent._id}`);
+    it("should return a widgets", async () => {
+      const response = await request(app).get(`/widgets/${testEvent._id}`);
       expect(response.status).toBe(200);
       compareAllExceptId(testEvent, response.body);
       expect(response.body).toEqual(expect.any(Object));
@@ -61,7 +58,7 @@ describe("Event Router", () => {
   });
 
   describe("POST /", () => {
-    it("should create a event", async () => {
+    it("should create a widget", async () => {
       let actualEvent = {
         type: "created",
         appId: "testinta",
@@ -70,7 +67,7 @@ describe("Event Router", () => {
           visitorId: "testVisitorIdCreated",
         },
       };
-      const response = await request(app).post("/events").send(actualEvent);
+      const response = await request(app).post("/widgets").send(actualEvent);
       createdEvent = response.body;
       compareAllExceptId(actualEvent, createdEvent);
       expect(response.body).toEqual(expect.any(Object));
@@ -78,9 +75,9 @@ describe("Event Router", () => {
   });
 
   describe("PATCH /:id", () => {
-    it("should update a event", async () => {
+    it("should update a widget", async () => {
       const response = await request(app)
-        .patch(`/events/${testEvent._id}`)
+        .patch(`/widgets/${testEvent._id}`)
         .send({
           data: {
             type: "changedType",
@@ -91,54 +88,27 @@ describe("Event Router", () => {
     });
   });
 
-  describe("GET /:id/events", () => {
-    it("should return events by appId", async () => {
+  describe("GET /:id/widgets", () => {
+    it("should return widgets by appId", async () => {
       const response = await request(app).get(
-        `/events/${testEvent.appId}/events`
+        `/widgets/${testEvent.appId}/widgets`
       );
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.any(Array));
     });
   });
 
-  describe("GET /visitor/:id", () => {
-    it("should return events by visitorId", async () => {
-      const response = await request(app).get(
-        `/events/visitor/${testEvent.visitorId}`
-      );
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.any(Array));
-    });
-  });
-
-  describe("PATCH /visitor/:id", () => {
-    it("should update timeSpentOnPage", async () => {
-      const response = await request(app)
-        .patch(`/events/visitor/${testEvent.visitorId}`)
-        .send({
-          type: "visited",
-          appId: "testint",
-          data: {
-            name: "test",
-            timeSpent: 1000,
-            visitorId: "testVisitorId",
-          },
-        });
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.any(Object));
-    });
-  });
 
   describe("DELETE /:id", () => {
-    it("should delete a event", async () => {
-      const response = await request(app).delete(`/events/${createdEvent._id}`);
+    it("should delete a widget", async () => {
+      const response = await request(app).delete(`/widgets/${createdEvent._id}`);
       expect(response.status).toBe(200);
     });
   });
 
-  function compareAllExceptId(event1, event2) {
-    expect(event1.type).toEqual(event2.type);
-    expect(event1.appId).toEqual(event2.appId);
-    expect(event1.data).toEqual(event2.data);
+  function compareAllExceptId(widget1, widget2) {
+    expect(widget1.type).toEqual(widget2.type);
+    expect(widget1.appId).toEqual(widget2.appId);
+    expect(widget1.data).toEqual(widget2.data);
   }
 });
