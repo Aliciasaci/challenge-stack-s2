@@ -39,7 +39,7 @@ jobs:
         working-directory: ./serveur
         run: |
           touch .env
-          echo DB_URL_POSTGRES=${{ secrets.ENDB_URL_POSTGRESGINE_API_KEY }} >> .env
+          echo DB_URL_POSTGRES=${{ secrets.DB_URL_POSTGRES }} >> .env
         shell: bash
         env:
           DATABASE_URL: ${{ secrets.DB_URL_POSTGRES }}
