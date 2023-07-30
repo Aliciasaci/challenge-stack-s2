@@ -38,3 +38,6 @@ jobs:
       - name: Run tests
         run: npm test
         working-directory: ${{ matrix.folder }}
+        
+        env:
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
