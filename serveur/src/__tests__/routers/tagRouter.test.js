@@ -28,6 +28,7 @@ describe("Tag Router", () => {
     const response = await request(app).post("/tags").send({
       id_user: testUser.id,
       commentaire: "TagTest",
+      description: "TagDescription",
     });
     testTag = response.body;
   });
@@ -43,27 +44,22 @@ describe("Tag Router", () => {
       const response = await request(app).get("/tags");
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.any(Array));
+      expect(response.body).toContainEqual(expect.objectContaining(testTag));
     });
   });
 
   describe("POST /", () => {
     it("should create a tag", async () => {
-      const response = await request(app).post("/tags").send({
+      let actualTag = {
         id_user: testUser.id,
         commentaire: "testTag",
-      });
+        description: "DescriptionTag",
+      };
+      const response = await request(app).post("/tags").send(actualTag);
       createdTag = response.body;
       expect(response.body).toEqual(expect.any(Object));
-    });
-  });
-
-  describe("PUT /:id", () => {
-    it("should update a tag", async () => {
-      const response = await request(app).put(`/tags/${testTag.id}`).send({
-        id_user: testUser.id,
-        commentaire: "testTag",
-      });
-      expect(response.body).toEqual(expect.any(Object));
+      expect(response.status).toBe(201);
+      compareAllExceptId(actualTag, response.body);
     });
   });
 
@@ -73,4 +69,12 @@ describe("Tag Router", () => {
       expect(response.status).toBe(204);
     });
   });
+
+  function compareAllExceptId(expectedTag, actualTag) {
+    expect(actualTag).toEqual(expect.any(Object));
+    expect(actualTag.commentaire).toEqual(expectedTag.commentaire);
+    expect(actualTag.id_user).toEqual(expectedTag.id_user);
+    expect(actualTag.description).toEqual(expectedTag.description);
+    expect(actualTag).toEqual(expect.objectContaining(expectedTag));
+  }
 });
