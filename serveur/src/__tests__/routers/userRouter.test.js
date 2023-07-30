@@ -43,7 +43,7 @@ describe("User Router", () => {
     it("should return a user", async () => {
       const response = await request(app).get(`/users/${testUser.id}`);
       expect(response.status).toBe(200);
-      compareAllExceptId(testUser, response.body);
+      compareAllExceptId(response.body, testUser);
       expect(response.body).toEqual(expect.any(Object));
     });
   });

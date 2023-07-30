@@ -14,7 +14,7 @@ describe("Auth Router", () => {
   let server;
   let createdUser;
   beforeAll(async () => {
-    server = listen(0); // Listen on a random port
+    server = app.listen(0); // Listen on a random port
     const address = server.address();
     console.log(`Auth App listening on port ${address.port}!`);
   });
