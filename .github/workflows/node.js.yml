@@ -34,10 +34,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
         working-directory: ${{ matrix.folder }}
+
+      - name: Create ENV file
+        working-directory: ./serveur
+        run: |
+          touch .env
+          echo DB_URL_POSTGRES=${{ secrets.DB_URL_POSTGRES }} >> .env
+          echo DB_URL_MONGO=${{ secrets.DB_URL_MONGO }} >> .env
+        shell: bash
+
+      - name: Test ENV file
+        working-directory: ./serveur
+        run: cat .env
       
       - name: Run tests
         run: npm test
         working-directory: ${{ matrix.folder }}
-        
-        env:
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
