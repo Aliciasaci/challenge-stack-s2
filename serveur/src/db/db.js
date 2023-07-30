@@ -20,7 +20,7 @@ connection
 //*MongoDB
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://79.137.86.197:27017/mongodatabase_test?directConnection=true", {
+  .connect(process.env && process.env.DB_URL_MONGO, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

@@ -40,9 +40,8 @@ jobs:
         run: |
           touch .env
           echo DB_URL_POSTGRES=${{ secrets.DB_URL_POSTGRES }} >> .env
+          echo DB_URL_MONGO=${{ secrets.DB_URL_MONGO }} >> .env
         shell: bash
-        env:
-          DATABASE_URL: ${{ secrets.DB_URL_POSTGRES }}
 
       - name: Test ENV file
         working-directory: ./serveur
