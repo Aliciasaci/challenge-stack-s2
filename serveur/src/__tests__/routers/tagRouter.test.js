@@ -15,7 +15,7 @@ describe("Tag Router", () => {
   let testUser;
 
   beforeAll(async () => {
-    server = app.listen(3002, () => {
+    server = app.listen(3003, () => {
       console.log("Tag App listening on port 3002!");
     });
     const userResponse = await request(app).post("/users").send({
