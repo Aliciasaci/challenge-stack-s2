@@ -23,7 +23,7 @@ console.log(process.env.NODE_ENV);
 const mongoose = require("mongoose");
 console.log(process.env.MONGO_URL);
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect("mongodb://79.137.86.197:27017/mongodatabase_test", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
