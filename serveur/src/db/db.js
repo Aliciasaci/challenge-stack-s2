@@ -20,7 +20,7 @@ connection
 //*MongoDB
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://79.137.86.197:27017/mongodatabase_test", {
+  .connect("mongodb://79.137.86.197:27017/mongodatabase_test?directConnection=true", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
