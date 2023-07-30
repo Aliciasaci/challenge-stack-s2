@@ -1,6 +1,7 @@
 import request from "supertest";
 process.env.NODE_ENV = "test";
 const app = require("../../server.js");
+const bcrypt = require("bcrypt");
 
 jest.mock("../../middlewares/checkAuth.js", () => {
   return jest.fn((req, res, next) => {
