@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "test/Tests" ]
+    branches: [ "test/integration" ]
   pull_request:
-    branches: [ "test/Tests" ]
+    branches: [ "test/integration" ]
 
 jobs:
   test:
@@ -40,4 +40,4 @@ jobs:
         working-directory: ${{ matrix.folder }}
         
         env:
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DB_URL_POSTGRES }}
