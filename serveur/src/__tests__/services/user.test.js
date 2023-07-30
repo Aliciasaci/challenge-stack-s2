@@ -6,7 +6,7 @@ const ValidationError = require("../../errors/ValidationError");
 const { afterEach } = require("node:test");
 
 describe("User service", () => {
-  const sequelize = new Sequelize(process.env.DATABASE_URL);
+  const sequelize = new Sequelize("postgres://challenge:root@79.137.86.197:5432/postgres_test");
   const User = UserModel(sequelize);
 
   beforeAll(async () => {
