@@ -40,4 +40,4 @@ jobs:
         working-directory: ${{ matrix.folder }}
         
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
